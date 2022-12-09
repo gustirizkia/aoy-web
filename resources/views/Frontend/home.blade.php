@@ -1,7 +1,7 @@
 @extends('layouts.frontend')
 
 @section('title')
-    AY'S ON YOU
+    AY'S ON YOU 2022
 @endsection
 
 @push('addStyle')
