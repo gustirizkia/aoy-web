@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\Front\CartController;
+use App\Http\Controllers\Front\DetailProductController;
+use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\ProdukController;
+use App\Http\Controllers\Front\TransaksiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,12 +18,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index']);
+Route::get('produk', [ProdukController::class, 'index'])->name('produk');
+Route::get('/produk/detail', [DetailProductController::class, 'index'])->name('detail-produk');
+Route::get('keranjang', [CartController::class, 'index'])->name('keranjang');
+Route::get('/proses-transaksi', [TransaksiController::class, 'index'])->name('proses-transaksi');
+Route::get('/transaksi-pending', [TransaksiController::class, 'menungguPembayaran'])->name('transaksi-pending');
+Route::get('/rincian-transaksi', [TransaksiController::class, 'rincian'])->name('transaksi-detail');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('welcome');
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';

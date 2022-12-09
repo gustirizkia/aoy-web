@@ -1,0 +1,8 @@
+nav .form-control {
+    font-size: 14px;
+    width: 300px !important;
+}
+
+nav .btn__search {
+    padding: 0 0.75rem;
+}
