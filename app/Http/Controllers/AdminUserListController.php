@@ -42,7 +42,7 @@
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
 			$this->form[] = ['label'=>'Name','name'=>'name','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Username','name'=>'username','type'=>'text','validation'=>'required|min:1|max:255|unique:users,username','width'=>'col-sm-10'];
+			// $this->form[] = ['label'=>'Username','name'=>'username','type'=>'text','validation'=>'required|min:1|max:255|unique:users,username','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Email','name'=>'email','type'=>'email','validation'=>'required|min:1|max:255|email|unique:users','width'=>'col-sm-10','placeholder'=>'Please enter a valid email address'];
 			$this->form[] = ['label'=>'Password','name'=>'password','type'=>'password','validation'=>'min:3|max:32','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Level','name'=>'level','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'levels,nama'];
@@ -267,6 +267,7 @@
 	    public function hook_before_add(&$postdata) {
 	        //Your code here
             $postdata['uuid'] = $this->generateUUID();
+            $postdata['username'] = 'aoy-'.$this->generateUsername();
 	    }
 
 	    /*
@@ -341,6 +342,16 @@
                 $this->generateUUID();
             }
             return $uuid;
+        }
+
+        public function generateUsername()
+        {
+            $username = Str::random(5);
+            $check = DB::table('users')->where('username', $username)->first();
+            if($check){
+                $this->generateUsername();
+            }
+            return $username;
         }
 
 	}
