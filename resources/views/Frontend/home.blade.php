@@ -49,54 +49,25 @@
                     Produk Rekomendasi
                 </div>
             </div>
-             <div class="md:col-span-4 col-span-12">
-                @component('Frontend.components.card-produk')
-                    @slot('image_url')
-                        https://img.freepik.com/premium-psd/logo-mockup-stand-face-hand-cream_145275-462.jpg?w=900
-                    @endslot
-                    @slot('nama')
-                        Lorem ipsum dolor sit amet.
-                    @endslot
-                    @slot('url_detail')
-                         {{ route('detail-produk') }}
-                    @endslot
-                    @slot('url_add')
-                        1
-                    @endslot
-                @endcomponent
-            </div>
-            <div class="md:col-span-4 col-span-12">
-                @component('Frontend.components.card-produk')
-                    @slot('image_url')
-                        https://img.freepik.com/premium-psd/cosmetic-tube-packaging-mockups_144389-269.jpg?w=900
-                    @endslot
-                    @slot('nama')
-                        Lorem ipsum dolor sit amet.
-                    @endslot
-                    @slot('url_detail')
-                         {{ route('detail-produk') }}
-                    @endslot
-                    @slot('url_add')
-                        1
-                    @endslot
-                @endcomponent
-            </div>
-            <div class="md:col-span-4 col-span-12">
-                @component('Frontend.components.card-produk')
-                    @slot('image_url')
-                       https://img.freepik.com/premium-psd/minimal-cream-tube-mockup_590726-56.jpg
-                    @endslot
-                    @slot('nama')
-                        Lorem ipsum dolor sit amet.
-                    @endslot
-                    @slot('url_detail')
-                         {{ route('detail-produk') }}
-                    @endslot
-                    @slot('url_add')
-                        1
-                    @endslot
-                @endcomponent
-            </div>
+            @foreach ($rekomendasi as $item)
+                <div class="md:col-span-4 col-span-12">
+                    @component('Frontend.components.card-produk')
+                        @slot('image_url')
+                            {{ url($item->thumbnail->photo) }}
+                        @endslot
+                        @slot('nama')
+                            {{ $item->nama }}
+                        @endslot
+                        @slot('url_detail')
+                                {{ route('detail-produk', $item->slug) }}
+                        @endslot
+                        @slot('url_add')
+                            {{ $item->id }}
+                        @endslot
+                    @endcomponent
+                </div>
+            @endforeach
+
         </div>
     </section>
 
@@ -154,6 +125,13 @@
         </div>
     </section>
 
+    {{-- <div class="w-screen h-screen bg-blue-200">
+    <div class="flex flex-col justify-between" style="height:100vh">
+        <div>1</div>
+        <div>3</div>
+    </div>
+</div> --}}
+
     {{-- section produk terbaru --}}
     <section class="my-8 md:px-32 px-6">
         <div class="grid grid-flow-row grid-cols-12 gap-6">
@@ -162,54 +140,26 @@
                     Produk Terbaru
                 </div>
             </div>
-            <div class="md:col-span-4 col-span-12">
-                @component('Frontend.components.card-produk')
-                    @slot('image_url')
-                        https://img.freepik.com/premium-psd/logo-mockup-stand-face-hand-cream_145275-462.jpg?w=900
-                    @endslot
-                    @slot('nama')
-                        Lorem ipsum dolor sit amet.
-                    @endslot
-                    @slot('url_detail')
-                         {{ route('detail-produk') }}
-                    @endslot
-                    @slot('url_add')
-                        1
-                    @endslot
-                @endcomponent
-            </div>
-            <div class="md:col-span-4 col-span-12">
-                @component('Frontend.components.card-produk')
-                    @slot('image_url')
-                        https://img.freepik.com/premium-psd/cosmetic-tube-packaging-mockups_144389-269.jpg?w=900
-                    @endslot
-                    @slot('nama')
-                        Lorem ipsum dolor sit amet.
-                    @endslot
-                    @slot('url_detail')
-                         {{ route('detail-produk') }}
-                    @endslot
-                    @slot('url_add')
-                        1
-                    @endslot
-                @endcomponent
-            </div>
-            <div class="md:col-span-4 col-span-12">
-                @component('Frontend.components.card-produk')
-                    @slot('image_url')
-                       https://img.freepik.com/premium-psd/minimal-cream-tube-mockup_590726-56.jpg
-                    @endslot
-                    @slot('nama')
-                        Lorem ipsum dolor sit amet.
-                    @endslot
-                    @slot('url_detail')
-                        {{ route('detail-produk') }}
-                    @endslot
-                    @slot('url_add')
-                        1
-                    @endslot
-                @endcomponent
-            </div>
+            @foreach ($terbaru as $item)
+                <div class="md:col-span-4 col-span-12">
+                    @component('Frontend.components.card-produk')
+                        @slot('image_url')
+                            {{ asset($item->thumbnail->photo) }}
+                        @endslot
+                        @slot('nama')
+                            <div class="text-lg">
+                                {{ $item->nama }}
+                            </div>
+                        @endslot
+                        @slot('url_detail')
+                                {{ route('detail-produk', $item->slug) }}
+                        @endslot
+                        @slot('url_add')
+                            {{ $item->id }}
+                        @endslot
+                    @endcomponent
+                </div>
+            @endforeach
         </div>
     </section>
 
@@ -329,80 +279,7 @@
         </div>
     </section>
 
-<div x-data="{ open: false }">
-  <button @click="open = true">Open Dropdown</button>
-  <ul x-show="open" @click.away="open = false">
-    Dropdown Body
-  </ul>
-</div>
 
-<div class="" x-data="{
-    activeSlide: 1,
-    slides: [
-        {
-            id: 1,
-            title: 'Hello World'
-        },
-        {
-            id: 2,
-            title: 'Hello World'
-        },
-        {
-            id: 3,
-            title: 'Hello World'
-        },
-    ]
-}">
-
-    <template class="" x-for="item in slides" :key="item.id">
-        <div class="">
-
-        </div>
-        <div class="" x-text="item.title"></div>
-    </template>
-
-</div>
-
-<div class="relative" x-data="{
-    activeSlide: 1,
-    slides: [
-        {
-            id: 1,
-            title: 'Hello World'
-        },
-        {
-            id: 2,
-            title: 'Hello World'
-        },
-        {
-            id: 3,
-            title: 'Hello World'
-        },
-    ],
-        images: [
-            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-            'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-            'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
-            'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-            'https://images.unsplash.com/photo-1485160497022-3e09382fb310?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-            'https://images.unsplash.com/photo-1472791108553-c9405341e398?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2137&q=80'
-        ]
-}">
-    <img class="h-64 w-full object-cover object-center"
-        :src="images[activeSlide]"
-        alt="mountains" />
-{{-- <template x-for="item in slides" :key="item.id">
-
-</template> --}}
-
-
-<div class="absolute bottom-0 w-full p-4 flex justify-center space-x-2">
-    <template x-for="(image,index) in images" :key="index">
-        <button @click="activeSlide = index" :class="{'bg-gray-300': activeSlide == index, 'bg-gray-500': activeSlide != index}"
-            class="h-2 w-2 rounded-full hover:bg-gray-300 ring-2 ring-gray-300"></button>
-    </template>
-</div>
-</div>
 
 @endsection
 

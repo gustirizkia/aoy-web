@@ -21,7 +21,7 @@ class CreateTransaksisTable extends Migration
             $table->string('metode_pembayaran');
             $table->string('biaya_pengiriman');
             $table->bigInteger('admin_pembayaran');
-            $table->dateTime('payment_at');
+            $table->dateTime('payment_at')->nullable();
             $table->char('sub_total', 50);
             $table->string('status');
             $table->timestamps();

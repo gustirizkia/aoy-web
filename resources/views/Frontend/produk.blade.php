@@ -27,28 +27,28 @@
                 @endfor
             </div>
         </div>
-        <div class="md:col-span-9">
+        <div class="md:col-span-9 col-span-12">
             <div class="grid grid-flow-row grid-cols-12 gap-4">
-                @for ($i = 0; $i < 6; $i++)
-                <div class="md:col-span-4 col-span-12">
-                    @component('Frontend.components.card-produk')
-                        @slot('image_url')
-                            https://img.freepik.com/premium-psd/logo-mockup-stand-face-hand-cream_145275-462.jpg?w=900
-                        @endslot
-                        @slot('nama')
-                            <div class="text-base">
-                                Lorem ipsum dolor sit amet.
-                            </div>
-                        @endslot
-                        @slot('url_detail')
-                            {{ route('detail-produk') }}
-                        @endslot
-                        @slot('url_add')
-                            1
-                        @endslot
-                    @endcomponent
-                </div>
-                @endfor
+                @foreach ($items as $item)
+                    <div class="md:col-span-4 col-span-12">
+                        @component('Frontend.components.card-produk')
+                            @slot('image_url')
+                                {{ url($item->thumbnail->photo) }}
+                            @endslot
+                            @slot('nama')
+                                <div class="text-base">
+                                    {{ $item->nama }}
+                                </div>
+                            @endslot
+                            @slot('url_detail')
+                                {{ route('detail-produk', $item->slug) }}
+                            @endslot
+                            @slot('url_add')
+                                1
+                            @endslot
+                        @endcomponent
+                    </div>
+                @endforeach
             </div>
 
         </div>

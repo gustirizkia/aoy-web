@@ -4,17 +4,16 @@
 	use Request;
 	use DB;
 	use CRUDBooster;
-    use Illuminate\Support\Str;
 
-	class AdminProductController extends \crocodicstudio\crudbooster\controllers\CBController {
+	class AdminProdukRekomendasisController extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function cbInit() {
 
 			# START CONFIGURATION DO NOT REMOVE THIS LINE
-			$this->title_field = "nama";
+			$this->title_field = "id";
 			$this->limit = "20";
 			$this->orderby = "id,desc";
-			$this->global_privilege = false;
+			$this->global_privilege = true;
 			$this->button_table_action = true;
 			$this->button_bulk_action = true;
 			$this->button_action_style = "button_icon";
@@ -26,39 +25,22 @@
 			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = false;
-			$this->table = "produks";
+			$this->table = "produk_rekomendasis";
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			// $this->col[] = ["label"=>"Kategori","name"=>"kategori_produk_id", 'join' => 'kategori_produks,nama'];
-            $this->col[] = ["label"=>"Kategori","name"=>"kategori_produk_id","join"=>"kategori_produks,nama"];
-			$this->col[] = ["label"=>"Nama","name"=>"nama"];
-			$this->col[] = ["label"=>"Slug","name"=>"slug"];
-			$this->col[] = ["label"=>"Harga","name"=>"harga"];
-			// $this->col[] = ["label"=>"Deskripsi","name"=>"deskripsi"];
-			// $this->col[] = ["label"=>"Cara Pakai","name"=>"cara_pakai"];
-			// $this->col[] = ["label"=>"Khasiat","name"=>"khasiat"];
+			$this->col[] = ["label"=>"Produk","name"=>"produk_id","join"=>"produks,nama"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-            $this->form[] = ['label'=>'Kategori Produk','name'=>'kategori_produk_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'kategori_produks,nama'];
-			$this->form[] = ['label'=>'Nama','name'=>'nama','type'=>'text','validation'=>'required|string|min:3','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
-			$this->form[] = ['label'=>'Harga','name'=>'harga','type'=>'number','validation'=>'required|min:3','width'=>'col-sm-10','placeholder'=>''];
-			$this->form[] = ['label'=>'Deskripsi','name'=>'deskripsi','type'=>'wysiwyg','validation'=>'required|string|min:5','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Cara Pakai','name'=>'cara_pakai','type'=>'wysiwyg','validation'=>'required|string|min:5','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Khasiat','name'=>'khasiat','type'=>'wysiwyg','validation'=>'required|string|min:5','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Produk','name'=>'produk_id','type'=>'select2','validation'=>'required|min:1','width'=>'col-sm-10','datatable'=>'produks,nama'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
-			//$this->form[] = ["label"=>"Nama","name"=>"nama","type"=>"text","required"=>TRUE,"validation"=>"required|string|min:3|max:70","placeholder"=>"You can only enter the letter only"];
-			//$this->form[] = ["label"=>"Slug","name"=>"slug","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
-			//$this->form[] = ["label"=>"Uuid","name"=>"uuid","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
-			//$this->form[] = ["label"=>"Deskripsi","name"=>"deskripsi","type"=>"textarea","required"=>TRUE,"validation"=>"required|string|min:5|max:5000"];
-			//$this->form[] = ["label"=>"Cara Pakai","name"=>"cara_pakai","type"=>"textarea","required"=>TRUE,"validation"=>"required|string|min:5|max:5000"];
-			//$this->form[] = ["label"=>"Khasiat","name"=>"khasiat","type"=>"textarea","required"=>TRUE,"validation"=>"required|string|min:5|max:5000"];
+			//$this->form[] = ["label"=>"Produk Id","name"=>"produk_id","type"=>"select2","required"=>TRUE,"validation"=>"required|min:1|max:255","datatable"=>"produk,id"];
 			# OLD END FORM
 
 			/*
@@ -74,7 +56,7 @@
 	        |
 	        */
 	        $this->sub_module = array();
-            $this->sub_module[] = ['label'=>'Photos','path'=>'ProductImage','parent_columns'=>'nama','foreign_key'=>'product_id','button_color'=>'success','button_icon'=>'fa fa-bars'];
+
 
 	        /*
 	        | ----------------------------------------------------------------------
@@ -268,8 +250,7 @@
 	    */
 	    public function hook_before_add(&$postdata) {
 	        //Your code here
-            $postdata['uuid'] = $this->generateUUID();
-            $postdata['slug'] = $this->createSlug($postdata['nama']);
+
 	    }
 
 	    /*
@@ -336,42 +317,6 @@
 
 
 	    //By the way, you can still create your own method in here... :)
-        public function generateUUID()
-        {
-            $uuid = Str::random(20);
-            $check = DB::table('produks')->where('uuid', $uuid)->first();
-            if($check){
-                $this->generateUUID();
-            }
-            return $uuid;
-        }
 
-            //For Generating Unique Slug Our Custom function
-       public function createSlug($title, $id = 0)
-       {
-             $slug = str_slug($title);
-         $allSlugs = $this->getRelatedSlugs($slug, $id);
-         if (! $allSlugs->contains('slug', $slug)){
-             return $slug;
-         }
-
-         $i = 1;
-         $is_contain = true;
-         do {
-             $newSlug = $slug . '-' . $i;
-             if (!$allSlugs->contains('slug', $newSlug)) {
-                 $is_contain = false;
-                 return $newSlug;
-             }
-             $i++;
-         } while ($is_contain);
-       }
-
-       protected function getRelatedSlugs($slug, $id = 0)
-       {
-           return DB::table('produks')->select('slug')->where('slug', 'like', $slug.'%')
-           ->where('id', '<>', $id)
-           ->get();
-       }
 
 	}

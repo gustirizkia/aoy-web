@@ -115,8 +115,8 @@
             <div class="">Subtotal</div>
             <div class="">Rp400,000</div>
         </div>
-        <div class="mt-6 bg-primary py-2 rounded-xl text-center text-white text-sm">
+        <a href="{{ route('proses-transaksi') }}" class="block w-full mt-6 bg-primary py-2 rounded-xl text-center text-white text-sm">
             Beli
-        </div>
+        </a>
     </div>
 @endsection

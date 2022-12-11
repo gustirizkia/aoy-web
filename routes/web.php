@@ -20,11 +20,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
 Route::get('produk', [ProdukController::class, 'index'])->name('produk');
-Route::get('/produk/detail', [DetailProductController::class, 'index'])->name('detail-produk');
+Route::get('/produk/{slug}', [DetailProductController::class, 'index'])->name('detail-produk');
 Route::get('keranjang', [CartController::class, 'index'])->name('keranjang');
-Route::get('/proses-transaksi', [TransaksiController::class, 'index'])->name('proses-transaksi');
+Route::get('/transaksi-proses', [TransaksiController::class, 'index'])->name('proses-transaksi');
 Route::get('/transaksi-pending', [TransaksiController::class, 'menungguPembayaran'])->name('transaksi-pending');
-Route::get('/rincian-transaksi', [TransaksiController::class, 'rincian'])->name('transaksi-detail');
+Route::get('/transaksi-detail', [TransaksiController::class, 'rincian'])->name('transaksi-detail');
 
 Route::get('/dashboard', function () {
     return view('welcome');
