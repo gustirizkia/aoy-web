@@ -8,17 +8,18 @@
     {{-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" /> --}}
     <link href="/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <script src="{{ asset('js/app.js') }}" defer></script>
 
     @stack('addStyle')
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,900&display=swap" rel="stylesheet">
+    @livewireStyles
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
 </head>
 
-<body class="font-popins  {{ (request()->is('transaksi*')) ? 'bg-transaksi' : '' }}">
+<body class="font-popins  {{ (request()->is('transaksi*')) ? 'bg-transaksi' : '' }}" >
     <nav class="md:flex justify-between py-3 px-4 md:px-32 items-center shadow hidden sticky top-0 bg-white z-30">
         <div class="w-20">
             <a href="/">
@@ -41,18 +42,22 @@
                         <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
                 </div>
-                <div class="mx-5 relative">
-                    @php
-                       $countCart = \App\Models\Cart::where('user_id', Auth::user()->id)->count();
-                    @endphp
+                @php
+                    $countCart = \App\Models\Cart::where('user_id', Auth::user()->id)->sum('qty');
+                @endphp
+                <div class="mx-5 relative" x-data="{
+                    count_cart: '{{ $countCart }}',
+                }" x-init="$store.global.addCart({{ $countCart }})">
+
                     <a href="{{ route('keranjang') }}">
                         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M24 14.8052V10.0134H21.0326L14.0085 3.52308C14.0873 3.30075 14.1307 3.06174 14.1307 2.81266C14.1307 1.6378 13.1749 0.681976 12 0.681976C10.8251 0.681976 9.86932 1.6378 9.86932 2.81266C9.86932 3.06171 9.91267 3.30075 9.99155 3.52308L2.96739 10.0134H0V14.8052H0.838911L3.75375 23.3181H20.2462L23.161 14.8052H24V14.8052ZM15.903 17.3536H12.8412V14.8284H16.1524L15.903 17.3536ZM11.1588 21.6356H8.5198L8.2631 19.0361H11.1588V21.6356ZM8.09698 17.3536L7.84763 14.8284H11.1588V17.3536H8.09698ZM12.4482 2.81266C12.4482 2.94258 12.3923 3.05941 12.3037 3.14133C12.2238 3.21526 12.1172 3.26086 12 3.26086C11.8828 3.26086 11.7763 3.21526 11.6963 3.14133C11.6077 3.05939 11.5518 2.94258 11.5518 2.81266C11.5518 2.68274 11.6077 2.5659 11.6963 2.48398C11.7762 2.41005 11.8828 2.36445 12 2.36445C12.1172 2.36445 12.2237 2.41005 12.3037 2.48398C12.3923 2.56593 12.4482 2.68274 12.4482 2.81266ZM11.1336 4.75854C11.3985 4.87695 11.6916 4.94336 12 4.94336C12.3084 4.94336 12.6015 4.87695 12.8664 4.75854L18.5535 10.0134H5.44657L11.1336 4.75854ZM1.68247 11.6959H22.3175V13.1227H1.68247V11.6959ZM6.15699 14.8284L6.40634 17.3536H3.4899L2.62525 14.8284H6.15699ZM4.95605 21.6356L4.06597 19.0361H6.57249L6.82916 21.6356H4.95605ZM12.8412 19.0361H15.7369L15.4802 21.6356H12.8412V19.0361ZM19.044 21.6356H17.1708L17.4275 19.0361H19.934L19.044 21.6356ZM20.5101 17.3536H17.5937L17.843 14.8284H21.3748L20.5101 17.3536Z"
                                 fill="#A349A3" />
                         </svg>
-                        @if ($countCart > 0)
-                            <span class="absolute top-0 -right-2 bg-gray-800 px-2 py-1 rounded-full text-xs text-white leading-none">{{ $countCart }}</span>
-                        @endif
+                        <span class="absolute top-0 -right-2 bg-gray-800 px-2 py-1 rounded-full text-xs text-white leading-none" x-show="count_cart > 0 || $store.global.qtyCart > 0">
+                            <span x-text="$store.global.qtyCart"></span>
+                        </span>
+
                     </a>
                 </div>
                 <a href="/login" class=" text-gray-600 rounded-lg ">{{ Auth::user()->name }}</a>
@@ -190,7 +195,11 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-    <script src="{{ mix('js/app.js') }}" defer></script>
     @stack('addScript')
+    @livewireScripts
+
+    <script>
+
+    </script>
 </body>
 </html>

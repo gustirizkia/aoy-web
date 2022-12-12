@@ -1,4 +1,4 @@
-<div class="bg-white p-8 rounded-lg shadow h-full flex flex-col justify-start">
+<div class="bg-white p-8 rounded-lg shadow h-full flex flex-col justify-start" >
 
     <div class="">
             <img src="{{ $image_url }}" alt="" class="rounded-lg w-full ">
@@ -26,6 +26,7 @@
 </div>
 
 @push('addScript')
+
     <script>
         function addCart(idProduk){
             Swal.fire({

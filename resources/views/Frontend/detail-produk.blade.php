@@ -50,7 +50,7 @@
                         </div>
                     </div>
                     <div class="my-4 flex">
-                        <div onclick="addAcrt()" class="border-2 border-primary px-4 py-2 rounded-xl font-medium text-primary cursor-pointer hover:bg-primary hover:text-white w-full text-center">
+                        <div @click="handleAddCart()" class="border-2 border-primary px-4 py-2 rounded-xl font-medium text-primary cursor-pointer hover:bg-primary hover:text-white w-full text-center">
                             + Keranjang
                         </div>
                         <div class="border-2 border-primary px-4 py-2 rounded-xl font-medium cursor-pointer bg-primary text-white ml-4 w-full text-center">
@@ -116,6 +116,7 @@
     <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="{{ asset('vendor/axios.min.js') }}"></script>
 
     <script>
          $('.your-class').slick({
@@ -209,6 +210,20 @@
                         },
                     @endforeach
                ],
+               handleAddCart(){
+                    axios.post("{{ route('add-cart') }}", {
+                        user_id: {{ Auth::user()->id }},
+                        produk_id: {{ $produk->id }},
+                        qty: this.qty
+                    }).then(res =>{
+                        console.log('res', res)
+                        this.$store.global.addCart(this.qty)
+                    }).catch(err =>{
+                        console.log('err', err)
+                    })
+
+                    return 1;
+               },
                 showData(param){
                     if(param === 'deskripsi'){
                         this.isDeskripsi = 1;
@@ -218,9 +233,7 @@
 
                 },
 
-                addCart(){
 
-                },
                 counterQty(param)
                 {
                     if(param === 'plus'){

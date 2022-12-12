@@ -25,6 +25,7 @@ Route::get('keranjang', [CartController::class, 'index'])->name('keranjang');
 Route::get('/transaksi-proses', [TransaksiController::class, 'index'])->name('proses-transaksi');
 Route::get('/transaksi-pending', [TransaksiController::class, 'menungguPembayaran'])->name('transaksi-pending');
 Route::get('/transaksi-detail', [TransaksiController::class, 'rincian'])->name('transaksi-detail');
+Route::post('/add-cart', [DetailProductController::class, 'addCart'])->name('add-cart');
 
 Route::get('/dashboard', function () {
     return view('welcome');
