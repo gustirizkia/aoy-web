@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index']);
 Route::get('produk', [ProdukController::class, 'index'])->name('produk');
 Route::get('/produk/{slug}', [DetailProductController::class, 'index'])->name('detail-produk');
-Route::get('keranjang', [CartController::class, 'index'])->name('keranjang');
+Route::get('keranjang', [CartController::class, 'index'])->name('keranjang')->middleware('auth');
 Route::get('/transaksi-proses', [TransaksiController::class, 'index'])->name('proses-transaksi');
 Route::get('/transaksi-pending', [TransaksiController::class, 'menungguPembayaran'])->name('transaksi-pending');
 Route::get('/transaksi-detail', [TransaksiController::class, 'rincian'])->name('transaksi-detail');
