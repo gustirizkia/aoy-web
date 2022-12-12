@@ -211,6 +211,7 @@
                     @endforeach
                ],
                handleAddCart(){
+                @if(Auth::user())
                     axios.post("{{ route('add-cart') }}", {
                         user_id: {{ Auth::user()->id }},
                         produk_id: {{ $produk->id }},
@@ -221,6 +222,7 @@
                     }).catch(err =>{
                         console.log('err', err)
                     })
+                @endif
 
                     return 1;
                },
