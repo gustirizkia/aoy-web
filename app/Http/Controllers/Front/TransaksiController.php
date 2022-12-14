@@ -3,15 +3,52 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\Transaksi;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class TransaksiController extends Controller
 {
     public function index(Request $request)
     {
+        $data = $request->all();
+        $data['user'] = auth()->user();
+        return response()->json($data);
+
         return view('Frontend.transaksi.index');
+    }
+
+    public function cretaeInvPembelian(Request $request)
+    {
+        $validasi = Validator::make($request->all(), [
+            'user_id' => 'required|integer',
+            'carts' => 'required',
+            'level_id' => 'required'
+        ]);
+
+        if($validasi->fails())
+        {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validasi->errors()
+            ], 422);
+        }
+
+        $carts = $request->carts;
+        $subTotal = 0;
+        // $level = DB::table('levels')->where('id', )
+
+        for ($i=0; $i < count($carts); $i++) {
+            $cart = DB::table('carts')
+                ->join('produks', 'carts.produk_id', 'produks.id')
+                ->where('carts.id', $carts[$i])->first();
+            // $diskon =
+        }
+
+        $produks = DB::table('produks')->whereIn('id', $request->produks)->get();
     }
 
     public function menungguPembayaran(Request $request)

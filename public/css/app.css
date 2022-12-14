@@ -2872,6 +2872,12 @@ textarea.form-control.is-invalid {
 .bottom-0 {
   bottom: 0px;
 }
+.-top-24 {
+  top: -6rem;
+}
+.left-0 {
+  left: 0px;
+}
 .-top-2 {
   top: -0.5rem;
 }
@@ -2881,14 +2887,8 @@ textarea.form-control.is-invalid {
 .-top-1 {
   top: -0.25rem;
 }
-.left-0 {
-  left: 0px;
-}
 .top-20 {
   top: 5rem;
-}
-.-top-24 {
-  top: -6rem;
 }
 .-right-2 {
   right: -0.5rem;
@@ -2920,14 +2920,14 @@ textarea.form-control.is-invalid {
 .col-span-4 {
   grid-column: span 4 / span 4;
 }
+.col-span-6 {
+  grid-column: span 6 / span 6;
+}
 .col-span-3 {
   grid-column: span 3 / span 3;
 }
 .col-span-9 {
   grid-column: span 9 / span 9;
-}
-.col-span-6 {
-  grid-column: span 6 / span 6;
 }
 .my-auto {
   margin-top: auto;
@@ -2941,18 +2941,6 @@ textarea.form-control.is-invalid {
   margin-left: auto;
   margin-right: auto;
 }
-.my-6 {
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-.mx-6 {
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
-}
-.my-3 {
-  margin-top: 0.75rem;
-  margin-bottom: 0.75rem;
-}
 .my-8 {
   margin-top: 2rem;
   margin-bottom: 2rem;
@@ -2964,6 +2952,18 @@ textarea.form-control.is-invalid {
 .mx-2 {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
+}
+.my-6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.mx-6 {
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}
+.my-3 {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 .my-2 {
   margin-top: 0.5rem;
@@ -3026,6 +3026,15 @@ textarea.form-control.is-invalid {
 .-mr-2 {
   margin-right: -0.5rem;
 }
+.mt-5 {
+  margin-top: 1.25rem;
+}
+.mb-8 {
+  margin-bottom: 2rem;
+}
+.mt-12 {
+  margin-top: 3rem;
+}
 .ml-5 {
   margin-left: 1.25rem;
 }
@@ -3040,15 +3049,6 @@ textarea.form-control.is-invalid {
 }
 .ml-32 {
   margin-left: 8rem;
-}
-.mt-5 {
-  margin-top: 1.25rem;
-}
-.mb-8 {
-  margin-bottom: 2rem;
-}
-.mt-12 {
-  margin-top: 3rem;
 }
 .mt-1 {
   margin-top: 0.25rem;
@@ -3122,17 +3122,20 @@ textarea.form-control.is-invalid {
 .h-10 {
   height: 2.5rem;
 }
+.h-56 {
+  height: 14rem;
+}
 .h-24 {
   height: 6rem;
 }
 .h-1 {
   height: 0.25rem;
 }
-.h-56 {
-  height: 14rem;
-}
 .h-screen {
   height: 100vh;
+}
+.h-32 {
+  height: 8rem;
 }
 .h-8 {
   height: 2rem;
@@ -3164,15 +3167,6 @@ textarea.form-control.is-invalid {
 .w-auto {
   width: auto;
 }
-.w-1 {
-  width: 0.25rem;
-}
-.w-72 {
-  width: 18rem;
-}
-.w-32 {
-  width: 8rem;
-}
 .w-2\/3 {
   width: 66.666667%;
 }
@@ -3181,6 +3175,15 @@ textarea.form-control.is-invalid {
 }
 .w-40 {
   width: 10rem;
+}
+.w-32 {
+  width: 8rem;
+}
+.w-1 {
+  width: 0.25rem;
+}
+.w-72 {
+  width: 18rem;
 }
 .w-12 {
   width: 3rem;
@@ -3433,14 +3436,6 @@ textarea.form-control.is-invalid {
   --tw-bg-opacity: 1;
   background-color: rgb(163 73 163 / var(--tw-bg-opacity));
 }
-.bg-purple-100 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(243 232 255 / var(--tw-bg-opacity));
-}
-.bg-gray-800 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(31 41 55 / var(--tw-bg-opacity));
-}
 .bg-purple-50 {
   --tw-bg-opacity: 1;
   background-color: rgb(250 245 255 / var(--tw-bg-opacity));
@@ -3448,6 +3443,14 @@ textarea.form-control.is-invalid {
 .bg-gray-50 {
   --tw-bg-opacity: 1;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+}
+.bg-purple-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 232 255 / var(--tw-bg-opacity));
+}
+.bg-gray-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(31 41 55 / var(--tw-bg-opacity));
 }
 .bg-indigo-50 {
   --tw-bg-opacity: 1;
@@ -3542,14 +3545,6 @@ textarea.form-control.is-invalid {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
 }
-.py-12 {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-}
-.py-3 {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
-}
 .py-14 {
   padding-top: 3.5rem;
   padding-bottom: 3.5rem;
@@ -3557,6 +3552,10 @@ textarea.form-control.is-invalid {
 .px-8 {
   padding-left: 2rem;
   padding-right: 2rem;
+}
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
 }
 .py-16 {
   padding-top: 4rem;
@@ -3573,6 +3572,10 @@ textarea.form-control.is-invalid {
 .py-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
+}
+.py-12 {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
 }
 .py-4 {
   padding-top: 1rem;
@@ -3606,11 +3609,11 @@ textarea.form-control.is-invalid {
 .pr-14 {
   padding-right: 3.5rem;
 }
-.pt-1 {
-  padding-top: 0.25rem;
-}
 .pl-4 {
   padding-left: 1rem;
+}
+.pt-1 {
+  padding-top: 0.25rem;
 }
 .pt-8 {
   padding-top: 2rem;
@@ -3649,13 +3652,13 @@ textarea.form-control.is-invalid {
   font-size: 1rem;
   line-height: 1.5rem;
 }
-.text-lg {
-  font-size: 1.125rem;
-  line-height: 1.75rem;
-}
 .text-3xl {
   font-size: 1.875rem;
   line-height: 2.25rem;
+}
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
 }
 .text-2xl {
   font-size: 1.5rem;
@@ -3680,11 +3683,11 @@ textarea.form-control.is-invalid {
 .leading-5 {
   line-height: 1.25rem;
 }
-.leading-tight {
-  line-height: 1.25;
-}
 .leading-8 {
   line-height: 2rem;
+}
+.leading-tight {
+  line-height: 1.25;
 }
 .leading-none {
   line-height: 1;
@@ -3867,13 +3870,13 @@ textarea.form-control.is-invalid {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
-.hover\:bg-gray-700:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
-}
 .hover\:bg-purple-500:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(168 85 247 / var(--tw-bg-opacity));
+}
+.hover\:bg-gray-700:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
 }
 .hover\:bg-gray-50:hover {
   --tw-bg-opacity: 1;
@@ -4100,24 +4103,24 @@ textarea.form-control.is-invalid {
     grid-column: span 8 / span 8;
   }
 
-  .md\:col-span-5 {
-    grid-column: span 5 / span 5;
+  .md\:col-span-6 {
+    grid-column: span 6 / span 6;
   }
 
   .md\:col-span-4 {
     grid-column: span 4 / span 4;
   }
 
-  .md\:col-span-3 {
-    grid-column: span 3 / span 3;
-  }
-
-  .md\:col-span-6 {
-    grid-column: span 6 / span 6;
-  }
-
   .md\:col-span-7 {
     grid-column: span 7 / span 7;
+  }
+
+  .md\:col-span-5 {
+    grid-column: span 5 / span 5;
+  }
+
+  .md\:col-span-3 {
+    grid-column: span 3 / span 3;
   }
 
   .md\:col-span-9 {
@@ -4138,16 +4141,16 @@ textarea.form-control.is-invalid {
     margin-top: 3rem;
   }
 
+  .md\:mb-12 {
+    margin-bottom: 3rem;
+  }
+
   .md\:mt-8 {
     margin-top: 2rem;
   }
 
   .md\:mt-0 {
     margin-top: 0px;
-  }
-
-  .md\:mb-12 {
-    margin-bottom: 3rem;
   }
 
   .md\:ml-8 {
@@ -4247,11 +4250,6 @@ textarea.form-control.is-invalid {
     line-height: 1.25rem;
   }
 
-  .md\:text-2xl {
-    font-size: 1.5rem;
-    line-height: 2rem;
-  }
-
   .md\:text-6xl {
     font-size: 3.75rem;
     line-height: 1;
@@ -4265,6 +4263,11 @@ textarea.form-control.is-invalid {
   .md\:text-xl {
     font-size: 1.25rem;
     line-height: 1.75rem;
+  }
+
+  .md\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 
   .md\:leading-10 {

@@ -7,6 +7,7 @@ use App\Models\Cart;
 use App\Models\Produk;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
 class CartController extends Controller
@@ -18,11 +19,13 @@ class CartController extends Controller
         }
 
         $cart = Cart::with('produk')->where('user_id', auth()->user()->id)->get()->groupBy('produk_id')->values();
-
+        $potongan = DB::table('levels')->where('id', auth()->user()->level)->first();
+        // dd($potongan);
         // return response()->json($cart);
 
         return view('Frontend.keranjang', [
-            'produks' => $cart
+            'produks' => $cart,
+            'level' => $potongan
         ]);
     }
 }

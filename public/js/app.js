@@ -5049,8 +5049,14 @@ __webpack_require__.r(__webpack_exports__);
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"];
 alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"].store("global", {
   qtyCart: 0,
+  total_harga: 0,
   addCart: function addCart(param) {
-    this.qtyCart += param;
+    var minus = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    if (minus) {
+      this.qtyCart -= param;
+    } else {
+      this.qtyCart += param;
+    }
   }
 });
 alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"].start();

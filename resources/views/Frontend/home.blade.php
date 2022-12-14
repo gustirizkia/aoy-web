@@ -52,6 +52,12 @@
             @foreach ($rekomendasi as $item)
                 <div class="md:col-span-4 col-span-12">
                     @component('Frontend.components.card-produk')
+                        @slot('param_nama')
+                            {{ $item->nama }}
+                        @endslot
+                        @slot('idProduk')
+                            {{ $item->id }}
+                        @endslot
                         @slot('image_url')
                             {{ url($item->thumbnail->photo) }}
                         @endslot
@@ -143,6 +149,12 @@
             @foreach ($terbaru as $item)
                 <div class="md:col-span-4 col-span-12">
                     @component('Frontend.components.card-produk')
+                        @slot('param_nama')
+                            {{ $item->nama }}
+                        @endslot
+                        @slot('idProduk')
+                            {{ $item->id }}
+                        @endslot
                         @slot('image_url')
                             {{ asset($item->thumbnail->photo) }}
                         @endslot

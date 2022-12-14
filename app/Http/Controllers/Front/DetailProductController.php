@@ -40,7 +40,19 @@ class DetailProductController extends Controller
 
         $cek = DB::table('carts')->where('user_id', $request->user_id)->where('produk_id', $request->produk_id)->first();
         if($cek){
-            $data['qty'] += $cek->qty;
+            if($request->status === 'minus')
+            {
+                $minusQty = $cek->qty - $data['qty'];
+                $data['qty'] = $minusQty;
+
+                if($data['qty'] <= 0)
+                {
+                    $delete = DB::table('carts')->where('user_id', $request->user_id)->where('produk_id', $request->produk_id)->delete();
+                    return response()->json($data);
+                }
+            }else{
+                $data['qty'] += $cek->qty;
+            }
             $update = DB::table('carts')->where('user_id', $request->user_id)->where('produk_id', $request->produk_id)->update($data);
         }else{
             $insert = DB::table('carts')->insert($data);
