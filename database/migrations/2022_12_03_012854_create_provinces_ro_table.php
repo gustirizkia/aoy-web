@@ -16,7 +16,7 @@ class CreateProvincesRoTable extends Migration
         Schema::create('provinces_ro', function (Blueprint $table) {
             $table->id();
             $table->integer('province_id');
-            $table->string('province_name');
+            $table->string('name');
             $table->timestamps();
         });
     }

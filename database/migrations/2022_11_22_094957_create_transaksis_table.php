@@ -18,9 +18,9 @@ class CreateTransaksisTable extends Migration
             $table->bigInteger('user_id');
             $table->string('no_inv');
             $table->string('jenis_inv');
-            $table->string('metode_pembayaran');
-            $table->string('biaya_pengiriman');
-            $table->bigInteger('admin_pembayaran');
+            $table->string('metode_pembayaran')->nullable();
+            $table->string('biaya_pengiriman')->nullable();
+            $table->bigInteger('admin_pembayaran')->nullable();
             $table->dateTime('payment_at')->nullable();
             $table->char('sub_total', 50);
             $table->string('status');

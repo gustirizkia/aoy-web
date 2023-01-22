@@ -26,4 +26,8 @@ class Produk extends Model
     public function image(){
         return $this->hasMany('App\Models\ImageProduk', 'product_id');
     }
+
+    public function kategori(){
+        return $this->belongsTo('App\Models\KategoriProduk', 'kategori_produk_id');
+    }
 }

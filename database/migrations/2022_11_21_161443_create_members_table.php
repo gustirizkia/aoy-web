@@ -16,11 +16,11 @@ class CreateMembersTable extends Migration
         Schema::create('members', function (Blueprint $table) {
             $table->id();
             $table->string('user_uuid');
-            $table->string('ref_id');
-            $table->string('level_id');
             $table->string('akun_ig')->nullable();
             $table->string('nomor_wa')->nullable();
-
+            $table->string('nama');
+            $table->bigInteger('users_address_id')->nullable();
+            $table->longText('deskripsi');
             $table->timestamps();
         });
     }

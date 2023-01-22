@@ -22,6 +22,8 @@
             padding: 16px 20px;
             border-radius: 80px;
             font-weight: 500;
+            background: #A349A3;
+            color: white;
         }
         .shape__r{
                 top: 0;

@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ListProvinsi extends Model
 {
     use HasFactory;
+
+    protected $table = "provinces_ro";
+    protected $guarded = [];
 }

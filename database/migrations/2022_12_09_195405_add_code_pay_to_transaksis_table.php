@@ -14,11 +14,11 @@ class AddCodePayToTransaksisTable extends Migration
     public function up()
     {
         Schema::table('transaksis', function (Blueprint $table) {
-            $table->string('pay_code');
+            $table->string('pay_code')->nullable();
             $table->string('checkout_url')->nullable();
-            $table->string('expired_time');
+            $table->string('expired_time')->nullable();
             $table->string('fee_customer')->nullable();
-            $table->string('payment_name');
+            $table->string('payment_name')->nullable();
 
         });
     }

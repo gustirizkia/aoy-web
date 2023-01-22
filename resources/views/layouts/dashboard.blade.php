@@ -11,20 +11,42 @@
 
     <title>@yield('title')</title>
 
-    <link
-      rel="icon"
-      href="/images/logo.svg"
-      sizes="32x32"
-    />
+    @php
+        $storeImage = \DB::table('members')->where('user_uuid', auth()->user()->uuid)->first()->image;
+    @endphp
+
+    @if ($storeImage)
+        <link
+            rel="icon"
+            href="{{ url('storage/'.$storeImage) }}"
+            sizes="32x32"
+        />
+    @else
+        <link
+            rel="icon"
+            href="{{ asset('gambar/no-image.png') }}"
+            sizes="32x32"
+        />
+    @endif
+
 
     @stack('prepend-style')
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <link href="/style/main.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('style/layout.css') }}">
+    <script src="{{ asset('js/app.js') }}" defer></script>
     @stack('addStyle')
 
     <style>
         .main__dashboard{
             margin-top: 100px;
+        }
+        .sidebar-heading .image__store{
+            width: 132px;
+            border-radius: 4px;
+        }
+        .cursor-pointer{
+            cursor: pointer;
         }
     </style>
   </head>
@@ -35,45 +57,51 @@
         <!-- Sidebar -->
         <div class="border-right" id="sidebar-wrapper">
           <div class="sidebar-heading text-center">
-            <img src="/images/dashboard-store-logo.svg" alt="" class="my-4" />
+
+            @if ($storeImage)
+                <img src="{{ url('storage/' . $storeImage) }}" alt="" class="my-4 image__store" />
+            @else
+                <img src="{{ asset('gambar/no-image.png') }}" alt="" class="my-4 image__store" />
+            @endif
+            <h4 class="text__primary">{{ \App\Models\Level::where('id', auth()->user()->id)->first()->nama }}</h4>
           </div>
           <div class="list-group list-group-flush">
             <a
-              href=""
-              class="list-group-item list-group-item-action active {{ (request()->is('dashboard')) ? 'active' : '' }}"
+              href="/dashboard"
+              class="list-group-item list-group-item-action  {{ (request()->is('dashboard')) ? 'active' : '' }}"
             >
               Dashboard
             </a>
             <a
-              href=""
-              class="list-group-item list-group-item-action {{ (request()->is('dashboard/products*')) ? 'active' : '' }}"
+              href="{{ route('produk-saya') }}"
+              class="list-group-item list-group-item-action {{ (request()->is('dashboard/produk*')) ? 'active' : '' }}"
             >
-              My Products
+              Produk Saya
             </a>
             <a
-              href=""
-              class="list-group-item list-group-item-action {{ (request()->is('dashboard/transactions*')) ? 'active' : '' }}"
+              href="{{ route('dashboard-transaksi') }}"
+              class="list-group-item list-group-item-action {{ (request()->is('dashboard/transaksi*')) ? 'active' : '' }}"
             >
-              Transactions
+              Transaksi
             </a>
             <a
-              href=""
-              class="list-group-item list-group-item-action {{ (request()->is('dashboard/settings*')) ? 'active' : '' }}"
+              href="{{ route('store-setting') }}"
+              class="list-group-item list-group-item-action {{ (request()->is('dashboard/store*')) ? 'active' : '' }}"
             >
-              Store Settings
+              Pengaturan Toko
             </a>
             <a
               href=""
               class="list-group-item list-group-item-action {{ (request()->is('dashboard/account*')) ? 'active' : '' }}"
             >
-              My Account
+              Akun Saya
             </a>
             <a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="list-group-item list-group-item-action">
-              Sign Out
+              Keluar
             </a>
-            {{-- <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 @csrf
-            </form> --}}
+            </form>
           </div>
         </div>
 
@@ -114,13 +142,9 @@
                         alt="Icon User"
                         class="rounded-circle mr-2 profile-picture"
                       />
-                      Hi,
+                      Hi, {{ Auth::user()->name }}
                     </a>
                     <div class="dropdown-menu">
-                      <a href="" class="dropdown-item">Dashboard</a>
-                      <a href="" class="dropdown-item"
-                        >Settings</a
-                      >
                       <div class="dropdown-divider"></div>
                       <a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item">Logout</a>
                       <form id="logout-form" action="" method="POST" style="display: none;">
@@ -130,17 +154,16 @@
                   </li>
                  <li class="nav-item">
                     <a href="#" class="nav-link d-inline-block mt-2">
-                        {{-- @php
-                            $carts = \App\Cart::where('users_id', Auth::user()->id)->count();
-                        @endphp --}}
+                        @php
+                            $carts = \App\Models\Cart::where('user_id', Auth::user()->id)->sum('qty');
+                        @endphp
 
-                        {{-- @if ($carts > 0)
+                        @if ($carts > 0)
                             <img src="/images/icon-cart-filled.svg" alt="" />
                             <div class="card-badge">{{ $carts }}</div>
                         @else
                             <img src="/images/icon-cart-empty.svg" alt="" />
-                            @endif --}}
-                        <img src="/images/icon-cart-empty.svg" alt="" />
+                        @endif
                     </a>
                   </li>
                 </ul>
@@ -184,6 +207,7 @@
     <script src="/vendor/jquery/jquery.slim.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
       AOS.init();
     </script>
@@ -194,5 +218,16 @@
       });
     </script>
     @stack('addScript')
+
+    @if (Session::has('success'))
+        <script>
+              Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: "{{ Session::get('success') }}"
+            })
+        </script>
+
+    @endif
   </body>
 </html>

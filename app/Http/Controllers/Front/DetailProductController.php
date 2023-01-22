@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
+use App\Models\DetailTransaksi;
 use App\Models\ImageProduk;
 use App\Models\Produk;
+use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class DetailProductController extends Controller
 {
@@ -18,17 +21,80 @@ class DetailProductController extends Controller
             abort(404);
         }
 
-        // $test = \App\Models\Cart::where('user_id', Auth::user()->id)->sum('qty');
-        // dd($test);
-
 
         $image = ImageProduk::where('product_id', $data->id)->get();
-        // return response()->json([$data, $image]);
 
         return view('Frontend.detail-produk', [
             'produk' => $data,
             'images' => $image
         ]);
+    }
+
+    public function orderLangsung(Request $request)
+    {
+        $validasi = Validator::make($request->all(), [
+            'produk_id' => 'required|exists:produks,id'
+        ]);
+
+        if($validasi->fails()){
+            return response()->json([
+                'status' => 'error',
+                'message' => $validasi->errors()
+            ], 422);
+        }
+
+        $user_id = auth()->user()->id;
+        $level = DB::table('levels')->where('id', $user_id)->first();
+        $diskon = 0;
+        $jenisInv = 'pembelian';
+        $noInv = 'AOY/INV/'.$user_id.time();
+        $totalHarga = 0;
+        $subTotal = 0;
+
+        $produk = DB::table('produks')->where('id', $request->produk_id)->first();
+        $totalHargaProduk = $produk->harga;
+        $totalHarga += $totalHargaProduk;
+
+        if($level->tipe_potongan === 'fix')
+        {
+            // potong tiap produk
+            $potonganProduk = $level->potongan_harga;
+            $diskon += $potonganProduk;
+            $subTotal += $totalHargaProduk - $potonganProduk;
+
+        }else{
+            $nilai = ($level->potongan_harga/100)*$produk->harga;
+            $potonganProduk = $nilai;
+
+            $diskon += $potonganProduk;
+            $subTotal += $totalHarga - $potonganProduk;
+        }
+
+        $createInv = Transaksi::create([
+                        'user_id' => $user_id,
+                        'no_inv' => $noInv,
+                        'jenis_inv' => $jenisInv,
+                        'sub_total' => $subTotal,
+                        'status' => 'create',
+                        'total_harga_barang' => $totalHarga,
+                        'diskon' => $diskon
+                    ]);
+
+        $insertDetailTransaksi = DetailTransaksi::create([
+                                    'produk_id' => $produk->id,
+                                    'transaksi_id' => $createInv->id,
+                                    'qty' => 1,
+                                    'harga' => $produk->harga,
+                                    'potong' => $potonganProduk
+                                ]);
+
+        return response()->json([
+            'status' => 'success',
+            'produk' => $produk,
+            'inv' => $createInv
+        ]);
+
+
     }
 
     public function addCart(Request $request)

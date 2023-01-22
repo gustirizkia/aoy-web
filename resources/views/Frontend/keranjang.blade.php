@@ -9,8 +9,9 @@
 @endpush
 
 @section('content')
+
 <div class="" x-data="funData">
-    <form action="{{ route('proses-transaksi') }}" @submit.prevent="handleSubmit()" method="POST">
+    <form  @submit.prevent="handleSubmit()" method="POST">
         @csrf
         <section class="md:px-32 px-6 mt-6 md:mt-12" >
             <div class="md:px-20">
@@ -95,7 +96,7 @@
                                 <div x-text="'Rp'+numberWithCommas(potongan.total_potongan)" class="">Rp400,000</div>
                             </div>
                             <div class="">
-                                <button type="submit" class="block w-full">
+                                <button type="submit" class="block w-full" :disabled="pilihan.length <= 0">
                                     <div class="mt-8 bg-primary py-2 rounded-xl text-center text-white">
                                         Beli
                                     </div>
@@ -130,7 +131,7 @@
                 <div class="">Subtotal</div>
                 <div x-text="'Rp'+numberWithCommas(potongan.total_potongan)" class="">Rp400,000</div>
             </div>
-            <a href="{{ route('proses-transaksi') }}" class="block w-full mt-6 bg-primary py-2 rounded-xl text-center text-white text-sm">
+            <a href="#" class="block w-full mt-6 bg-primary py-2 rounded-xl text-center text-white text-sm">
                 Beli
             </a>
         </div>
@@ -201,12 +202,15 @@
                 },
 
                 handleSubmit(){
-                    axios.post("{{ route('proses-transaksi') }}", {
+                    axios.post("{{ route('createInv') }}", {
                         carts: this.pilihan,
                     }, {
                         csrfToken: "{{ csrf_token() }}",
                     }).then(ress =>{
                         console.log(ress);
+                        console.log('ress.data.no_inv', ress.data.inv.no_inv)
+                        // return;
+                        window.location.replace("{{ route('proses-transaksi') }}?inv="+ress.data.inv.no_inv);
                     });
                 },
 

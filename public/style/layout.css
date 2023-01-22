@@ -6,3 +6,12 @@ nav .form-control {
 nav .btn__search {
     padding: 0 0.75rem;
 }
+
+.text__primary {
+    color: #a349a3 !important;
+}
+
+.btn__primary {
+    background-color: #a349a3;
+    color: white;
+}

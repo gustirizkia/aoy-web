@@ -27,9 +27,9 @@
                         </div>
 
                         <div class="flex mt-6">
-                            <img src="{{ asset('gambar/icon/bri.png') }}" alt="" class="">
+                            {{-- <img src="{{ $item-> }}" alt="" class=""> --}}
                             <div class="ml-6">
-                                BRI Virtual Account
+                                {{ $item->payment_name }}
                             </div>
                         </div>
 
@@ -41,7 +41,7 @@
 
                                 <div class="flex mt-2">
                                     <div class="font-medium">
-                                        70071829471259461
+                                        {{ $item->pay_code }}
                                     </div>
                                     <div class="text-primary font-semibold ml-2">
                                         Salin
@@ -55,7 +55,7 @@
 
                                 <div class="flex mt-2">
                                     <div class="font-medium">
-                                        Rp900,0000
+                                        Rp{{ number_format($item->amount) }}
                                     </div>
                                     <div class="">
                                         <a href="{{ route('transaksi-detail') }}">

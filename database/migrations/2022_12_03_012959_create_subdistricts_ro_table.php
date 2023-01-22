@@ -17,7 +17,7 @@ class CreateSubdistrictsRoTable extends Migration
             $table->id();
             $table->integer('province_id');
             $table->integer('city_id');
-            $table->string('subdistrict_name');
+            $table->string('name');
             $table->timestamps();
         });
     }

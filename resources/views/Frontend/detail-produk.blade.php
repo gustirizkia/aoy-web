@@ -53,7 +53,7 @@
                         <div @click="handleAddCart()" class="border-2 border-primary px-4 py-2 rounded-xl font-medium text-primary cursor-pointer hover:bg-primary hover:text-white w-full text-center">
                             + Keranjang
                         </div>
-                        <div class="border-2 border-primary px-4 py-2 rounded-xl font-medium cursor-pointer bg-primary text-white ml-4 w-full text-center">
+                        <div class="border-2 border-primary px-4 py-2 rounded-xl font-medium cursor-pointer bg-primary text-white ml-4 w-full text-center" @click="handleOrderLangsung">
                             Order
                         </div>
                     </div>
@@ -233,6 +233,19 @@
                         this.isDeskripsi = 0;
                     }
 
+                },
+
+                handleOrderLangsung(){
+                    axios.post("{{ route('orderLangsung') }}", {
+                        produk_id: this.produk_id,
+                    }, {
+                        csrfToken: "{{ csrf_token() }}",
+                    }).then(ress => {
+                        console.log('ress.data.inv.no_inv', ress.data.inv.no_inv)
+                        window.location.replace("{{ route('proses-transaksi') }}?inv="+ress.data.inv.no_inv);
+                    }).catch(err =>{
+                        console.log('err', err)
+                    });
                 },
 
 
