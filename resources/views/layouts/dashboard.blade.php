@@ -48,6 +48,22 @@
         .cursor-pointer{
             cursor: pointer;
         }
+        label{
+            font-weight: 500;
+            font-size: 16px;
+            color: #0C0D36;
+        }
+        .form-control{
+            font-weight: 400;
+            font-size: 16px;
+            color: #0C0D36;
+        }
+        .profile-picture-topbar{
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+        }
     </style>
   </head>
 
@@ -91,8 +107,8 @@
               Pengaturan Toko
             </a>
             <a
-              href=""
-              class="list-group-item list-group-item-action {{ (request()->is('dashboard/account*')) ? 'active' : '' }}"
+              href="{{ route('akun-saya') }}"
+              class="list-group-item list-group-item-action {{ (request()->is('dashboard/akun-saya*')) ? 'active' : '' }}"
             >
               Akun Saya
             </a>
@@ -138,9 +154,9 @@
                       data-toggle="dropdown"
                     >
                       <img
-                        src="/images/icon-user.png"
+                        src="{{ Auth::user()->photo ? url("storage/".Auth::user()->photo) : asset('gambar/user.png') }}"
                         alt="Icon User"
-                        class="rounded-circle mr-2 profile-picture"
+                        class=" mr-2 profile-picture profile-picture-topbar"
                       />
                       Hi, {{ Auth::user()->name }}
                     </a>
@@ -190,7 +206,7 @@
             data-aos="fade-up">
             <div class="container-fluid">
                 <div class="dashboard-heading">
-                    <h2 class="dashboard-title mb-5">@yield('title')</h2>
+                    <h2 class="dashboard-title mb-md-5 mb-2">@yield('title')</h2>
                 </div>
                 <div class="dashboard-content">
                     @yield('content')
@@ -227,7 +243,15 @@
                 text: "{{ Session::get('success') }}"
             })
         </script>
-
+    @endif
+    @if (Session::has('error'))
+        <script>
+              Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: "{{ Session::get('error') }}"
+            })
+        </script>
     @endif
   </body>
 </html>

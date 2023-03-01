@@ -29,7 +29,8 @@ class KecamatanSeeder extends Seeder
             $subdistrict = json_decode($data->getBody())->rajaongkir->results;
             foreach($subdistrict as $kecamatan){
                 DB::table('tb_ro_subdistricts')->insert([
-                    'city_id' => $item->id,
+                    'city_id' => $item->city_id,
+                    'subdistrict_id' => (int)$kecamatan->subdistrict_id,
                     'subdistrict_name' => $kecamatan->subdistrict_name,
                     'created_at' => now(),
                     'updated_at' => now()

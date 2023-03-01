@@ -4,49 +4,92 @@
 	use Request;
 	use DB;
 	use CRUDBooster;
-    use Illuminate\Support\Str;
 
-	class AdminUsers12Controller extends \crocodicstudio\crudbooster\controllers\CBController {
+	class AdminTransaksisController extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function cbInit() {
 
 			# START CONFIGURATION DO NOT REMOVE THIS LINE
-			$this->title_field = "name";
+			$this->title_field = "payment_name";
 			$this->limit = "20";
 			$this->orderby = "id,desc";
-			$this->global_privilege = false;
+			$this->global_privilege = true;
 			$this->button_table_action = true;
 			$this->button_bulk_action = true;
 			$this->button_action_style = "button_icon";
-			$this->button_add = true;
+			$this->button_add = false;
 			$this->button_edit = true;
-			$this->button_delete = true;
+			$this->button_delete = false;
 			$this->button_detail = true;
 			$this->button_show = true;
 			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = false;
-			$this->table = "users";
+			$this->table = "transaksis";
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"Name","name"=>"name"];
-			$this->col[] = ["label"=>"Username","name"=>"username"];
-			$this->col[] = ["label"=>"Email","name"=>"email"];
+			$this->col[] = ["label"=>"User","name"=>"user_id","join"=>"users,name"];
+			$this->col[] = ["label"=>"Invoice","name"=>"no_inv"];
+			$this->col[] = ["label"=>"Jenis Order","name"=>"jenis_inv"];
+			$this->col[] = ["label"=>"Metode Pembayaran","name"=>"payment_name"];
+			$this->col[] = ["label"=>"Admin Pembayaran","name"=>"admin_pembayaran"];
+			$this->col[] = ["label"=>"Biaya Pengiriman","name"=>"biaya_pengiriman"];
+			$this->col[] = ["label"=>"Metode Pengiriman","name"=>"metode_pengiriman"];
+			$this->col[] = ["label"=>"Status","name"=>"status"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			$this->form[] = ['label'=>'Name','name'=>'name','type'=>'text','validation'=>'required|string|min:3','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
-			$this->form[] = ['label'=>'Email','name'=>'email','type'=>'email','validation'=>'required|min:1|email|unique:users','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'User Id','name'=>'user_id','type'=>'select2','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'user,id'];
+			$this->form[] = ['label'=>'No Inv','name'=>'no_inv','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Jenis Inv','name'=>'jenis_inv','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Metode Pembayaran','name'=>'metode_pembayaran','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Biaya Pengiriman','name'=>'biaya_pengiriman','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Admin Pembayaran','name'=>'admin_pembayaran','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Metode Pengiriman','name'=>'metode_pengiriman','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Payment At','name'=>'payment_at','type'=>'datetime','validation'=>'required|date_format:Y-m-d H:i:s','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Sub Total','name'=>'sub_total','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Status','name'=>'status','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Pay Code','name'=>'pay_code','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Checkout Url','name'=>'checkout_url','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Expired Time','name'=>'expired_time','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Fee Customer','name'=>'fee_customer','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Payment Name','name'=>'payment_name','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Total Harga Barang','name'=>'total_harga_barang','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Diskon','name'=>'diskon','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Reference','name'=>'reference','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'City Id','name'=>'city_id','type'=>'select2','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'city,id'];
+			$this->form[] = ['label'=>'Province Id','name'=>'province_id','type'=>'select2','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'province,id'];
+			$this->form[] = ['label'=>'Subdistrict Id','name'=>'subdistrict_id','type'=>'select2','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'subdistrict,id'];
+			$this->form[] = ['label'=>'Alamat Lengkap','name'=>'alamat_lengkap','type'=>'textarea','validation'=>'required|string|min:5|max:5000','width'=>'col-sm-10'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
-			//$this->form[] = ['label'=>'Name','name'=>'name','type'=>'text','validation'=>'required|string|min:3','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
-			//$this->form[] = ['label'=>'Uuid','name'=>'uuid','type'=>'text','validation'=>'required|min:1','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Email','name'=>'email','type'=>'email','validation'=>'required|min:1|email|unique:users','width'=>'col-sm-10'];
+			//$this->form[] = ["label"=>"User Id","name"=>"user_id","type"=>"select2","required"=>TRUE,"validation"=>"required|min:1|max:255","datatable"=>"user,id"];
+			//$this->form[] = ["label"=>"No Inv","name"=>"no_inv","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Jenis Inv","name"=>"jenis_inv","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Metode Pembayaran","name"=>"metode_pembayaran","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Biaya Pengiriman","name"=>"biaya_pengiriman","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Admin Pembayaran","name"=>"admin_pembayaran","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Metode Pengiriman","name"=>"metode_pengiriman","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Payment At","name"=>"payment_at","type"=>"datetime","required"=>TRUE,"validation"=>"required|date_format:Y-m-d H:i:s"];
+			//$this->form[] = ["label"=>"Sub Total","name"=>"sub_total","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Status","name"=>"status","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Pay Code","name"=>"pay_code","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Checkout Url","name"=>"checkout_url","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Expired Time","name"=>"expired_time","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Fee Customer","name"=>"fee_customer","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Payment Name","name"=>"payment_name","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Total Harga Barang","name"=>"total_harga_barang","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Diskon","name"=>"diskon","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Reference","name"=>"reference","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"City Id","name"=>"city_id","type"=>"select2","required"=>TRUE,"validation"=>"required|min:1|max:255","datatable"=>"city,id"];
+			//$this->form[] = ["label"=>"Province Id","name"=>"province_id","type"=>"select2","required"=>TRUE,"validation"=>"required|min:1|max:255","datatable"=>"province,id"];
+			//$this->form[] = ["label"=>"Subdistrict Id","name"=>"subdistrict_id","type"=>"select2","required"=>TRUE,"validation"=>"required|min:1|max:255","datatable"=>"subdistrict,id"];
+			//$this->form[] = ["label"=>"Alamat Lengkap","name"=>"alamat_lengkap","type"=>"textarea","required"=>TRUE,"validation"=>"required|string|min:5|max:5000"];
 			# OLD END FORM
 
 			/*
@@ -76,6 +119,7 @@
 	        |
 	        */
 	        $this->addaction = array();
+            $this->addaction[] = ['label'=>'Kirim','url'=>CRUDBooster::mainpath('set-status/dikirim/[id]'),'icon'=>'fa fa-check','color'=>'success','showIf'=>"[status] == 'PAID'"];
 
 
 	        /*
@@ -234,6 +278,7 @@
 	    */
 	    public function hook_query_index(&$query) {
 	        //Your code here
+            $query->where('status', '!=', 'create');
 
 	    }
 
@@ -245,7 +290,6 @@
 	    */
 	    public function hook_row_index($column_index,&$column_value) {
 	    	//Your code here
-
 	    }
 
 	    /*
@@ -257,11 +301,6 @@
 	    */
 	    public function hook_before_add(&$postdata) {
 	        //Your code here
-            $uuid = new UtilsController();
-            $postdata['uuid'] = $uuid->generateUuid('users');
-            $userName = Str::random(5);
-            $userName = 'aoy-'.$userName;
-            $postdata['username'] = $userName;
 
 	    }
 
@@ -329,6 +368,16 @@
 
 
 	    //By the way, you can still create your own method in here... :)
+        public function getSetStatus($status,$id) {
+            DB::table('transaksis')->where('id',$id)->update(['status'=>$status, 'updated_at' => now()]);
+
+            $message = '';
+            if($status === 'dikirim'){
+                $message = "Orderan berhasil dikirim";
+            }
+            //This will redirect back and gives a message
+            CRUDBooster::redirect($_SERVER['HTTP_REFERER'], $message,"success");
+        }
 
 
 	}

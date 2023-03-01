@@ -6,6 +6,7 @@
 
 @section('addStyle')
     <link href="{{ asset('style/main.css') }}" rel="stylesheet" />
+
 @endsection
 
 @section('content')
@@ -17,10 +18,10 @@
                     <div class="flex justify-between px-6 items-center">
                         <div class="text-lg ">Alamat Pengiriman</div>
                         @if ($address_active)
-                            <div class="bg-[#F258FF] px-3 py-1 text-sm  bg-opacity-25 text-[#B916B9] font-semibold rounded cursor-pointer" data-bs-toggle="modal" data-bs-target="#pilih_alamat">Pilih alamat lain</div>
+                            <div class="bg-[#F258FF] px-3 py-1 text-sm  bg-opacity-25 text-[#B916B9] font-semibold rounded cursor-pointer" @click="handleModalPilihAlamat">Pilih alamat lain</div>
 
                         @else
-                            <div class="bg-[#F258FF] px-3 py-1 text-sm  bg-opacity-25 text-[#B916B9] font-semibold rounded cursor-pointer" data-bs-toggle="modal" data-bs-target="#exampleModal">Tambah alamat</div>
+                            <div class="bg-[#F258FF] px-3 py-1 text-sm  bg-opacity-25 text-[#B916B9] font-semibold rounded cursor-pointer" @click="modalTambahAlamatBaru">Tambah alamat</div>
 
                         @endif
                     </div>
@@ -43,8 +44,12 @@
                                     <div class="text-xs md:text-sm ">
                                         {{ $item->produk->nama }}
                                     </div>
-                                    <div class="text-xs md:text-sm font-semibold">
-                                        {{ number_format($item->produk->harga) }}
+
+                                    <div class="text-xs md:text-sm font-semibold my-1">
+                                        Rp{{ number_format($item->produk->harga) }}
+                                    </div>
+                                    <div class="text-xs md:text-xs text-gray-500">
+                                        total : {{ $item->qty }}
                                     </div>
                                 </div>
                             </div>
@@ -60,35 +65,35 @@
                                     Metode Pengiriman
                                 </div>
                                 <div class="text-sm font-medium mt-1">
-                                    SiCepat Reg (Rp. 8.000)
+                                    <span x-text="selectKurir.name"></span> (Rp<span x-text="$store.global.numberWithCommas(selectKurir.cost)"></span>)
                                 </div>
-                                <div class="text-xs">
-                                    Estimasi tiba 12-14 Desember
+                                <div class="text-xs" x-text="'Estimasi '+selectKurir.estimasi+' hari'">
+
                                 </div>
                             </div>
                         </div>
 
                         <div class="flex items-end mt-3 md:mt-0 justify-end">
-                            <div class="bg-[#F258FF] px-3 py-1 text-xs md:text-sm  bg-opacity-25 text-[#B916B9] font-semibold rounded cursor-pointer inline" onclick="modalKurir()">Pilih kurir</div>
+                            <div class="bg-[#F258FF] px-3 py-1 text-xs md:text-sm  bg-opacity-25 text-[#B916B9] font-semibold rounded cursor-pointer inline" @click="handleModalPilihKurir">Pilih kurir</div>
                         </div>
                     </div>
                 </div>
                 <div class="mb-2">
                     <div class="bg-white rounded-xl p-4 md:flex justify-between">
                         <div class="flex items-center">
-                            <img :src="channelPembayaran[$store.global.selectPembayaran].icon_url" class="w-12" alt="">
+                            <img :src="selectPembayaran.icon_url" class="w-12" alt="">
                             <div class="ml-6">
                                 <div class="text-base font-medium">
                                     Metode Pembayaran
                                 </div>
                                 <div class="text-sm font-medium mt-1">
-                                    <span x-text="channelPembayaran[$store.global.selectPembayaran].name"></span>
+                                    <span x-text="selectPembayaran.name"></span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="flex items-end mt-3 md:mt-0 justify-end">
-                            <div class="bg-[#F258FF] px-3 py-1 text-xs md:text-sm  bg-opacity-25 text-[#B916B9] font-semibold rounded cursor-pointer inline" @click="modalPayment">Pilih pembayaran</div>
+                            <div class="bg-[#F258FF] px-3 py-1 text-xs md:text-sm  bg-opacity-25 text-[#B916B9] font-semibold rounded cursor-pointer inline" @click="handleModalPilihPayment">Pilih pembayaran</div>
                         </div>
                     </div>
                 </div>
@@ -106,18 +111,24 @@
                         <div class="">
                             Diskon Barang
                         </div>
-                        <div class="" x-text="'Rp'+$store.global.numberWithCommas($store.global.diskon)">Rp400,0000</div>
+                        <div class="" x-text="'Rp'+$store.global.numberWithCommas($store.global.diskon)"></div>
                     </div>
                     <div class="text-gray-600 mt-3 flex justify-between">
                         <div class="">
                             Biaya Admin
                         </div>
-                        <div class="" x-text="'Rp'+$store.global.numberWithCommas($store.global.biayaAdmin)">Rp400,0000</div>
+                        <div class="" x-text="'Rp'+$store.global.numberWithCommas($store.global.biayaAdmin)"></div>
+                    </div>
+                    <div class="text-gray-600 mt-3 flex justify-between">
+                        <div class="">
+                            Ongkos Kirim
+                        </div>
+                        <div class="" x-text="'Rp'+$store.global.numberWithCommas(selectKurir.cost)"></div>
                     </div>
                     <hr class="my-4">
                     <div class="font-bold text-gray-800 flex justify-between text-sm">
                         <div class="">Subtotal</div>
-                        <div class="" x-text="'Rp'+$store.global.numberWithCommas($store.global.sub_total)">Rp400,000</div>
+                        <div class="" x-text="'Rp'+$store.global.numberWithCommas($store.global.sub_total)"></div>
                     </div>
                     <div @click="handleProsesPayment">
                         <div class="mt-6 bg-primary py-2 rounded-xl text-center text-white text-sm cursor-pointer">
@@ -129,163 +140,232 @@
         </div>
     </div>
 
-    {{-- modal tambah alamat --}}
-    {{-- <div class="hidden" id="modal_pembayaran" >
-        <div class="">
-            <div class="flex justify-between items-center">
-                <div class="font-bold mb-7">Pilih metode pembayaran</div>
-            </div>
-            <div class="absolute top-0 right-0 p-2 cursor-pointer" onclick="hiddenModal('modal_alamat')">
-                <img src="{{ asset('gambar/icon/close.png') }}" alt="" class="w-8 ">
-            </div>
-            <template class="" x-for="(item, index) in channelPembayaran" :key="index">
-                <div class="flex justify-between">
-                    <div class="">
-                        <div class="flex ">
-                            <img :src="item.icon_url" alt="" class="w-16">
-                            <div class="ml-4 font-semibold">
-                                <span x-text="item.group"></span> - <span x-text="item.name"></span>
+    {{-- modal pilih alamat --}}
+    <template x-if="modalPilihAlamat">
+        <div class="fixed top-0 h-screen flex flex-col justify-center items-center w-full px-6 md:px-60" >
+            <div class="bg-gray-700 h-screen w-full absolute bg-opacity-30" @click="handleModalPilihAlamat"></div>
+            <div class="bg-white relative z-40 rounded-xl  max-h-[70%] md:w-1/2 w-full" >
+                {{-- loading --}}
+                <template x-if="loadingUp">
+                    <div class="absolute bg-white rounded-xl h-full w-full flex-col  flex justify-center items-center">
+                        <img src="{{ asset('gambar/animate/loading.svg') }}" alt="">
+                        <div class="font-semibold text-primary text-xl">Loading</div>
+                    </div>
+                </template>
+                {{-- loading --}}
+                <div class=" bg-white border-b mb-3  pb-4 md:pb-5 px-4 md:pt-8 pt-4 rounded-t-xl ">
+                    <div class="text-base md:text-lg font-semibold">Pilih alamat pengiriman</div>
+                </div>
+                {{-- body --}}
+                <div class="max-h-80 overflow-auto p-4 md:pb-8 no-scrollbar">
+                    <template x-for="item_alamat in list_alamat_user" :key="item_alamat.id">
+                        <div :class="alamat_active.id === item_alamat.id ?'border-primary' : '' " class="border w-full card__pilih__alamat  p-2 rounded-lg mb-4 cursor-pointer" @click="handlePilihAlamat(item_alamat)">
+                            <div class="flex justify-between items-center">
+                                <div class="font-medium" x-text="item_alamat.province_name"></div>
+                                <div class="" x-show="alamat_active.id === item_alamat.id">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <g clip-path="url(#clip0_79_4458)">
+                                    <path d="M10.0003 18.3334C5.39783 18.3334 1.66699 14.6026 1.66699 10.0001C1.66699 5.39758 5.39783 1.66675 10.0003 1.66675C14.6028 1.66675 18.3337 5.39758 18.3337 10.0001C18.3337 14.6026 14.6028 18.3334 10.0003 18.3334ZM9.16949 13.3334L15.0612 7.44092L13.8828 6.26258L9.16949 10.9767L6.81199 8.61925L5.63366 9.79758L9.16949 13.3334Z" fill="#A349A3"/>
+                                    </g>
+                                    <defs>
+                                    <clipPath id="clip0_79_4458">
+                                    <rect width="20" height="20" fill="white"/>
+                                    </clipPath>
+                                    </defs>
+                                    </svg>
+                                </div>
                             </div>
+
+                            <div class="text-sm text-gray-700" x-text="item_alamat.kota_name+', '+item_alamat.kecamatan_name">{{ $item->kota->name }}, {{ $item->kecamatan->subdistrict_name }}</div>
+                            <div class="text-sm text-gray-700" x-text="item_alamat.address"></div>
+                        </div>
+                    </template>
+                </div>
+                <div class=" bg-white   pb-6 px-4 md:pt-6 rounded-b-xl ">
+                    <div class="border-primary border-2 text-primary p-3 cursor-pointer hover:text-gray-800 hover:bg-primary text-center rounded-xl" @click="modalTambahAlamatBaru">Tambah alamat baru</div>
+                </div>
+            </div>
+        </div>
+    </template>
+    {{-- modal pilih alamat end --}}
+
+
+    {{-- modal pilih kurir --}}
+    <template x-if="modalPilihKurir">
+        <div class="fixed top-0 h-screen flex flex-col justify-center items-center w-full px-6 md:px-60" >
+            <div class="bg-gray-700 h-screen w-full absolute bg-opacity-30" @click="handleModalPilihKurir"></div>
+            <div class="bg-white relative z-40 rounded-xl  max-h-[70%] md:w-1/2 w-full" >
+                <div class=" bg-white mb-3 md:mb-0  pb-4  px-4  pt-4 rounded-t-xl ">
+                    <div class="text-base md:text-lg font-semibold">Pilih kurir</div>
+                </div>
+                {{-- body --}}
+                <div class="max-h-80 overflow-auto p-4 md:pb-8 no-scrollbar inline-block w-full">
+                    <div class="">
+                        <div class="flex justify-between items-center cursor-pointer" @click="handleSelectKurir('sicepat')">
+                            <div class="">
+                                <div class="flex items-center">
+                                    <img src="{{ asset('gambar/icon/sicepat.png') }}" alt="" class="w-16">
+                                    <div class="ml-4 font-semibold text-left">
+                                        SiCepat Reg (Rp<span x-text="$store.global.numberWithCommas(sicepat.cost)"></span>)
+                                        <p class="font-normal text-gray-500 text-sm">Estimasi pengiriman <span x-text="sicepat.estimasi"></span> hari</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="">
+                            <hr class="my-5 bg-gray-300">
                         </div>
                     </div>
                     <div class="">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                        </svg>
+                        <div class="flex justify-between items-center cursor-pointer" @click="handleSelectKurir('jne')">
+                            <div class="">
+                                <div class="flex items-center">
+                                    <img src="{{ asset('gambar/icon/jne.png') }}" alt="" class="w-16">
+                                    <div class="ml-4 font-semibold text-left">
+                                        JNE Reg (Rp<span x-text="$store.global.numberWithCommas(jne.cost)"></span>)
+                                        <p class="font-normal text-gray-500 text-sm">Estimasi pengiriman <span x-text="jne.estimasi"></span> hari</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                </svg>
+                            </div>
+                        </div>
+                        {{-- <div class="">
+                            <hr class="my-5 bg-gray-300">
+                        </div> --}}
                     </div>
                 </div>
-                <div class="">
-                    <hr class="my-5 bg-gray-300">
+                {{-- body end --}}
+
+            </div>
+        </div>
+    </template>
+    {{-- modal pilih kurir end --}}
+
+    {{-- modal tambah alamat --}}
+    <template x-if="modalTambahAlamat">
+        <div class="fixed top-0 h-screen flex flex-col justify-center items-center w-full px-6 md:px-60" >
+            <div class="bg-gray-700 h-screen w-full absolute bg-opacity-30" @click="modalTambahAlamatBaru"></div>
+            <div class="bg-white relative z-40 rounded-xl  max-h-[90%] md:w-1/2" >
+                <div class=" bg-white mb-3 md:mb-0  pb-4  px-4  pt-4 rounded-t-xl ">
+                    <div class="text-base md:text-lg font-semibold">Tambah Alamat</div>
                 </div>
-            </template>
+                {{-- body --}}
+                <div class=" p-4 md:pb-8 no-scrollbar inline-block w-full">
+                    <div class="modal-body relative py-4">
+                        <label for="">Provinsi</label>
+                        <div class="mb-4 group group-focus::border-primary bg-white group-focus:ring-primary py-1 focus-within:ring-primary focus-within:border-primary border-2 rounded-full w-full items-center px-3">
+                                <select name="" id="" class="w-full text-sm text-gray-900 bg-gray-50 focus:ring-0 border-0 placeholder-gray-400" x-model="select_provinsi_id">
+                                    @foreach ($list_provinsi as $item)
+                                        <option value="{{ $item->province_id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                        </div>
+                        <label for="" class="mt-4">Kota</label>
+                        <div class="mb-4 group group-focus::border-primary bg-white group-focus:ring-primary py-1 focus-within:ring-primary focus-within:border-primary border-2 rounded-full w-full items-center px-3">
+                                <select name="" id="" class=" text-sm text-gray-900 bg-gray-50 focus:ring-0 border-0 placeholder-gray-400 w-full" x-model="select_kota_id">
+                                    <option value="0" disabled>Pilih kota</option>
+                                    @foreach ($list_kota as $item)
+                                        <option value="{{ $item->city_id }}" x-show="'{{ $item->province_id }}' === select_provinsi_id">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                        </div>
+                        <label for="" class="mt-4">Kecamatan</label>
+                        <div class="mb-4 group group-focus::border-primary bg-white group-focus:ring-primary py-1 focus-within:ring-primary focus-within:border-primary border-2 rounded-full w-full items-center px-3">
+                                <select name="" id="" class=" text-sm text-gray-900 bg-gray-50 focus:ring-0 border-0 placeholder-gray-400 w-full" x-model="select_kecamatan_id">
+                                    <option value="0" disabled>Pilih kecamatan</option>
+                                    <template x-for="(item, index) in kecamatan" :key="index">
+                                        <option :value="item.subdistrict_id">
+                                            <span x-text="item.subdistrict_name"></span>
+                                        </option>
+                                    </template>
+                                </select>
+                        </div>
+                        <label for="" class="mt-4">Alamat lengkap</label>
+                        <div class=" group group-focus::border-primary bg-white group-focus:ring-primary py-1 focus-within:ring-primary focus-within:border-primary border-2 rounded-full w-full items-center px-3">
+                                <input type="text" x-model="tambah_address" class="w-full text-sm text-gray-900 bg-gray-50 focus:ring-0 border-0 placeholder-gray-900" placeholder="Alamat lengkap">
+                        </div>
+                    </div>
+                </div>
+                {{-- body end --}}
+                <div class="p-4">
+                    <button type="button" class="px-6
+                        py-2.5
+                        bg-primary
+                        text-white
+                        font-medium
+                        text-xs
+                        leading-tight
+                        uppercase
+                        rounded
+                        shadow-md
+                        hover:bg-purple-700 hover:shadow-lg
+                        focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0
+                        active:bg-primary active:shadow-lg
+                        transition
+                        duration-150
+                        ease-in-out
+                        ml-1"
+                        @click="handleTambahAlamat">
+                        Simpan Alamat
+                    </button>
+                </div>
 
-        </div>
-        <div class=" h-screen w-full bg-gray-800 bg-opacity-20 top-0 fixed flex items-center justify-center"  onclick="hiddenModal('modal_alamat')">
-        </div>
-    </div> --}}
-
-    {{-- component Modal Alamat --}}
-
-<!-- Modal tambah alamat -->
-<div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
-  id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog relative w-auto pointer-events-none">
-        <div
-        class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
-        <div
-            class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
-            <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalLabel">Tambah Alamat</h5>
-            <button type="button"
-            class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
-            data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body relative p-4">
-            <label for="">Provinsi</label>
-            <div class="mb-4 group group-focus::border-primary bg-white group-focus:ring-primary py-1 focus-within:ring-primary focus-within:border-primary border-2 rounded-full w-full items-center px-3">
-                    <select name="" id="" class="w-full text-sm text-gray-900 bg-gray-50 focus:ring-0 border-0 placeholder-gray-400 w-full" x-model="select_provinsi_id">
-                        @foreach ($list_provinsi as $item)
-                            <option value="{{ $item->province_id }}">{{ $item->name }}</option>
-                        @endforeach
-                    </select>
             </div>
-            <label for="" class="mt-4">Kota</label>
-            <div class="mb-4 group group-focus::border-primary bg-white group-focus:ring-primary py-1 focus-within:ring-primary focus-within:border-primary border-2 rounded-full w-full items-center px-3">
-                    <select name="" id="" class=" text-sm text-gray-900 bg-gray-50 focus:ring-0 border-0 placeholder-gray-400 w-full" x-model="select_kota_id">
-                        <option value="0" disabled>Pilih kota</option>
-                        @foreach ($list_kota as $item)
-                            <option value="{{ $item->city_id }}" x-show="'{{ $item->province_id }}' === select_provinsi_id">{{ $item->name }}</option>
-                        @endforeach
-                    </select>
+        </div>
+    </template>
+    {{-- modal tambah alamat end --}}
+
+    {{-- modal tambah alamat --}}
+    <template x-if="modalPilihPembayaran">
+        <div class="fixed top-0 h-screen flex flex-col justify-center items-center w-full px-6 md:px-60" >
+            <div class="bg-gray-700 h-screen w-full absolute bg-opacity-30" @click="handleModalPilihPayment"></div>
+            <div class="bg-white relative z-40 rounded-xl  max-h-[90%] md:w-1/2" >
+                <div class=" bg-white mb-3 md:mb-0  pb-4  px-4  pt-4 rounded-t-xl ">
+                    <div class="text-base md:text-lg font-semibold">Pilih Metode Pembayaran</div>
+                </div>
+                {{-- body --}}
+                <div class=" p-4 md:pb-8 max-h-80 overflow-auto  inline-block w-full">
+                    @foreach($channel_pembayaran as $index => $item)
+                        <div class="cursor-pointer" @click="handleSelectPembayaran('{{ $item->code }}')">
+                            <div class="flex justify-between">
+                                <div class="">
+                                    <div class="flex ">
+                                        <img src="{{ $item->icon_url }}" alt="" class="w-12 object-contain h-auto">
+                                        <div class="ml-4 font-semibold text-sm">
+                                            {{ $item->name }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="">
+                                <hr class="my-5 bg-gray-300">
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                {{-- body end --}}
+
             </div>
-            <label for="" class="mt-4">Kecamatan</label>
-            <div class="mb-4 group group-focus::border-primary bg-white group-focus:ring-primary py-1 focus-within:ring-primary focus-within:border-primary border-2 rounded-full w-full items-center px-3">
-                    <select name="" id="" class=" text-sm text-gray-900 bg-gray-50 focus:ring-0 border-0 placeholder-gray-400 w-full" x-model="select_kecamatan_id">
-                        <option value="0" disabled>Pilih kecamatan</option>
-                        <template x-for="(item, index) in kecamatan" :key="index">
-                            <option :value="item.subdistrict_id">
-                                <span x-text="item.subdistrict_name"></span>
-                            </option>
-                        </template>
-                    </select>
-            </div>
-            <label for="" class="mt-4">Alamat lengkap</label>
-            <div class=" group group-focus::border-primary bg-white group-focus:ring-primary py-1 focus-within:ring-primary focus-within:border-primary border-2 rounded-full w-full items-center px-3">
-                    <input type="text" x-model="tambah_address" class="w-full text-sm text-gray-900 bg-gray-50 focus:ring-0 border-0 placeholder-gray-900" placeholder="Alamat lengkap">
-            </div>
         </div>
-        <div
-            class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+    </template>
+    {{-- modal tambah alamat end --}}
 
-        <button type="button" class="px-6
-            py-2.5
-            bg-primary
-            text-white
-            font-medium
-            text-xs
-            leading-tight
-            uppercase
-            rounded
-            shadow-md
-            hover:bg-purple-700 hover:shadow-lg
-            focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0
-            active:bg-primary active:shadow-lg
-            transition
-            duration-150
-            ease-in-out
-            ml-1"
-            @click="handleTambahAlamat">
-            Simpan Alamat
-        </button>
-        </div>
-        </div>
-    </div>
-</div>
-{{-- endmodal tambah alamat --}}
-
-<!-- Modal pilih alamat -->
-<div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
-  id="pilih_alamat" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog relative w-auto pointer-events-none">
-        <div
-        class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
-        <div
-            class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
-            <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalLabel">Tambah Alamat</h5>
-            <button type="button"
-            class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
-            data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body relative p-4">
-
-        </div>
-        <div
-            class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
-
-        <button type="button" class="px-6
-            py-2.5
-            bg-primary
-            text-white
-            font-medium
-            text-xs
-            leading-tight
-            uppercase
-            rounded
-            shadow-md
-            hover:bg-purple-700 hover:shadow-lg
-            focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0
-            active:bg-primary active:shadow-lg
-            transition
-            duration-150
-            ease-in-out
-            ml-1"
-            @click="handleTambahAlamat">
-            Simpan Alamat
-        </button>
-        </div>
-        </div>
-    </div>
-</div>
-{{-- endmodal pilih alamat --}}
 
 </section>
 
@@ -300,6 +380,11 @@
 <script>
     function funcData(){
         return{
+            loadingUp: false,
+            modalPilihAlamat: false,
+            modalPilihKurir: false,
+            modalTambahAlamat: false,
+            modalPilihPembayaran: false,
             channelPembayaran: [
                                 @foreach($channel_pembayaran as $item)
                                     {
@@ -313,7 +398,15 @@
                                     },
                                 @endforeach
                                 ],
-            selectPembayaran: this.$store.global.selectPembayaran,
+            selectPembayaran: {
+                                        code: "{{ $channel_pembayaran[0]->code }}",
+                                        group: "{{ $channel_pembayaran[0]->group }}",
+                                        name: "{{ $channel_pembayaran[0]->name }}",
+                                        icon_url: "{{ $channel_pembayaran[0]->icon_url }}",
+                                        active: "{{ $channel_pembayaran[0]->active }}",
+                                        fee_customer_flat: {{ $channel_pembayaran[0]->fee_customer->flat }},
+                                        fee_customer_percent: {{ $channel_pembayaran[0]->fee_customer->percent }},
+                                    },
             sub_total: this.$store.global.sub_total,
             diskon: this.$store.global.diskon,
             total_harga_barang: this.$store.global.total_harga_barang,
@@ -331,11 +424,118 @@
             select_kota_id:'0',
             tambah_address: "",
             select_kecamatan_id: '0',
+            list_alamat_user: [
+                @foreach($address as $item)
+                    {
+                        id: {{ $item->id }},
+                        address: "{{ $item->address }}",
+                        city_id: {{ $item->city_id }},
+                        province_id: {{ $item->province_id }},
+                        subdistrict_id: {{ $item->subdistrict_id }},
+                        kota_name: "{{ $item->kota->name }}",
+                        province_name: "{{ $item->provinsi->name }}",
+                        kecamatan_name: "{{ $item->kecamatan->subdistrict_name }}"
+                    },
+                @endforeach
+            ],
 
             alamat_active:{
+                id: {{ $address_active->id  }},
                 address: "{{ $address_active->address  }}",
                 city_name: "{{ $address_active->nama_kota }}",
                 province_name: "{{ $address_active->nama_provinsi }}",
+            },
+            selectKurir: {
+                code: "{{$sicepat['code']}}",
+                cost: {{$sicepat['cost']->value}},
+                estimasi: "{{$sicepat['cost']->etd}}",
+                name: "Sicepat Reg"
+            },
+            jne: {
+                code: "{{$jne['code']}}",
+                cost: {{$jne['cost']->value}},
+                estimasi: "{{$jne['cost']->etd}}",
+                name: "JNE Reg"
+            },
+            sicepat: {
+                code: "{{$sicepat['code']}}",
+                cost: {{$sicepat['cost']->value}},
+                estimasi: "{{$sicepat['cost']->etd}}",
+                name: "Sicepat Reg"
+            },
+
+            handleModalPilihAlamat(){
+                if(this.modalPilihAlamat){
+                    this.modalPilihAlamat = false;
+                }else{
+                    this.modalPilihAlamat = true;
+                }
+            },
+            handleModalPilihKurir(){
+
+                if(this.modalPilihKurir){
+                    this.modalPilihKurir = false;
+                }else{
+                    this.modalPilihKurir = true;
+                }
+            },
+
+            handleSelectKurir(param){
+                this.$store.global.sub_total -= this.selectKurir.cost;
+                if(param === 'jne'){
+                    this.selectKurir = this.jne;
+                }else{
+                    this.selectKurir = this.sicepat;
+                }
+                this.$store.global.sub_total += this.selectKurir.cost;
+
+                this.modalPilihKurir = false;
+            },
+
+            handlePilihAlamat(param){
+                console.log('param', param);
+                this.loadingUp = true;
+
+                axios.post("{{ route('viewOngkirProduct') }}", {
+                    address_id: param.id
+                }, {
+                    csrfToken: "{{ csrf_token() }}"
+                }).then(res => {
+                    // console.log('res ongkir cek jne', res.data.data[0].costs[0].cost[0].value)
+                    // console.log('res ongkir cek sicepet', res.data.data[1].costs[1].cost[0])
+                    this.jne = {
+                        code: "jne",
+                        cost: res.data.data[0].costs[0].cost[0].value,
+                        estimasi: res.data.data[0].costs[0].cost[0].etd,
+                        name: "JNE Reg"
+                    }
+                    this.sicepat = {
+                        code: "sicepat",
+                        cost: res.data.data[1].costs[1].cost[0].value,
+                        estimasi: res.data.data[1].costs[1].cost[0].etd,
+                        name: "Sicepat Reg"
+                    }
+
+                    this.$store.global.sub_total -= this.selectKurir.cost;
+                    if(this.selectKurir.code === 'jne'){
+                        this.selectKurir = this.jne;
+                    }else{
+                        this.selectKurir = this.sicepat;
+                    }
+                    this.$store.global.sub_total += this.selectKurir.cost;
+
+                    this.alamat_active = {
+                        id: param.id,
+                        address: param.address,
+                        city_name: param.kota_name,
+                        province_name: param.province_name,
+                    };
+                    this.loadingUp = false;
+                }).catch(err => {
+                    this.loadingUp = false;
+                })
+
+
             },
 
             handleChannelPembayaran(){
@@ -348,6 +548,15 @@
                     this.alamat_active.city_name = "{{ $item->name }}";
                    }
                 @endforeach
+            },
+
+            modalTambahAlamatBaru(){
+                this.modalPilihAlamat = false;
+                if(this.modalTambahAlamat){
+                    this.modalTambahAlamat = false;
+                }else{
+                    this.modalTambahAlamat = true;
+                }
             },
 
             handleCloseModal(){
@@ -368,8 +577,10 @@
                         this.alamat_active.city_name = result.nama_kota;
                         this.alamat_active.province_name = result.nama_provinsi;
                         $('#exampleModal').modal('hide')
+                        this.modalTambahAlamat = false;
                     }).catch(err =>{
                         $('#exampleModal').modal('hide')
+                        this.modalTambahAlamat = false;
                         console.log("ada error");
                     });
 
@@ -395,37 +606,57 @@
                 axios.post("{{ route('transaksi-pending') }}", {
                         no_inv: "{{ $transaksi->no_inv }}",
                         sub_total: this.$store.global.sub_total,
-                        metode_pembayaran: channel.code,
+                        metode_pembayaran: this.selectPembayaran.code,
+                        biaya_pengiriman: this.selectKurir.cost,
+                        biaya_admin: this.$store.global.biayaAdmin,
+                        address_id: this.alamat_active.id
                     }, {
                         csrfToken: "{{ csrf_token() }}",
                     }).then(ress =>{
-                        console.log('ress proses', ress)
+                        console.log('ress proses', ress.data)
+                        window.location.replace("{{ route('transaksi-unpaid') }}?inv="+ress.data.no_inv);
                     }).catch(err =>{
                     });
 
             },
 
+            handleModalPilihPayment(){
+                if(this.modalPilihPembayaran){
+                    this.modalPilihPembayaran = false;
+                }else{
+                    this.modalPilihPembayaran = true;
+                }
+            },
+
             handleSelectPembayaran(index){
-                this.selectPembayaran = index;
-                this.$store.global.selectPembayaran = index;
+                let channel_pembayaran = null;
+                this.channelPembayaran.forEach(element => {
+                    if(element.code === index){
+                        channel_pembayaran = element;
+
+                        this.selectPembayaran = element;
+                    }
+                });
+                // return;
 
 
-                let channel_pembayaran = this.$store.global.channel_pembayaran[this.$store.global.selectPembayaran];
+                // let channel_pembayaran = this.$store.global.channel_pembayaran[this.$store.global.selectPembayaran];
+                this.$store.global.sub_total = this.$store.global.sub_total - this.$store.global.biayaAdmin;
                 this.$store.global.sub_total = this.$store.global.sub_total + channel_pembayaran.fee_customer_flat;
                 this.$store.global.biayaAdmin = channel_pembayaran.fee_customer_flat;
 
                 if(channel_pembayaran.fee_customer_percent > 0){
-                    let nilai= (channel_pembayaran.fee_customer_percent/100)*this.sub_total;
+                    let nilai= (channel_pembayaran.fee_customer_percent/100)*this.$store.global.sub_total;
+                    nilai = Math.ceil(nilai);
+
                     this.$store.global.biayaAdmin = nilai;
                     this.$store.global.sub_total = this.$store.global.sub_total + this.$store.global.biayaAdmin;
-                    this.$store.global.sub_total = this.$store.global.sub_total.toFixed(2);
-                    this.$store.global.biayaAdmin = nilai.toFixed(2);
-
-
+                    this.$store.global.sub_total = this.$store.global.sub_total;
+                    this.$store.global.biayaAdmin = nilai;
                 }
+                console.log('channel_pembayaran', channel_pembayaran,)
 
-
-                swal.close();
+                this.modalPilihPembayaran = false;
             },
 
             modalPayment(){
@@ -466,9 +697,7 @@
 
             init(){
 
-                console.log('this.select_provinsi_id', this.select_provinsi_id)
-
-                this.$store.global.sub_total= {{ $transaksi->sub_total }};
+                this.$store.global.sub_total= {{ $transaksi->sub_total }}+this.selectKurir.cost;
                 this.$store.global.diskon= {{ $transaksi->diskon }};
                 this.$store.global.total_harga_barang= {{ $transaksi->total_harga_barang }};
 
@@ -505,139 +734,8 @@
 </script>
 
     <script>
-        function hiddenModal(id){
-            $('#'+id).addClass('hidden');
-        }
 
-        function modalPayment(){
-            Swal.fire({
-                html: `
-                    <div class="">
-                        <div class="flex justify-between items-center">
-                            <div class="font-bold mb-7">Pilih metode pembayaran</div>
-                        </div>
 
-                        <div class="">
-                            <div class="flex justify-between">
-                                <div class="">
-                                    <div class="flex ">
-                                        <img src="{{ asset('gambar/icon/bca.png') }}" alt="" class="w-16">
-                                        <div class="ml-4 font-semibold">
-                                            BCA Virtual Account
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="">
-                                <hr class="my-5 bg-gray-300">
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="flex justify-between">
-                                <div class="">
-                                    <div class="flex ">
-                                        <img src="{{ asset('gambar/icon/bri.png') }}" alt="" class="w-16">
-                                        <div class="ml-4 font-semibold">
-                                            BRI Virtual Account
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="">
-                                <hr class="my-5 bg-gray-300">
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="flex justify-between">
-                                <div class="">
-                                    <div class="flex ">
-                                        <img src="{{ asset('gambar/icon/indomaret.png') }}" alt="" class="w-16">
-                                        <div class="ml-4 font-semibold">
-                                            Indomaret
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="">
-                                <hr class="my-5 bg-gray-300">
-                            </div>
-                        </div>
-                    </div>
-                `,
-                showConfirmButton : false,
-                width: "800px"
-            })
-        }
-        function modalKurir(){
-            Swal.fire({
-                html: `
-                    <div class="">
-                        <div class="flex justify-between items-center">
-                            <div class="font-bold mb-7">Pilih metode pengiriman</div>
-                        </div>
-
-                        <div class="">
-                            <div class="flex justify-between items-center">
-                                <div class="">
-                                    <div class="flex items-center">
-                                        <img src="{{ asset('gambar/icon/sicepat.png') }}" alt="" class="w-16">
-                                        <div class="ml-4 font-semibold">
-                                            SiCepat (Rp9.000)
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="">
-                                <hr class="my-5 bg-gray-300">
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="flex justify-between">
-                                <div class="">
-                                    <div class="flex ">
-                                        <img src="{{ asset('gambar/icon/jne.png') }}" alt="" class="w-16">
-                                        <div class="ml-4 font-semibold">
-                                            JNE (Rp8.000)
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="">
-                                <hr class="my-5 bg-gray-300">
-                            </div>
-                        </div>
-
-                    </div>
-                `,
-                showConfirmButton : false,
-                width: "800px"
-            })
-        }
 
         function showModal(id){
             $('#'+id).removeClass('hidden');

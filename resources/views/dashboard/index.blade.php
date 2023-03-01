@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('title')
-    Welcome
+    Dashboard
 @endsection
 
 @push('addStyle')
@@ -27,15 +27,32 @@
             top: 0;
             right: -8px;
         }
+
+        @media (max-width: 991.98px) {
+            .icon_status img{
+                width: 40px;
+            }
+
+            .icon_status .status{
+                font-size: 10px;
+            }
+
+            .count_status{
+                font-size: 10px;
+            }
+            .w-75{
+                width: 100% !important;
+            }
+        }
     </style>
 @endpush
 
 @section('content')
 <div class="row statistik">
-    <div class="col-md-3 col-6">
+    <div class="col-md-3 col-12 mb-md-0 mb-3">
         <div class="card p-3">
             <div class="d-flex align-items-center">
-                <img src="{{ asset('gambar/icon/diagram-keuntungan.png') }}" class="mr-3"  alt="">
+                <img src="{{ asset('gambar/icon/diagram-keuntungan.png') }}" class="mr-md-3 mr-2"  alt="">
                 <h5 class="font-weight-bold">Keuntungan</h5>
             </div>
             <div class="mt-2">
@@ -48,7 +65,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 col-6">
+    <div class="col-md-3 col-12 mb-md-0 mb-3">
         <div class="card p-3">
             <div class="d-flex align-items-center">
                 <img src="{{ asset('gambar/icon/diagram-penjualan.png') }}" class="mr-3"  alt="">
@@ -64,7 +81,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 col-6">
+    <div class="col-md-3 col-12 mb-md-0 mb-3">
         <div class="card p-3">
             <div class="d-flex align-items-center">
                 <img src="{{ asset('gambar/icon/diagram-stokpng.png') }}" class="mr-3"  alt="">
@@ -80,7 +97,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 col-6">
+    <div class="col-md-3 col-12 mb-md-0 mb-3">
         <div class="card p-3">
             <div class="d-flex align-items-center">
                 <img src="{{ asset('gambar/icon/diagram-stokpng.png') }}" class="mr-3"  alt="">
@@ -98,42 +115,42 @@
     </div>
 </div>
 <div class="card card-body mt-4">
-    <div class="row">
-        <div class="col text-center">
+    <div class="row no-gutters">
+        <div class="col text-center icon_status">
             <div class="position-relative d-inline-block">
                 <img src="{{ asset('gambar/icon/dompet.png') }}" alt="">
                 @if ($count_unpaid > 0)
                     <span class="count_status">{{ $count_unpaid }}</span>
                 @endif
             </div>
-            <div class="mt-1">Belum dibayar</div>
+            <div class="mt-1 status">Belum dibayar</div>
         </div>
-        <div class="col text-center">
+        <div class="col text-center icon_status">
             <div class="position-relative d-inline-block">
                 <img src="{{ asset('gambar/icon/dikemas.png') }}" alt="">
                 @if ($count_dikemas > 0)
                     <span class="count_status">{{ $count_dikemas }}</span>
                 @endif
             </div>
-            <div class="mt-1">Dikemas</div>
+            <div class="mt-1 status">Dikemas</div>
         </div>
-        <div class="col text-center">
+        <div class="col text-center icon_status">
             <div class="position-relative d-inline-block">
                 <img src="{{ asset('gambar/icon/dikirim.png') }}" alt="">
                 @if ($count_dikirim > 0)
                     <span class="count_status">{{ $count_dikirim }}</span>
                 @endif
             </div>
-            <div class="mt-1">Dikirim</div>
+            <div class="mt-1 status">Dikirim</div>
         </div>
-        <div class="col text-center">
+        <div class="col text-center icon_status">
             <div class="position-relative d-inline-block">
                 <img src="{{ asset('gambar/icon/penilain.png') }}" alt="">
                 @if ($count_penilaian > 0)
                     <span class="count_status">{{ $count_penilaian }}</span>
                 @endif
             </div>
-            <div class="mt-1">Beri penilaian</div>
+            <div class="mt-1 status">Beri penilaian</div>
         </div>
     </div>
 </div>

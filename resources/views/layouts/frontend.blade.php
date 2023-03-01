@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
     {{-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" /> --}}
-    <link href="/css/app.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    {{-- <link href="/css/app.css" rel="stylesheet"> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}
 
 
 
@@ -16,7 +16,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,900&display=swap" rel="stylesheet">
     @livewireStyles
     @stack('addStyle')
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <link rel="stylesheet" href="/css/app.css">
+    <script src="/js/app.js" defer></script>
 
 </head>
 
@@ -28,17 +29,20 @@
             </a>
         </div>
         {{-- Menu --}}
-        <div class="text-gray-700 font-medium">
+        <div class="text-gray-700">
             <a href="{{ route('produk') }}" class="mx-10">Produk</a>
-            <a href="" class="mx-10">Tentang</a>
-            <a href="" class="mx-10">Media</a>
-            <a href="" class="mx-10">Kontak</a>
+            <a href="" class="mx-6">Seller</a>
+            <a href="" class="mx-6">Tentang</a>
+            <a href="" class="mx-6">Media</a>
+            <a href="" class="mx-6">Kontak</a>
         </div>
         @if (Auth::user())
             {{-- search --}}
             <div class="flex items-center">
                 <div class="relative w-64">
-                    <input type="text" id="search-dropdown" class="block p-2 w-full z-20 text-sm text-gray-900 bg-gray-50 pr-14 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-400" placeholder="Cari barang " required>
+                    <form action="{{ route('produk') }}" method="get">
+                        <input type="text" name="search" value="{{ Request::get('search') }}" id="search-dropdown" class="block p-2 w-full z-20 text-sm text-gray-900 bg-gray-50 pr-14 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-400" placeholder="Cari barang " required>
+                    </form>
                     <div  class="absolute top-0 right-0 p-2 text-sm font-medium text-white bg-primary rounded-r-lg border border-primary hover:bg-purple-300 focus:ring-4 focus:outline-none focus:ring-blue-300">
                         <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
@@ -64,7 +68,7 @@
 
                 @if (Auth::user()->photo)
                 <a href="/dashboard" class=" text-gray-600 rounded-lg ">
-                    <img src="{{ asset(Auth::user()->photo) }}" class="w-32 h-32 rounded-full" alt="">
+                    <img src="{{ asset('storage/'.Auth::user()->photo) }}" class="w-10 h-10 rounded-full object-cover object-center" alt="">
                 </a>
                 @else
                     <a href="/dashboard" class=" text-gray-600 rounded-lg block">
@@ -79,7 +83,10 @@
             {{-- search --}}
             <div class="flex">
                 <div class="relative w-64">
-                    <input type="text" id="search-dropdown" class="block p-2 w-full z-20 text-sm text-gray-900 bg-gray-50 pr-14 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-400" placeholder="Cari barang " required>
+                    <form action="{{ route('produk') }}" method="get">
+                        @csrf
+                        <input type="text" name="search" id="search-dropdown" class="block p-2 w-full z-20 text-sm text-gray-900 bg-gray-50 pr-14 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-400" placeholder="Cari barang . . ." required>
+                    </form>
                     <div  class="absolute top-0 right-0 p-2 text-sm font-medium text-white bg-primary rounded-r-lg border border-primary hover:bg-purple-300 focus:ring-4 focus:outline-none focus:ring-blue-300">
                         <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
@@ -124,10 +131,12 @@
             </a>
         </div>
         <div class="text-gray-600">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6 mx-auto text-gray-600"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-            <div class="font-medium text-sm">
-                Profile
-            </div>
+            <a href="/dashboard">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6 mx-auto text-gray-600"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                <div class="font-medium text-sm">
+                    Profile
+                </div>
+            </a>
         </div>
     </section>
 

@@ -196,7 +196,6 @@
                 }, {
                     csrfToken: "{{ csrf_token() }}",
                 }).then(res =>{
-                    console.log('====handle res create inv penjualan====', res)
                 })
             },
 

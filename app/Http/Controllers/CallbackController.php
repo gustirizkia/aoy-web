@@ -57,7 +57,7 @@ class CallbackController extends Controller
                     return response()->json([
                         'success' => false,
                         'message' => 'Unrecognized payment status',
-                    ]);
+                    ], 422);
         }
 
         $transaksi = Transaksi::where('reference', $request->reference)->first();

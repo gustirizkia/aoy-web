@@ -13,5 +13,24 @@ nav .btn__search {
 
 .btn__primary {
     background-color: #a349a3;
+    border-color: #a349a3;
     color: white;
+}
+
+.btn__primary:hover {
+    background-color: #802980;
+    color: white;
+}
+
+.btn__outline__primary {
+    border-color: #a349a3;
+    color: #a349a3;
+}
+
+.btn__outline__primary:hover {
+    background-color: #a349a3;
+    color: white;
+}
+.cursor-pointer {
+    cursor: pointer;
 }

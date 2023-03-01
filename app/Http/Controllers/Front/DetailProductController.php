@@ -52,19 +52,19 @@ class DetailProductController extends Controller
         $subTotal = 0;
 
         $produk = DB::table('produks')->where('id', $request->produk_id)->first();
-        $totalHargaProduk = $produk->harga;
+        $totalHargaProduk = $produk->harga*$request->qty;
         $totalHarga += $totalHargaProduk;
 
         if($level->tipe_potongan === 'fix')
         {
             // potong tiap produk
             $potonganProduk = $level->potongan_harga;
-            $diskon += $potonganProduk;
-            $subTotal += $totalHargaProduk - $potonganProduk;
+            $diskon += $potonganProduk*$request->qty;
+            $subTotal += $totalHargaProduk - $diskon;
 
         }else{
             $nilai = ($level->potongan_harga/100)*$produk->harga;
-            $potonganProduk = $nilai;
+            $potonganProduk = $nilai*$request->qty;
 
             $diskon += $potonganProduk;
             $subTotal += $totalHarga - $potonganProduk;
@@ -83,7 +83,7 @@ class DetailProductController extends Controller
         $insertDetailTransaksi = DetailTransaksi::create([
                                     'produk_id' => $produk->id,
                                     'transaksi_id' => $createInv->id,
-                                    'qty' => 1,
+                                    'qty' => $request->qty,
                                     'harga' => $produk->harga,
                                     'potong' => $potonganProduk
                                 ]);
@@ -91,7 +91,8 @@ class DetailProductController extends Controller
         return response()->json([
             'status' => 'success',
             'produk' => $produk,
-            'inv' => $createInv
+            'inv' => $createInv,
+            'detail_inv' => $insertDetailTransaksi
         ]);
 
 

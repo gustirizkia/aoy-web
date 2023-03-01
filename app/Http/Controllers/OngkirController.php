@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use GuzzleHttp\Exception\BadResponseException;
 
 class OngkirController extends Controller
 {
@@ -445,6 +446,37 @@ class OngkirController extends Controller
         ], 200);
     }
 
+    public function wayBill(Request $request)
+    {
+        try {
+            $client = new Client();
+            // return $orders->resi;
+            $data = $client->post('https://pro.rajaongkir.com/api/waybill',[
+                'headers' => [
+                  // 'key' => 'a906fd8fc45a816184224df29f246d93'
+                  'key' => '437db99af91a23c64bf1bed279bc4d0f'
+                ],
+                'form_params' => [
+                    'waybill' => $request->resi,
+                    'courier' => $request->kurir
+                ]
+            ]);
+            $response = json_decode($data->getBody()); //->getContents();
+            return response()->json([
+              'status' => 'success',
+              'status_code' => '01',
+              'waybill' => $response->rajaongkir->result
+            ], 200);
+        } catch (BadResponseException $e) {
+            $response = $e->getResponse();
+            $msg = json_decode($response->getBody()->getContents());
+
+            return response()->json([
+                'data' => $msg
+            ]);
+        }
+    }
+
     public function manifestCheck(Request $request){
 
       $validator = Validator::make($request->all(), [
@@ -815,7 +847,6 @@ class OngkirController extends Controller
     public function viewOngkirProduct(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'product_id' => 'required',
             'address_id' => 'required'
         ]);
 
@@ -826,17 +857,9 @@ class OngkirController extends Controller
             ], 400);
         }
 
-        // Check Invoice
-        $exits = DB::table('vendor_products')->where('id', $request->product_id)->first();
-        if (!$exits) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Produk tidak ditemukan'
-            ], 400);
-        }
 
         // Check address
-        $address = DB::table('user_address')->where('id', $request->address_id)->where('user_id', auth()->user()->id)->first();
+        $address = DB::table('users_address')->where('id', $request->address_id)->where('user_id', auth()->user()->id)->first();
         if (!$address) {
             return response()->json([
                 'status' => 'failed',
@@ -844,17 +867,7 @@ class OngkirController extends Controller
             ], 404);
         }
 
-        // Get weight product
-        $weight = DB::table('vendor_products')
-                    ->where('id', $request->product_id)
-                    ->get()
-                    ->sum('weight');
-
-        // dd($weight);
-        // Check if product not found or weight = 0
-        if ($weight == 0) {
-            $weight = 1;
-        }
+        $weight = 1;
 
         $client = new Client();
 
@@ -864,12 +877,12 @@ class OngkirController extends Controller
               'key' => '437db99af91a23c64bf1bed279bc4d0f'
             ],
             'form_params' => [
-                'origin' => 457,
-                'originType' => 'city',
+                'origin' => 6312,
+                'originType' => 'subdistrict',
                 'destination' => $address->subdistrict_id,
                 'destinationType' => 'subdistrict',
                 'weight' => $weight,
-                'courier' => 'jne:tiki:jnt:sicepat'
+                'courier' => 'jne:sicepat'
             ]
         ]);
 
@@ -1298,86 +1311,86 @@ class OngkirController extends Controller
     }
 
     public function compareStrings($s1, $s2) {
-    //one is empty, so no result
-    if (strlen($s1)==0 || strlen($s2)==0) {
-        return 0;
-    }
+        //one is empty, so no result
+        if (strlen($s1)==0 || strlen($s2)==0) {
+            return 0;
+        }
 
-    //replace none alphanumeric charactors
-    //i left - in case its used to combine words
-    $s1clean = preg_replace("/[^A-Za-z0-9-]/", ' ', $s1);
-    $s2clean = preg_replace("/[^A-Za-z0-9-]/", ' ', $s2);
+        //replace none alphanumeric charactors
+        //i left - in case its used to combine words
+        $s1clean = preg_replace("/[^A-Za-z0-9-]/", ' ', $s1);
+        $s2clean = preg_replace("/[^A-Za-z0-9-]/", ' ', $s2);
 
-    //remove double spaces
-    while (strpos($s1clean, "  ")!==false) {
-        $s1clean = str_replace("  ", " ", $s1clean);
-    }
-    while (strpos($s2clean, "  ")!==false) {
-        $s2clean = str_replace("  ", " ", $s2clean);
-    }
+        //remove double spaces
+        while (strpos($s1clean, "  ")!==false) {
+            $s1clean = str_replace("  ", " ", $s1clean);
+        }
+        while (strpos($s2clean, "  ")!==false) {
+            $s2clean = str_replace("  ", " ", $s2clean);
+        }
 
-    //create arrays
-    $ar1 = explode(" ",$s1clean);
-    $ar2 = explode(" ",$s2clean);
-    $l1 = count($ar1);
-    $l2 = count($ar2);
+        //create arrays
+        $ar1 = explode(" ",$s1clean);
+        $ar2 = explode(" ",$s2clean);
+        $l1 = count($ar1);
+        $l2 = count($ar2);
 
-    //flip the arrays if needed so ar1 is always largest.
-    if ($l2>$l1) {
-        $t = $ar2;
-        $ar2 = $ar1;
-        $ar1 = $t;
-    }
+        //flip the arrays if needed so ar1 is always largest.
+        if ($l2>$l1) {
+            $t = $ar2;
+            $ar2 = $ar1;
+            $ar1 = $t;
+        }
 
-    //flip array 2, to make the words the keys
-    $ar2 = array_flip($ar2);
+        //flip array 2, to make the words the keys
+        $ar2 = array_flip($ar2);
 
 
-    $maxwords = max($l1, $l2);
-    $matches = 0;
+        $maxwords = max($l1, $l2);
+        $matches = 0;
 
-    //find matching words
-    foreach($ar1 as $word) {
-        if (array_key_exists($word, $ar2))
-            $matches++;
-    }
+        //find matching words
+        foreach($ar1 as $word) {
+            if (array_key_exists($word, $ar2))
+                $matches++;
+        }
 
-      return ($matches / $maxwords) * 100;
-    }
+        return ($matches / $maxwords) * 100;
+        }
 
-    public function array_sort($array, $on, $order=SORT_ASC)
-    {
-        $new_array = array();
-        $sortable_array = array();
+        public function array_sort($array, $on, $order=SORT_ASC)
+        {
+            $new_array = array();
+            $sortable_array = array();
 
-        if (count($array) > 0) {
-            foreach ($array as $k => $v) {
-                if (is_array($v)) {
-                    foreach ($v as $k2 => $v2) {
-                        if ($k2 == $on) {
-                            $sortable_array[$k] = $v2;
+            if (count($array) > 0) {
+                foreach ($array as $k => $v) {
+                    if (is_array($v)) {
+                        foreach ($v as $k2 => $v2) {
+                            if ($k2 == $on) {
+                                $sortable_array[$k] = $v2;
+                            }
                         }
+                    } else {
+                        $sortable_array[$k] = $v;
                     }
-                } else {
-                    $sortable_array[$k] = $v;
+                }
+
+                switch ($order) {
+                    case SORT_ASC:
+                        asort($sortable_array);
+                    break;
+                    case SORT_DESC:
+                        arsort($sortable_array);
+                    break;
+                }
+
+                foreach ($sortable_array as $k => $v) {
+                    array_push($new_array, $array[$k]);
                 }
             }
 
-            switch ($order) {
-                case SORT_ASC:
-                    asort($sortable_array);
-                break;
-                case SORT_DESC:
-                    arsort($sortable_array);
-                break;
-            }
-
-            foreach ($sortable_array as $k => $v) {
-                array_push($new_array, $array[$k]);
-            }
-        }
-
-        return $new_array;
+            return $new_array;
     }
 
     public function distance($lat1, $lon1, $lat2, $lon2, $unit)

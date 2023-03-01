@@ -43,6 +43,7 @@ class StatusTransaksiCommand extends Command
 
         $data = DB::table('transaksis')->get();
         foreach($data as $item){
+
             if($item->status === 'UNPAID'){
                 if($item->expired_time < $now){
                     DB::table('transaksis')->where('id', $item->id)->update([
@@ -59,7 +60,16 @@ class StatusTransaksiCommand extends Command
                     ]);
                 }
             }
+
+            if($item->status === 'create'){
+                $date = Carbon::parse($item->created_at)->addHour(4);
+                if($now > $date){
+                    DB::table('transaksis')->where('id', $item->id)->delete();
+                }
+            }
         }
+
+        $this->info('command ubah status transaksi successfully');
 
     }
 }

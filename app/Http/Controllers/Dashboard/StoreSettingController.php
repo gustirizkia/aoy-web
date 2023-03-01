@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Member;
 use App\Models\MemberGallery;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class StoreSettingController extends Controller
@@ -14,10 +15,13 @@ class StoreSettingController extends Controller
     {
         $member = Member::where('user_uuid', auth()->user()->uuid)->first();
         $gallery = MemberGallery::where('member_id', auth()->user()->id)->get();
+
+        $provinsi = DB::table('provinces_ro')->orderBy('name', 'asc')->get();
         // dd($gallery, auth()->user()->id);
         return view('dashboard.store.index', [
             'member' => $member,
-            'gallery' => $gallery
+            'gallery' => $gallery,
+            'provinsi' => $provinsi
         ]);
     }
 
@@ -28,13 +32,19 @@ class StoreSettingController extends Controller
             'akun_ig' => 'required|string',
             'nomor_wa' => 'required|string',
             'deskripsi' => 'required',
+            'city_id' => 'required',
+            'kecamatan_id' => 'required',
+            'provinsi' => 'required',
         ]);
         $data = [
             'user_uuid' => auth()->user()->uuid,
             'akun_ig' => $request->akun_ig,
             'nomor_wa' => $request->nomor_wa,
             'nama' => $request->nama,
-            'deskripsi' => $request->deskripsi
+            'deskripsi' => $request->deskripsi,
+            'province_id' => $request->provinsi,
+            'city_id' => $request->city_id,
+            'subdistrict_id' => $request->kecamatan_id
         ];
 
         if($request->image){

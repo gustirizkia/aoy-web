@@ -15,6 +15,7 @@ class CreateTbRoSubdistrictsTable extends Migration
     {
         Schema::create('tb_ro_subdistricts', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('subdistrict_id');
             $table->bigInteger('city_id');
             $table->string('subdistrict_name');
             $table->timestamps();

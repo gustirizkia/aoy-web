@@ -113,28 +113,32 @@
             </div>
 
         </section>
-        <div class="border w-full p-4 fixed bg-white bottom-0 z-40 text-xs md:hidden">
-            <div class="text-gray-600  flex justify-between">
-                <div class="">
-                    Total Harga
+        @if (count($produks) > 0)
+            <div class="border w-full p-4 fixed bg-white bottom-0 z-40 text-xs md:hidden">
+                <div class="text-gray-600  flex justify-between">
+                    <div class="">
+                        Total Harga
+                    </div>
+                    <div class=""><span x-text="'Rp'+numberWithCommas(totalHarga)"></span></div>
                 </div>
-                <div class=""><span x-text="'Rp'+numberWithCommas(totalHarga)"></span></div>
-            </div>
-            <div class="text-gray-600 mt-3 flex justify-between">
-                <div class="">
-                    Diskon Barang
+                <div class="text-gray-600 mt-3 flex justify-between">
+                    <div class="">
+                        Diskon Barang
+                    </div>
+                    <div class="" x-text="'Rp'+numberWithCommas(potongan.diskon)">Rp400,0000</div>
                 </div>
-                <div class="" x-text="'Rp'+numberWithCommas(potongan.diskon)">Rp400,0000</div>
+                <hr class="my-4">
+                <div class="font-bold text-gray-800 flex justify-between text-sm">
+                    <div class="">Subtotal</div>
+                    <div x-text="'Rp'+numberWithCommas(potongan.total_potongan)" class="">Rp400,000</div>
+                </div>
+                <a href="#" class="block w-full mt-6 bg-primary py-2 rounded-xl text-center text-white text-sm">
+                    Beli
+                </a>
             </div>
-            <hr class="my-4">
-            <div class="font-bold text-gray-800 flex justify-between text-sm">
-                <div class="">Subtotal</div>
-                <div x-text="'Rp'+numberWithCommas(potongan.total_potongan)" class="">Rp400,000</div>
-            </div>
-            <a href="#" class="block w-full mt-6 bg-primary py-2 rounded-xl text-center text-white text-sm">
-                Beli
-            </a>
-        </div>
+        @else
+        <div class=" text-center">Keranjang kosong</div>
+        @endif
     </form>
 </div>
 @endsection
