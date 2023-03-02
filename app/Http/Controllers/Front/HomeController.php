@@ -32,9 +32,9 @@ class HomeController extends Controller
         $request->session()->put('current_page', '/');
         $request->session()->put('prev', URL::previous());
 
-        $rekomendasi_produk = DB::table('produk_rekomendasis')->limit(3)->get()->pluck('produk_id');
+        $rekomendasi_produk = DB::table('produk_rekomendasis')->limit(4)->get()->pluck('produk_id');
         $produkRekomendasi = Produk::whereIn('id', $rekomendasi_produk)->get();
-        $produkTerbaru = Produk::orderBy('id', 'desc')->limit(3)->get();
+        $produkTerbaru = Produk::orderBy('id', 'desc')->limit(4)->get();
 
         $provinsiList = ListProvinsi::orderBy('name', 'asc')->get();
         $member = DB::table('members')

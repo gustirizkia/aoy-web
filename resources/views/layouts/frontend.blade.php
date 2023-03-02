@@ -102,7 +102,7 @@
 
 
     {{-- bottombar mobile --}}
-    <section class="md:hidden shadow py-3 px-6 flex items-center justify-between fixed w-full border-t bottom-0 bg-white z-40 {{ (request()->is('keranjang')) ? 'hidden' : '' }}">
+    <section class="md:hidden shadow py-3 px-6 flex items-center justify-between fixed w-full border-t bottom-0 bg-white z-40 {{ (request()->is('keranjang')) || (request()->is('produk*')) ? 'hidden' : '' }}">
         <div class="{{ (request()->is('/')) ? 'text-primary' : 'text-gray-600' }} text-center">
             <a href="/">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 mx-auto">

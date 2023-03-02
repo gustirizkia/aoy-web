@@ -54,7 +54,7 @@
                 </div>
             </div>
             @foreach ($rekomendasi as $item)
-                <div class="md:col-span-4 col-span-6">
+                <div class="md:col-span-3 col-span-6">
                     @component('Frontend.components.card-produk')
                         @slot('param_nama')
                             {{ $item->nama }}
@@ -147,7 +147,7 @@
                 </div>
             </div>
             @foreach ($terbaru as $item)
-                <div class="md:col-span-4 col-span-6">
+                <div class="md:col-span-3 col-span-6">
                     @component('Frontend.components.card-produk')
                         @slot('param_nama')
                             {{ $item->nama }}
