@@ -31,7 +31,7 @@
         {{-- Menu --}}
         <div class="text-gray-700">
             <a href="{{ route('produk') }}" class="mx-10">Produk</a>
-            <a href="" class="mx-6">Seller</a>
+            <a href="/member" class="mx-6">Seller</a>
             <a href="" class="mx-6">Tentang</a>
             <a href="" class="mx-6">Media</a>
             <a href="" class="mx-6">Kontak</a>

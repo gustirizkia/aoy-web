@@ -1,4 +1,4 @@
-<div class="bg-white md:p-8 p-3 rounded-lg shadow h-full flex flex-col justify-start" x-data="cardProduk" >
+<div class="bg-white md:p-4 p-3 rounded-lg shadow h-full flex flex-col justify-start" x-data="cardProduk" >
 
     <div class="">
             <img src="{{ $image_url }}" alt="" class="rounded-lg w-full ">

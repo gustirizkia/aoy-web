@@ -54,7 +54,7 @@
                 </div>
             </div>
             @foreach ($rekomendasi as $item)
-                <div class="md:col-span-4 col-span-12">
+                <div class="md:col-span-3 col-span-6">
                     @component('Frontend.components.card-produk')
                         @slot('param_nama')
                             {{ $item->nama }}
@@ -73,6 +73,9 @@
                         @endslot
                         @slot('url_add')
                             {{ $item->id }}
+                        @endslot
+                        @slot('harga')
+                            {{ number_format($item->harga) }}
                         @endslot
                     @endcomponent
                 </div>
@@ -144,7 +147,7 @@
                 </div>
             </div>
             @foreach ($terbaru as $item)
-                <div class="md:col-span-4 col-span-6">
+                <div class="md:col-span-3 col-span-6">
                     @component('Frontend.components.card-produk')
                         @slot('param_nama')
                             {{ $item->nama }}
@@ -236,11 +239,11 @@
             @endforeach
             @if ($member->currentPage() < $member->lastPage())
                 <div class="col-span-12">
-                    <div class="flex justify-center">
+                    <a href="/member" class="flex justify-center">
                         <div class="border-2 border-primary px-6 py-3 text-primary font-medium rounded-full cursor-pointer hover:bg-primary hover:text-white">
                             Lebih Banyak
                         </div>
-                    </div>
+                    </a>
                 </div>
             @endif
         </div>
