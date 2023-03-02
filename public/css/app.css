@@ -3559,6 +3559,12 @@ textarea.form-control.is-invalid {
 .h-32 {
   height: 8rem;
 }
+.h-72 {
+  height: 18rem;
+}
+.h-80 {
+  height: 20rem;
+}
 .max-h-\[70\%\] {
   max-height: 70%;
 }

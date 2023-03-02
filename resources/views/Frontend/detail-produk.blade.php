@@ -58,13 +58,13 @@
                 </div>
             </div>
             <div class="col-span-12 md:hidden">
-                <div id="indicators-carousel" class="relative" data-carousel="static">
+                <div id="indicators-carousel" class="relative h-80" data-carousel="static">
                     <!-- Carousel wrapper -->
-                    <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+                    <div class="relative h-80 overflow-hidden rounded-lg md:h-96">
                         <!-- Item -->
                         @foreach ($images as $index => $item)
                             <div class="hidden duration-700 ease-in-out" data-carousel-item="{{ $index === 0 ? 'active' : '' }}">
-                                <img src="{{ url($item->photo) }}" class="absolute block w-full h-56 object-cover -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+                                <img src="{{ url($item->photo) }}" class="absolute block w-full h-80 object-cover object-center -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
                             </div>
                         @endforeach
                     </div>
