@@ -238,6 +238,8 @@
                     }).catch(err =>{
                         console.log('err', err)
                     })
+                @else
+                    window.location.href = "{{ route('login') }}";
                 @endif
 
                     return 1;
@@ -252,17 +254,21 @@
                 },
 
                 handleOrderLangsung(){
-                    axios.post("{{ route('orderLangsung') }}", {
-                        produk_id: this.produk_id,
-                        qty: this.qty
-                    }, {
-                        csrfToken: "{{ csrf_token() }}",
-                    }).then(ress => {
-                        console.log('ress.data.inv.no_inv', ress.data)
-                        window.location.replace("{{ route('proses-transaksi') }}?inv="+ress.data.inv.no_inv);
-                    }).catch(err =>{
-                        console.log('err', err)
-                    });
+                    @if(Auth::user())
+                        axios.post("{{ route('orderLangsung') }}", {
+                            produk_id: this.produk_id,
+                            qty: this.qty
+                        }, {
+                            csrfToken: "{{ csrf_token() }}",
+                        }).then(ress => {
+                            console.log('ress.data.inv.no_inv', ress.data)
+                            window.location.replace("{{ route('proses-transaksi') }}?inv="+ress.data.inv.no_inv);
+                        }).catch(err =>{
+                            console.log('err', err)
+                        });
+                    @else
+                        window.location.href = "{{ route('login') }}";
+                    @endif
                 },
 
 
