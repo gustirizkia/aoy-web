@@ -36,4 +36,25 @@ class UtilsController extends Controller
             'total_qty' => $detail->sum('qty')
         ];
     }
+    public function totalPembelian(){
+        $penjualan = DB::table('transaksis')->where('user_id', auth()->user()->id)->where('jenis_inv', 'pembelian');
+        $detail = DB::table('detail_transaksis')->whereIn('transaksi_id', $penjualan->get()->pluck('id'));
+        return [
+            'total_harga' => $penjualan->sum('total_harga_barang'),
+            'total_qty' => $detail->sum('qty')
+        ];
+    }
+
+    public function stok(){
+        $data = DB::table('produk_sayas')->where('user_id', auth()->user()->id)->sum('qty');
+
+        $penjualan = DB::table('transaksis')->where('user_id', auth()->user()->id)->where('jenis_inv', 'pembelian')->where(function($query){
+            return $query->where('status', 'selesai')->orWhere('status', 'konfirmasi');
+        });
+        $detail = DB::table('detail_transaksis')->whereIn('transaksi_id', $penjualan->get()->pluck('id'));
+        return [
+            'stok' => $data,
+            'jumlah_pembelian' => $detail->sum('qty')
+        ];
+    }
 }

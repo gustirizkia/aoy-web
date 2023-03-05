@@ -53,14 +53,14 @@
         <div class="card p-3">
             <div class="d-flex align-items-center">
                 <img src="{{ asset('gambar/icon/diagram-keuntungan.png') }}" class="mr-md-3 mr-2"  alt="">
-                <h5 class="font-weight-bold">Keuntungan</h5>
+                <h5 class="font-weight-bold">Penjualan</h5>
             </div>
             <div class="mt-2">
                 <div class="text-secondary">
                     Total revenue
                 </div>
                 <div class="font-weight-bold text__primary">
-                    Rp2000.0000
+                    Rp.{{ number_format($total_penjualan) }}
                 </div>
             </div>
         </div>
@@ -69,14 +69,14 @@
         <div class="card p-3">
             <div class="d-flex align-items-center">
                 <img src="{{ asset('gambar/icon/diagram-penjualan.png') }}" class="mr-3"  alt="">
-                <h5 class="font-weight-bold">Penjualan</h5>
+                <h5 class="font-weight-bold">Pembelian</h5>
             </div>
             <div class="mt-2">
                 <div class="text-secondary">
-                    Total penjualan
+                    Total pembelian
                 </div>
                 <div class="font-weight-bold text__primary">
-                    Rp2000.0000
+                    Rp{{ number_format($total_pembelian) }}
                 </div>
             </div>
         </div>
@@ -92,7 +92,7 @@
                     Total Stok
                 </div>
                 <div class="font-weight-bold text__primary">
-                    400
+                    {{ $stok }}
                 </div>
             </div>
         </div>
@@ -101,14 +101,14 @@
         <div class="card p-3">
             <div class="d-flex align-items-center">
                 <img src="{{ asset('gambar/icon/diagram-stokpng.png') }}" class="mr-3"  alt="">
-                <h5 class="font-weight-bold">Pembelian</h5>
+                <h5 class="font-weight-bold">Pembelian Produk</h5>
             </div>
             <div class="mt-2">
                 <div class="text-secondary">
                     Total pembelian
                 </div>
                 <div class="font-weight-bold text__primary">
-                    400
+                    {{ $total_qty }}
                 </div>
             </div>
         </div>
