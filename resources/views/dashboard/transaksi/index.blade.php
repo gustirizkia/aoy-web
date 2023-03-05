@@ -25,24 +25,38 @@
             line-height: 1;
             font-size: 14px
         }
+        @media (max-width: 991.98px) {
+            .item_jenis_inv{
+                font-size: 14px;
+            }
+            .w-75{
+                width: 15% !important;
+            }
+         }
+         .card-list .card-body{
+            line-height: unset;
+            font-size: 12px;
+            padding: 8px;
+
+         }
     </style>
 @endpush
 
 @section('content')
     <section x-data="funcData">
-        <div class="header mb-5">
+        <div class="header mb-md-5 mb-3">
             <div class="row">
                 <div class="col-md-12 d-flex justify-content-between align-items-center">
-                    <div class="d-flex">
+                    <div class="d-flex align-items-center">
                         <div class="item_jenis_inv " :class="!pembelian ? 'active' : ''" @click="() =>{pembelian = false}">
                             Penjualan
                         </div>
-                        <div class="item_jenis_inv ml-5" :class="pembelian ? 'active' : ''" @click="() =>{pembelian = true}">
+                        <div class="item_jenis_inv ml-md-5 ml-3" :class="pembelian ? 'active' : ''" @click="() =>{pembelian = true}">
                             Pembelian
                         </div>
                     </div>
                     <div class="">
-                        <a href="{{ route('dashboard-transaksi-create') }}" class="btn btn__primary">Buat Invoice</a>
+                        <a href="{{ route('dashboard-transaksi-create') }}" class="btn btn__primary btn-sm">Buat Invoice</a>
                     </div>
                 </div>
             </div>
@@ -52,10 +66,61 @@
         {{-- pembelian --}}
         <section x-show="pembelian">
             @foreach ($pembelian as $transaction)
+            {{-- mobile view --}}
                 <a
-                    href=""
-                    class="card card-list d-block"
-                >
+                        href="{{ route('transaksi-detail') }}?inv={{ $transaction->transaksi->no_inv }}"
+                        class="card card-list d-md-none">
+                        <div class="card-body">
+                        <div class="">
+                            <div class=" d-flex align-items-center">
+                                <img
+                                    src="{{ url($transaction->produk->thumbnail->photo) }}"
+                                    class="w-75"
+                                />
+                                <div class="ml-2 w-100">
+                                    <div>{{ $transaction->produk->nama ?? '' }}</div>
+
+                                    <div class="w-100">
+                                        <div class="d-flex">
+                                            <span class="mr-2">Status</span>
+                                            <div class="harga">
+                                                @if ($transaction->transaksi->status === 'UNPAID')
+                                                    <span class="text-warning">Belum dibayar</span>
+                                                @endif
+                                                @if ($transaction->transaksi->status === 'konfirmasi')
+                                                    <span class="text-warning">Butuh konfirmasi</span>
+                                                @endif
+                                                @if ($transaction->transaksi->status === 'selesai')
+                                                    <span class="text-success">Selesai</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between w-100">
+                                            <div class="harga">
+                                                Rp{{ number_format($transaction->produk->harga) }}<span> qty: {{ $transaction->qty }}</span>
+                                            </div>
+                                            <div class="">
+                                                {{ $transaction->created_at ?? '' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-1 d-none d-md-block">
+                            <img
+                                src="images/dashboard-arrow-right.svg"
+                                alt=""
+                            />
+                            </div>
+                        </div>
+                        </div>
+                    </a>
+            {{-- mobile view end --}}
+                <a
+                    href="{{ route('transaksi-detail') }}?inv={{ $transaction->transaksi->no_inv }}"
+                    class="card card-list d-md-block d-none">
                     <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-md-1 d-flex align-items-center">
@@ -65,7 +130,8 @@
                         />
                         </div>
                         <div class="col-md-4">
-                        <span>{{ $transaction->produk->nama ?? '' }}</span>  <div class="harga">Rp{{ number_format($transaction->produk->harga) }}<span> qty: {{ $transaction->qty }}</span></div>
+                            <span>{{ $transaction->produk->nama ?? '' }}</span>  <div class="harga">Rp{{ number_format($transaction->produk->harga) }}<span> qty: {{ $transaction->qty }}</span>
+                        </div>
 
                         </div>
                         <div class="col-md-3">
@@ -76,6 +142,9 @@
                                 @endif
                                 @if ($transaction->transaksi->status === 'selesai')
                                     <span class="text-success">Selesai</span>
+                                @endif
+                                @if ($transaction->transaksi->status === 'konfirmasi')
+                                    <span class="text-warning">Butuh konfirmasi</span>
                                 @endif
                                 @if ($transaction->transaksi->status === 'PAID')
                                     <span class="text-success">dibayar</span>
@@ -101,12 +170,11 @@
         <section x-show="!pembelian">
             @foreach ($penjualan as $transaction)
                 <a
-                    href=""
-                    class="card card-list d-block"
-                >
+                    href="{{ route('transaksi-detail') }}?inv={{ $transaction->transaksi->no_inv }}"
+                    class="card card-list d-md-block d-none">
                     <div class="card-body">
                     <div class="row align-items-center">
-                        <div class="col-md-1 d-flex align-items-center">
+                        <div class="col-md-1 col-3 d-flex align-items-center">
                         <img
                             src="{{ url($transaction->produk->thumbnail->photo) }}"
                             class="w-75"
@@ -130,6 +198,43 @@
                         <div class="col-md-3">
                         {{ $transaction->created_at ?? '' }}
                         </div>
+                        <div class="col-md-1 d-none d-md-block">
+                        <img
+                            src="images/dashboard-arrow-right.svg"
+                            alt=""
+                        />
+                        </div>
+                    </div>
+                    </div>
+                </a>
+                <a
+                    href="{{ route('transaksi-detail') }}?inv={{ $transaction->transaksi->no_inv }}"
+                    class="card card-list d-md-none">
+                    <div class="card-body">
+                    <div class="">
+                        <div class=" d-flex align-items-center">
+                            <img
+                                src="{{ url($transaction->produk->thumbnail->photo) }}"
+                                class="w-75"
+                            />
+                            <div class="ml-2 w-100">
+                                <div>{{ $transaction->produk->nama ?? '' }}</div>
+
+                                <div class="w-100">
+
+                                    <div class="d-flex justify-content-between w-100">
+                                        <div class="harga">
+                                            Rp{{ number_format($transaction->produk->harga) }}<span> qty: {{ $transaction->qty }}</span>
+                                        </div>
+                                        <div class="">
+                                            {{ $transaction->created_at ?? '' }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                         <div class="col-md-1 d-none d-md-block">
                         <img
                             src="images/dashboard-arrow-right.svg"

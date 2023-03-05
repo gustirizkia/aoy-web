@@ -122,22 +122,22 @@
                     <div class="mt-4">
                         <div class="row">
                             @foreach ($gallery as $item)
-                                <div class="col-md-3">
+                                <div class="col-md-3 col-6 mb-3">
                                     <div class="position-relative">
                                         <img src="{{ Storage::url($item->image) }}" class="img-fluid" alt="">
-                                        <div class="delete_image px-1">X</div>
+                                        <a href="{{ route('deleteImage') }}?id={{ $item->id }}" class="delete_image px-1">X</a>
                                     </div>
                                 </div>
                             @endforeach
                             <template x-for="(item, index) in image" :key="index">
-                                <div class="col-md-3 position-relative" x-show="image.length > 0">
+                                <div class="col-md-3 col-6 mb-3 position-relative" x-show="image.length > 0">
                                     <div class="position-relative">
                                         <img :src="item" alt="" class="img-fluid">
                                         <div class="delete_image px-1">X</div>
                                     </div>
                                 </div>
                             </template>
-                            <div class="col-md-3 position-relative">
+                            <div class="col-md-3 col-6 mb-3 position-relative">
                                 <img src="{{ asset('gambar/add-image.png') }}" class="img-fluid" alt="" @click="$refs.imageRef.click()"  >
                                 <input type="file" accept="image/*" x-ref="imageRef" class="d-none" @change="onFileChange">
 
@@ -181,13 +181,20 @@
                         axios.post("{{ route('upload-image-gallery') }}",formData, {
                             csrfToken: "{{ csrf_token() }}",
                         }).then(res =>{
-                            this.image.push(urlimage)
-                            console.log('res', res)
+                            location.reload();
                         }).catch(err =>{
                             console.log('err', err)
                         })
 
                     }
+                },
+
+                handleImageDelete(id){
+                    axios.get("{{ route('deleteImage') }}?id="+id).then(res => {
+                        console.log('res', res)
+                    }).catch(err => {
+                        console.log('err', err);
+                    })
                 },
 
                 onChangeImageStore(e)

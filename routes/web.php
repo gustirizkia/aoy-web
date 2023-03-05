@@ -57,6 +57,7 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::get('store-setting', [StoreSettingController::class, 'index'])->name('store-setting');
     Route::post('store-setting', [StoreSettingController::class, 'store'])->name('insert-store-setting');
     Route::post('upload-gallery-image', [StoreSettingController::class, 'uploadImage'])->name('upload-image-gallery');
+    Route::get('delete-image', [StoreSettingController::class, 'deleteImage'])->name('deleteImage');
 
     Route::get('akun-saya', [AkunController::class, 'index'])->name('akun-saya');
     Route::post('updateProfile', [AkunController::class, 'updateProfile'])->name('updateProfile');

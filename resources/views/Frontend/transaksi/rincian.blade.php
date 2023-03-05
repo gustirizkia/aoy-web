@@ -37,7 +37,7 @@
                                 <p class="text-xs">Pesanan anda dalam pengemasan</p>
                             </li>
                             <li class="mb-10 ml-6">
-                                @if ($transaksi->status === 'konfirmasi')
+                                @if ($transaksi->status === 'konfirmasi' || $transaksi->status === 'dikirim' || $transaksi->jenis_inv === 'penjualan')
                                     <span class="absolute flex items-center justify-center w-8 h-8 bg-green-200 rounded-full -left-4 ring-4 ring-white dark:ring-gray-900 dark:bg-green-900">
                                         <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
                                     </span>
@@ -54,9 +54,15 @@
                                 <p class="text-xs">Sedang dalam perjalanan</p>
                             </li>
                             <li class="ml-6">
-                                <span class="absolute flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full -left-4 ring-4 ring-white dark:ring-gray-900 dark:bg-gray-700">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                </span>
+                                @if ($transaksi->jenis_inv === 'penjualan' || $transaksi->status === 'selesai')
+                                    <span class="absolute flex items-center justify-center w-8 h-8 bg-green-200 rounded-full -left-4 ring-4 ring-white dark:ring-gray-900 dark:bg-green-900">
+                                        <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                    </span>
+                                @else
+                                    <span class="absolute flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full -left-4 ring-4 ring-white dark:ring-gray-900 dark:bg-gray-700">
+                                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                    </span>
+                                @endif
                                 <h3 class="font-medium leading-tight text-gray-900">Pesanan sudah diterima</h3>
                                 <p class="text-xs">Barang sudah sampai</p>
                             </li>
@@ -89,15 +95,21 @@
                         </div>
 
                         <div class="mt-6">
-                            <div class="text-gray-500">
-                                Lokai tujuan
-                            </div>
-                            <div class=" font-medium">
-                                {{ $transaksi->kecamatan->subdistrict_name }}, {{ $transaksi->kota->name }}, {{ $transaksi->provinsi->name }}
-                            </div>
-                            <div class="text-gray-500 text-sm">
-                                {{ $transaksi->alamat_lengkap }}
-                            </div>
+                            @if ($transaksi->jenis_inv === 'penjualan')
+                                <div class="text-gray-800">
+                                    Penjualan
+                                </div>
+                            @else
+                                <div class="text-gray-500">
+                                    Lokai tujuan
+                                </div>
+                                <div class=" font-medium">
+                                    {{ $transaksi->kecamatan->subdistrict_name }}, {{ $transaksi->kota->name }}, {{ $transaksi->provinsi->name }}
+                                </div>
+                                <div class="text-gray-500 text-sm">
+                                    {{ $transaksi->alamat_lengkap }}
+                                </div>
+                            @endif
                         </div>
 
                         {{-- list produk desktop --}}

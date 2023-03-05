@@ -83,4 +83,16 @@ class StoreSettingController extends Controller
 
         return response()->json($insert);
     }
+
+    public function deleteImage(Request $request)
+    {
+        $id = $request->id;
+        if(!$id){
+            return redirect()->back()->with('error', "Data tidak ditemukan");
+        }
+
+        $delete = DB::table('member_galleries')->where('member_id', auth()->user()->id)->where('id', $id)->delete();
+
+        return redirect()->back()->with('success', "Berhasil hapus photo");
+    }
 }

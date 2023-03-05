@@ -161,7 +161,7 @@
         <h5 class="mb-3">Riwayat Transaksi</h5>
         @foreach ($detail_transaksi as $transaction)
             <a
-                href=""
+                href="{{ route('transaksi-detail') }}?inv={{ $transaction->transaksi->no_inv }}"
                 class="card card-list d-block"
             >
                 <div class="card-body">
