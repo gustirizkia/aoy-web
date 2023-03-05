@@ -402,4 +402,30 @@ class TransaksiController extends Controller
             'detail_transaksi' => $detailTransaksi
         ]);
     }
+
+    public function konfirmasi(Request $request)
+    {
+        if(!$request->inv || !$request->reference){
+            return redirect()->back()->with('error', 'Data tidak ditemukan');
+        }
+
+        if($request->status === "1" || $request->status === 1){
+            $transaksi = DB::table('transaksis')->where('no_inv', $request->inv)->where('reference', $request->reference)->update([
+                'status' => 'selesai',
+                'updated_at' => now()
+            ]);
+
+            return redirect()->back()->with('success', 'Berhasil konfirmasi pesanan');
+        }
+
+        if($request->status === auth()->user()->uuid){
+            $transaksi = DB::table('transaksis')->where('no_inv', $request->inv)->where('reference', $request->reference)->update([
+                'status' => 'komplain',
+                'updated_at' => now()
+            ]);
+            return redirect()->back()->with('success', 'Berhasil komplain pesanan');
+        }
+
+        return redirect()->back()->with('error', 'Data tidak ditemukan');
+    }
 }

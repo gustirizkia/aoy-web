@@ -41,6 +41,7 @@ Route::post('/createInv', [TransaksiController::class, 'createInv'])->name('crea
 Route::post('/transaksi-pending', [TransaksiController::class, 'menungguPembayaran'])->name('transaksi-pending')->middleware('auth');
 Route::get('/transaksi-unpaid', [TransaksiController::class, 'unpaid'])->name('transaksi-unpaid')->middleware('auth');
 Route::get('/transaksi-detail', [TransaksiController::class, 'rincian'])->name('transaksi-detail');
+Route::get('/konfirmasi', [TransaksiController::class, 'konfirmasi'])->name('konfirmasi');
 Route::post('/add-cart', [DetailProductController::class, 'addCart'])->name('add-cart');
 
 Route::post('tambah-alamat', [UserController::class, 'tambahAlamat'])->name('tambah-alamat')->middleware('auth');
