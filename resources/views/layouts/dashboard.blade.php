@@ -169,7 +169,7 @@
                     </div>
                   </li>
                  <li class="nav-item">
-                    <a href="#" class="nav-link d-inline-block mt-2">
+                    <a href="{{ route('keranjang') }}" class="nav-link d-inline-block mt-2">
                         @php
                             $carts = \App\Models\Cart::where('user_id', Auth::user()->id)->sum('qty');
                         @endphp
