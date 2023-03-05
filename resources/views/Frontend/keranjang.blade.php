@@ -134,9 +134,11 @@
                     <div class="">Subtotal</div>
                     <div x-text="'Rp'+numberWithCommas(potongan.total_potongan)" class="">Rp400,000</div>
                 </div>
-                <a href="#" class="block w-full mt-6 bg-primary py-2 rounded-xl text-center text-white text-sm">
-                    Beli
-                </a>
+                <button type="submit" class="block w-full" :disabled="pilihan.length <= 0">
+                    <div class="mt-8 bg-primary py-2 rounded-xl text-center text-white">
+                        Beli
+                    </div>
+                </button>
             </div>
         @else
         <div class=" text-center mb-3">Keranjang kosong</div>
