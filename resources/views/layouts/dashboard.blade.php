@@ -253,5 +253,14 @@
             })
         </script>
     @endif
+    @if (Session::has('info'))
+        <script>
+              Swal.fire({
+                icon: 'info',
+                title: 'Info!',
+                text: "{{ Session::get('info') }}"
+            })
+        </script>
+    @endif
   </body>
 </html>

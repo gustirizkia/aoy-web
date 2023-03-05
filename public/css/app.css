@@ -4307,10 +4307,6 @@ textarea.form-control.is-invalid {
   --tw-text-opacity: 1;
   color: rgb(14 159 110 / var(--tw-text-opacity));
 }
-.text-yellow-300 {
-  --tw-text-opacity: 1;
-  color: rgb(250 202 21 / var(--tw-text-opacity));
-}
 .underline {
   text-decoration-line: underline;
 }

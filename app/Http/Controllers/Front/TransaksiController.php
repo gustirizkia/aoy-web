@@ -363,21 +363,25 @@ class TransaksiController extends Controller
             return redirect()->route('transaksi-detail', 'inv='.$transaksi->no_inv);
         }
 
-        $client = new Client();
-        $result = $client->request('get', env("TRIPAY_URL").'transaction/detail?reference='.$transaksi->reference, [
-            'headers' => [
-                        'Authorization' => "Bearer " . $apiKey,
-                ],
-        ]);
+        try {
+            $client = new Client();
+            $result = $client->request('get', env("TRIPAY_URL").'transaction/detail?reference='.$transaksi->reference, [
+                'headers' => [
+                            'Authorization' => "Bearer " . $apiKey,
+                    ],
+            ]);
 
-        $res = json_decode($result->getBody());
-        setlocale(LC_ALL, 'IND');
-        // $time = Carbon::createFromTimestamp("1676994526")->formatLocalized('%A %d %B %Y');
-        // dd($res->data);
+            $res = json_decode($result->getBody());
+            setlocale(LC_ALL, 'IND');
+            // $time = Carbon::createFromTimestamp("1676994526")->formatLocalized('%A %d %B %Y');
+            // dd($res->data);
 
-        return view('Frontend.transaksi.menunggu', [
-            'item' => $res->data
-        ]);
+            return view('Frontend.transaksi.menunggu', [
+                'item' => $res->data
+            ]);
+        } catch (BadResponseException $e) {
+            return redirect()->back()->with('info', 'Transaksi tidak ditemukan');
+        }
     }
 
     public function rincian(Request $request)
