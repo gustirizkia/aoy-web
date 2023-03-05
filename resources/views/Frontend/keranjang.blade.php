@@ -73,42 +73,44 @@
                         </template>
 
                     </div>
-                    <div class="col-span-4 md:block hidden">
-                        <div class="border rounded-xl p-4 md:sticky md:top-20 ">
-                            <div class="font-bold text-gray-800">
-                                Ringkasan Belanja
-                            </div>
-                            <div class="text-gray-600 mt-3 flex justify-between">
-                                <div class="">
-                                    Total Harga
+                    @if (count($produks) > 0)
+                        <div class="col-span-4 md:block hidden">
+                            <div class="border rounded-xl p-4 md:sticky md:top-20 ">
+                                <div class="font-bold text-gray-800">
+                                    Ringkasan Belanja
                                 </div>
-                                <div class="" x-text="'Rp'+numberWithCommas(totalHarga)"></div>
-                            </div>
-                            <div class="text-gray-600 mt-3 flex justify-between">
-                                <div class="">
-                                    Diskon Barang
+                                <div class="text-gray-600 mt-3 flex justify-between">
+                                    <div class="">
+                                        Total Harga
+                                    </div>
+                                    <div class="" x-text="'Rp'+numberWithCommas(totalHarga)"></div>
                                 </div>
-                                <div class="" x-text="'Rp'+numberWithCommas(potongan.diskon)">Rp400,0000</div>
-                            </div>
-                            <hr class="my-4">
-                            <div class="font-bold text-gray-800 flex justify-between">
-                                <div class="">Subtotal</div>
-                                <div x-text="'Rp'+numberWithCommas(potongan.total_potongan)" class="">Rp400,000</div>
-                            </div>
-                            <div class="">
-                                <button type="submit" class="block w-full" :disabled="pilihan.length <= 0">
-                                    <div class="mt-8 bg-primary py-2 rounded-xl text-center text-white">
-                                        Beli
+                                <div class="text-gray-600 mt-3 flex justify-between">
+                                    <div class="">
+                                        Diskon Barang
                                     </div>
-                                </button>
-                                {{-- <a href="{{ route('proses-transaksi') }}">
-                                    <div class="mt-8 bg-primary py-2 rounded-xl text-center text-white">
-                                        Beli
-                                    </div>
-                                </a> --}}
+                                    <div class="" x-text="'Rp'+numberWithCommas(potongan.diskon)">Rp400,0000</div>
+                                </div>
+                                <hr class="my-4">
+                                <div class="font-bold text-gray-800 flex justify-between">
+                                    <div class="">Subtotal</div>
+                                    <div x-text="'Rp'+numberWithCommas(potongan.total_potongan)" class="">Rp400,000</div>
+                                </div>
+                                <div class="">
+                                    <button type="submit" class="block w-full" :disabled="pilihan.length <= 0">
+                                        <div class="mt-8 bg-primary py-2 rounded-xl text-center text-white">
+                                            Beli
+                                        </div>
+                                    </button>
+                                    {{-- <a href="{{ route('proses-transaksi') }}">
+                                        <div class="mt-8 bg-primary py-2 rounded-xl text-center text-white">
+                                            Beli
+                                        </div>
+                                    </a> --}}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
             </div>
 
@@ -137,7 +139,10 @@
                 </a>
             </div>
         @else
-        <div class=" text-center">Keranjang kosong</div>
+        <div class=" text-center mb-3">Keranjang kosong</div>
+        <div class="w-full text-center">
+            <a href="/produk" class="text-center bg-primary text-white px-4 py-2 rounded-lg mt-3">Cari produk</a>
+        </div>
         @endif
     </form>
 </div>

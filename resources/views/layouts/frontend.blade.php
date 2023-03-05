@@ -30,8 +30,8 @@
         </div>
         {{-- Menu --}}
         <div class="text-gray-700">
-            <a href="{{ route('produk') }}" class="mx-10">Produk</a>
-            <a href="/member" class="mx-6">Seller</a>
+            <a href="{{ route('produk') }}" class="mx-10 {{ (request()->is('produk*')) ? 'text-primary font-medium' : '' }}">Produk</a>
+            <a href="/member" class="mx-6 {{ (request()->is('member*')) ? 'text-primary font-medium' : '' }}">Seller</a>
             <a href="" class="mx-6">Tentang</a>
             <a href="" class="mx-6">Media</a>
             <a href="" class="mx-6">Kontak</a>
@@ -102,7 +102,7 @@
 
 
     {{-- bottombar mobile --}}
-    <section class="md:hidden shadow py-3 px-6 flex items-center justify-between fixed w-full border-t bottom-0 bg-white z-40 {{ (request()->is('keranjang')) || (request()->is('produk*')) ? 'hidden' : '' }}">
+    <section class="md:hidden shadow py-3 px-6 flex items-center justify-between fixed w-full border-t bottom-0 bg-white z-40 {{ (request()->is('keranjang')) || (request()->is('produk/*')) || (request()->is('transaksi*')) ? 'hidden' : '' }}">
         <div class="{{ (request()->is('/')) ? 'text-primary' : 'text-gray-600' }} text-center">
             <a href="/">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 mx-auto">

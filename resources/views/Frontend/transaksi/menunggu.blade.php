@@ -26,9 +26,12 @@
                             Rincian pembayaran
                         </div>
 
-                        <div class="flex mt-6">
+                        <div class=" mt-6">
                             {{-- <img src="{{ $item-> }}" alt="" class=""> --}}
-                            <div class="ml-6">
+                            <div class="text-gray-500 text-sm">
+                                Metode pembayaran
+                            </div>
+                            <div class="font-semibold">
                                 {{ $item->payment_name }}
                             </div>
                         </div>
