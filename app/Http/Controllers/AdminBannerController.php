@@ -33,6 +33,7 @@
 			$this->col[] = ["label"=>"Photo","name"=>"photo","image"=>true];
 			$this->col[] = ["label"=>"Photo Mobile","name"=>"photo_mobile","image"=>true];
 			$this->col[] = ["label"=>"Status","name"=>"status"];
+			$this->col[] = ["label"=>"Page","name"=>"page"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
@@ -268,6 +269,7 @@
             }else{
                 $postdata['status'] = 0;
             }
+			$postdata['page'] = 'home';
 	    }
 
 	    /*
@@ -291,12 +293,13 @@
 	    |
 	    */
 	    public function hook_before_edit(&$postdata,$id) {
-	        //Your code here
-            if ($postdata['status'] == 'active') {
-                $postdata['status'] = 1;
-            }else{
-                $postdata['status'] = 0;
-            }
+		//Your code here
+			if ($postdata['status'] == 'active') {
+				$postdata['status'] = 1;
+			} else {
+				$postdata['status'] = 0;
+			}
+			$postdata['page'] = 'home';
 	    }
 
 	    /*

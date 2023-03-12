@@ -55,16 +55,16 @@
     </style>
 </head>
 
-<body class="login-page">
+<body class="login-page" style="display: flex; flex-direction: column; justify-content: center">
 
-<div class="login-box">
-    <div class="login-logo">
+<div class="login-box" style="">
+    {{-- <div class="login-logo">
         <a href="{{url('/')}}">
             <img title='{!!(Session::get('appname') == 'CRUDBooster')?"<b>CRUD</b>Booster":CRUDBooster::getSetting('appname')!!}'
                  src='{{ CRUDBooster::getSetting("logo")?asset(CRUDBooster::getSetting('logo')):asset('vendor/crudbooster/assets/logo_crudbooster.png') }}'
                  style='max-width: 100%;max-height:170px'/>
         </a>
-    </div><!-- /.login-logo -->
+    </div><!-- /.login-logo --> --}}
     <div class="login-box-body">
 
         @if ( Session::get('message') != '' )
