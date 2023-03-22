@@ -55,9 +55,9 @@
     </style>
 </head>
 
-<body class="login-page" style="display: flex; flex-direction: column; justify-content: center">
+<body class="login-page">
 
-<div class="login-box" style="">
+<div class="login-box">
     {{-- <div class="login-logo">
         <a href="{{url('/')}}">
             <img title='{!!(Session::get('appname') == 'CRUDBooster')?"<b>CRUD</b>Booster":CRUDBooster::getSetting('appname')!!}'
@@ -76,7 +76,7 @@
         <p class='login-box-msg'>{{cbLang("login_message")}}</p>
         <form autocomplete='off' action="{{ route('postLogin') }}" method="post">
             <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-            
+
             @if(!empty(config('services.google')))
 
                 <div style="margin-bottom:10px" class='row'>
@@ -89,7 +89,7 @@
                     </div>
                 </div>
             @endif
-            
+
             <div class="form-group has-feedback">
                 <input autocomplete='off' type="text" class="form-control" name='email' required placeholder="Email"/>
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>

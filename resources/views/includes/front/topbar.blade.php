@@ -29,13 +29,51 @@
         </svg>
 
     </div>
-
-    <div class="text-gray-600">
+@if (Auth::user())
+<button class="text-gray-600 relative" id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification" type="button">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+    </svg>
+    <span class="top-0 left-4 absolute  w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></span>
+</button>
+@else
+   <a href="/login" class="text-gray-600 relative" id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification" type="button">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
             <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
         </svg>
-    </div>
+        <span class="top-0 left-4 absolute  w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></span>
+    </a>
+@endif
+@auth
+  @php
+        $notifTopBar = \App\Models\Notification::where('user_uuid', Auth::user()->uuid)->limit(7)->get();
+  @endphp
+        <div id="dropdownNotification" class="z-20 overflow-x-auto h-screen hidden w-full max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-800 dark:divide-gray-700" aria-labelledby="dropdownNotificationButton">
+            <div class="block px-4 py-2 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white">
+                Notifications
+            </div>
+            @foreach ($notifTopBar as $item)
+                <div class="divide-y divide-gray-100 dark:divide-gray-700">
+                    <a href="{{ $item->cta ? $item->cta : '#' }}" class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
+
+                    <div class="w-full pl-3">
+                        <div class="font-medium text-gray-800">{{ $item->title }}</div>
+                        <div class="text-gray-500 text-sm">{{ $item->short_body }}</div>
+                    </div>
+                    </a>
+                </div>
+            @endforeach
+            <a href="#" class="block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white">
+                <div class="inline-flex items-center ">
+                <svg class="w-4 h-4 mr-2 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>
+                    View all
+                </div>
+            </a>
+      </div>
+@endauth
 
 
 </section>
 @endif
+
+

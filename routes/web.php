@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\AlamatController;
 use App\Http\Controllers\Dashboard\AkunController;
 use App\Http\Controllers\Dashboard\ProdukController as DashboardProdukController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Front\DetailProductController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\MemberController;
 use App\Http\Controllers\Front\ProdukController;
+use App\Http\Controllers\Front\SellerController;
 use App\Http\Controllers\Front\TransaksiController;
 use App\Http\Controllers\Front\UserController;
 use App\Http\Controllers\OngkirController;
@@ -31,6 +33,8 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('member/{username}', [HomeController::class, 'detailMember'])->name('detailMember');
 Route::get('member', [MemberController::class, 'index'])->name('member-index');
 Route::get('getMember', [MemberController::class, 'getMember'])->name('getMember');
+Route::get('member-filter', [SellerController::class, 'filter'])->name('member-filter');
+Route::get('getNotif', [UserController::class, 'getNotif'])->name('getNotif')->middleware('auth');
 
 Route::get('produk', [ProdukController::class, 'index'])->name('produk');
 Route::get('/produk/{slug}', [DetailProductController::class, 'index'])->name('detail-produk');
@@ -66,5 +70,6 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
 
 });
 
+Route::get('admin', [AdminDashboardController::class, 'index']);
 
 require __DIR__.'/auth.php';

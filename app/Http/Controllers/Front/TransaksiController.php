@@ -8,6 +8,7 @@ use App\Models\Cart;
 use App\Models\DetailTransaksi;
 use App\Models\ListKota;
 use App\Models\ListProvinsi;
+use App\Models\Notification;
 use App\Models\Transaksi;
 use App\Models\UserAddress;
 use Carbon\Carbon;
@@ -258,98 +259,110 @@ class TransaksiController extends Controller
 
     public function menungguPembayaran(Request $request)
     {
-        $inv = Transaksi::where('no_inv', $request->no_inv)->first();
-        $user = DB::table('users')->find($inv->user_id);
-        $detailTransaksi = DB::table('detail_transaksis')
-                        ->where('detail_transaksis.transaksi_id', $inv->id)
-                        ->join('produks', 'detail_transaksis.produk_id', 'produks.id')
-                        ->get();
+        DB::transaction(function()use($request){
 
-        $total_pembayaran = (int)$inv->sub_total+(int)$request->biaya_pengiriman+(int)$request->biaya_admin;
+            $inv = Transaksi::where('no_inv', $request->no_inv)->first();
+            $user = DB::table('users')->find($inv->user_id);
+            $detailTransaksi = DB::table('detail_transaksis')
+                            ->where('detail_transaksis.transaksi_id', $inv->id)
+                            ->join('produks', 'detail_transaksis.produk_id', 'produks.id')
+                            ->get();
 
-        $apiKey       = env('TRIPAY_API_KEY');
-        $privateKey   = env('TRIPAY_PRIVAT_KEY');
-        $merchantCode = env("TRIPAY_MERCHENT");
-        $merchantRef  = $request->no_inv;
-        $amount       = $total_pembayaran-(int)$request->biaya_admin;
-        $metode_pembayaran = $request->metode_pembayaran;
-        $biaya_pengiriman = $request->biaya_pengiriman;
-        // dd($merchantRef);
+            $total_pembayaran = (int)$inv->sub_total+(int)$request->biaya_pengiriman+(int)$request->biaya_admin;
 
-        $data = [
-            'method'         => $metode_pembayaran,
-            'merchant_ref'   => $merchantRef,
-            'amount'         => $amount,
-            'customer_name'  => $user->name,
-            'customer_email' => $user->email,
-            'customer_phone' => '081234567890',
-            'order_items'    => [
-                [
-                    'sku'         => $detailTransaksi[0]->slug,
-                    'name'        => $detailTransaksi[0]->nama,
-                    'price'       => $amount,
-                    'quantity'    => 1,
-                    'product_url' => 'https://tokokamu.com/product/nama-produk-1',
-                    'image_url'   => 'https://tokokamu.com/product/nama-produk-1.jpg',
+            $apiKey       = env('TRIPAY_API_KEY');
+            $privateKey   = env('TRIPAY_PRIVAT_KEY');
+            $merchantCode = env("TRIPAY_MERCHENT");
+            $merchantRef  = $request->no_inv;
+            $amount       = $total_pembayaran-(int)$request->biaya_admin;
+            $metode_pembayaran = $request->metode_pembayaran;
+            $biaya_pengiriman = $request->biaya_pengiriman;
+            // dd($merchantRef);
+
+            $data = [
+                'method'         => $metode_pembayaran,
+                'merchant_ref'   => $merchantRef,
+                'amount'         => $amount,
+                'customer_name'  => $user->name,
+                'customer_email' => $user->email,
+                'customer_phone' => '081234567890',
+                'order_items'    => [
+                    [
+                        'sku'         => $detailTransaksi[0]->slug,
+                        'name'        => $detailTransaksi[0]->nama,
+                        'price'       => $amount,
+                        'quantity'    => 1,
+                        'product_url' => 'https://tokokamu.com/product/nama-produk-1',
+                        'image_url'   => 'https://tokokamu.com/product/nama-produk-1.jpg',
+                    ],
                 ],
-            ],
-            'return_url'   => url('/'),
-            'expired_time' => (time() + (24 * 60 * 60)), // 24 jam
-            'signature'    => hash_hmac('sha256', $merchantCode.$merchantRef.$amount, $privateKey)
-        ];
+                'return_url'   => url('/'),
+                'expired_time' => (time() + (24 * 60 * 60)), // 24 jam
+                'signature'    => hash_hmac('sha256', $merchantCode.$merchantRef.$amount, $privateKey)
+            ];
 
-        $client = new Client();
-        $result = $client->request('post', env("TRIPAY_URL").'transaction/create', [
-            'headers' => [
-                        'Authorization' => "Bearer " . $apiKey,
-                ],
-            'form_params' => $data
-        ]);
+            $client = new Client();
+            $result = $client->request('post', env("TRIPAY_URL").'transaction/create', [
+                'headers' => [
+                            'Authorization' => "Bearer " . $apiKey,
+                    ],
+                'form_params' => $data
+            ]);
 
-        $res = json_decode($result->getBody());
+            $res = json_decode($result->getBody());
 
-        $userAddress = DB::table('users_address')->find($request->address_id);
+            $userAddress = DB::table('users_address')->find($request->address_id);
 
-        $transaksi = Transaksi::where('no_inv', $merchantRef)->update([
-            'user_id' => auth()->user()->id,
-            'no_inv' => $merchantRef,
-            'jenis_inv' => 'pembelian',
-            'metode_pembayaran' => $metode_pembayaran,
-            'biaya_pengiriman' => $biaya_pengiriman,
-            'sub_total' => $total_pembayaran,
-            'status' => $res->data->status,
-            'payment_name' => $res->data->payment_name,
-            'fee_customer' => $res->data->fee_customer,
-            'expired_time' => $res->data->expired_time,
-            'checkout_url' => $res->data->checkout_url,
-            'pay_code' => $res->data->pay_code,
-            'admin_pembayaran' => $res->data->fee_merchant,
-            'payment_at' => null,
-            'reference' => $res->data->reference,
-            'city_id' => $userAddress->city_id,
-            'province_id' => $userAddress->province_id,
-            'subdistrict_id' => $userAddress->subdistrict_id,
-        ]);
+            $transaksi = Transaksi::where('no_inv', $merchantRef)->update([
+                'user_id' => auth()->user()->id,
+                'no_inv' => $merchantRef,
+                'jenis_inv' => 'pembelian',
+                'metode_pembayaran' => $metode_pembayaran,
+                'biaya_pengiriman' => $biaya_pengiriman,
+                'sub_total' => $total_pembayaran,
+                'status' => $res->data->status,
+                'payment_name' => $res->data->payment_name,
+                'fee_customer' => $res->data->fee_customer,
+                'expired_time' => $res->data->expired_time,
+                'checkout_url' => $res->data->checkout_url,
+                'pay_code' => $res->data->pay_code,
+                'admin_pembayaran' => $res->data->fee_merchant,
+                'payment_at' => null,
+                'reference' => $res->data->reference,
+                'city_id' => $userAddress->city_id,
+                'province_id' => $userAddress->province_id,
+                'subdistrict_id' => $userAddress->subdistrict_id,
+            ]);
 
-        $inv = Transaksi::where('no_inv', $request->no_inv)->first();
-        $detailTransaksi = DetailTransaksi::where('transaksi_id', $inv->id)->get();
-        foreach($detailTransaksi as $item){
-            $cartUser = Cart::where('user_id', $inv->user_id)->where('produk_id', $item->produk_id)->first();
-            if($cartUser){
-                if($item->qty >= $cartUser->qty){
-                    $cartUser->delete();
-                }else{
-                    $qty = $cartUser->qty-$item->qty;
-                    $cartUser->update('qty', $qty);
+            $inv = Transaksi::where('no_inv', $request->no_inv)->first();
+            $detailTransaksi = DetailTransaksi::where('transaksi_id', $inv->id)->get();
+            foreach($detailTransaksi as $item){
+                $cartUser = Cart::where('user_id', $inv->user_id)->where('produk_id', $item->produk_id)->first();
+                if($cartUser){
+                    if($item->qty >= $cartUser->qty){
+                        $cartUser->delete();
+                    }else{
+                        $qty = $cartUser->qty-$item->qty;
+                        $cartUser->update('qty', $qty);
+                    }
                 }
             }
-        }
 
-        return response()->json($inv);
+            $notifkasi = Notification::create([
+                'user_uuid' => auth()->user()->uuid,
+                'title' => 'Selesaikan pembayan anda',
+                'short_body' => 'klik untuk melakukan pembayaran',
+                'cta' => route('transaksi-unpaid')."?inv=".$request->no_inv,
+
+            ]);
+
+            return response()->json($inv);
+        });
     }
 
     public function unpaid(Request $request)
     {
+
         if(!$request->inv){
             return redirect('/');
         }

@@ -613,8 +613,9 @@
                     }, {
                         csrfToken: "{{ csrf_token() }}",
                     }).then(ress =>{
-                        console.log('ress proses', ress.data)
-                        window.location.replace("{{ route('transaksi-unpaid') }}?inv="+ress.data.no_inv);
+                        // console.log('ress proses', ress.data)
+                        window.location.replace("{{ route('transaksi-unpaid') }}?inv={{ $transaksi->no_inv }}");
+                        // console.log("DISINI");
                     }).catch(err =>{
                     });
 

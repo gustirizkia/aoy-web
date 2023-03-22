@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd84158a714ee84a8980c03da2dae8554
+class ComposerStaticInit25c6f655aefa3a477d90a05fc5445f71
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -662,6 +662,7 @@ class ComposerStaticInitd84158a714ee84a8980c03da2dae8554
         'App\\Http\\Controllers\\Front\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Front/HomeController.php',
         'App\\Http\\Controllers\\Front\\MemberController' => __DIR__ . '/../..' . '/app/Http/Controllers/Front/MemberController.php',
         'App\\Http\\Controllers\\Front\\ProdukController' => __DIR__ . '/../..' . '/app/Http/Controllers/Front/ProdukController.php',
+        'App\\Http\\Controllers\\Front\\SellerController' => __DIR__ . '/../..' . '/app/Http/Controllers/Front/SellerController.php',
         'App\\Http\\Controllers\\Front\\TransaksiController' => __DIR__ . '/../..' . '/app/Http/Controllers/Front/TransaksiController.php',
         'App\\Http\\Controllers\\Front\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Front/UserController.php',
         'App\\Http\\Controllers\\OngkirController' => __DIR__ . '/../..' . '/app/Http/Controllers/OngkirController.php',
@@ -689,6 +690,7 @@ class ComposerStaticInitd84158a714ee84a8980c03da2dae8554
         'App\\Models\\ListProvinsi' => __DIR__ . '/../..' . '/app/Models/ListProvinsi.php',
         'App\\Models\\Member' => __DIR__ . '/../..' . '/app/Models/Member.php',
         'App\\Models\\MemberGallery' => __DIR__ . '/../..' . '/app/Models/MemberGallery.php',
+        'App\\Models\\Notification' => __DIR__ . '/../..' . '/app/Models/Notification.php',
         'App\\Models\\Produk' => __DIR__ . '/../..' . '/app/Models/Produk.php',
         'App\\Models\\ProdukRekomendasi' => __DIR__ . '/../..' . '/app/Models/ProdukRekomendasi.php',
         'App\\Models\\ProdukSaya' => __DIR__ . '/../..' . '/app/Models/ProdukSaya.php',
@@ -7361,10 +7363,10 @@ class ComposerStaticInitd84158a714ee84a8980c03da2dae8554
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd84158a714ee84a8980c03da2dae8554::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd84158a714ee84a8980c03da2dae8554::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitd84158a714ee84a8980c03da2dae8554::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitd84158a714ee84a8980c03da2dae8554::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit25c6f655aefa3a477d90a05fc5445f71::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit25c6f655aefa3a477d90a05fc5445f71::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit25c6f655aefa3a477d90a05fc5445f71::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit25c6f655aefa3a477d90a05fc5445f71::$classMap;
 
         }, null, ClassLoader::class);
     }

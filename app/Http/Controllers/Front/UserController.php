@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -49,5 +50,11 @@ class UserController extends Controller
         ->where('users_address.id', $insert)->first();
 
       return response()->json($get);
+    }
+
+    public function getNotif(){
+        $data = Notification::where('user_uuid', auth()->user()->uuid)->get();
+
+        return response()->json($data);
     }
 }

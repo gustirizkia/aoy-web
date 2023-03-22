@@ -7,8 +7,13 @@
 @section('content')
 {{-- banner --}}
 <section>
-    <img src="{{ asset('gambar/banner-slider-1.png') }}" class="w-full" alt="">
-    
+
+<div id="default-carousel" class="relative w-full" data-carousel="slide">
+
+    @if ($banner)
+        <img src="{{ asset($banner->photo) }}" class="w-full" alt="">
+    @endif
+
 </section>
 <section class="md:px-32 px-6 mt-4 md:mt-12">
     <div class="grid grid-flow-row grid-cols-12 gap-6">
