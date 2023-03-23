@@ -21,6 +21,7 @@ return array(
     'App\\Http\\Controllers\\AdminTransaksisController' => $baseDir . '/app/Http/Controllers/AdminTransaksisController.php',
     'App\\Http\\Controllers\\AdminUserListController' => $baseDir . '/app/Http/Controllers/AdminUserListController.php',
     'App\\Http\\Controllers\\AdminUsers12Controller' => $baseDir . '/app/Http/Controllers/AdminUsers12Controller.php',
+    'App\\Http\\Controllers\\Admin\\DashboardController' => $baseDir . '/app/Http/Controllers/Admin/DashboardController.php',
     'App\\Http\\Controllers\\AlamatController' => $baseDir . '/app/Http/Controllers/AlamatController.php',
     'App\\Http\\Controllers\\Auth\\AuthenticatedSessionController' => $baseDir . '/app/Http/Controllers/Auth/AuthenticatedSessionController.php',
     'App\\Http\\Controllers\\Auth\\ConfirmablePasswordController' => $baseDir . '/app/Http/Controllers/Auth/ConfirmablePasswordController.php',
