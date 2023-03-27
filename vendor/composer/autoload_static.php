@@ -368,8 +368,8 @@ class ComposerStaticInitd179f148d979d05ec2036b2c27d6e26b
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -465,8 +465,8 @@ class ComposerStaticInitd179f148d979d05ec2036b2c27d6e26b
         ),
         'Intervention\\Image\\' => 
         array (
-            0 => __DIR__ . '/..' . '/intervention/imagecache/src/Intervention/Image',
-            1 => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image',
+            0 => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image',
+            1 => __DIR__ . '/..' . '/intervention/imagecache/src/Intervention/Image',
         ),
         'Illuminate\\Support\\' => 
         array (
