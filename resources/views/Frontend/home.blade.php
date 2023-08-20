@@ -30,7 +30,7 @@
                         Get Health and Perfect Skin
                     </div>
                     <div class="text-gray-500 my-4 md:my-6 mb-6 md:mb-12 text-lg md:w-2/3">
-                        Memiliki kulit sehat dan cantik sudah menjadi idaman para Wanita. Berbagai varian dari serum somethinc ini menjadi solusinya. Penuhi kebutuhan kulitmu agar kecantikanmu terpancar.
+                        Memiliki kulit sehat dan cantik sudah menjadi idaman para Wanita. Berbagai varian dari serum ini menjadi solusinya. Penuhi kebutuhan kulitmu agar kecantikanmu terpancar.
                     </div>
                         <a href="{{ route('produk') }}" class="bg-primary px-8 hover:bg-purple-500 mt-4 md:mt-8 py-3 rounded-full text-white">Lihat Produk</a>
                 </div>
@@ -179,7 +179,7 @@
     </section>
 
     {{--  member --}}
-    <section class="my-8 md:px-32 px-6 bg-purple-50 py-8 md:py-14">
+    <section class="my-8 md:px-32 px-6 bg-purple-50 py-8 md:py-14 hidden">
         <div class="md:flex justify-between items-center">
             <div class="text-2xl font-medium text-center md:text-left">
                 Temui kami <br>
