@@ -144,74 +144,75 @@
     <div class="min-h-screen">
         @yield('content')
     </div>
-
-    <footer class="border-t-2 mt-12 md:mt-44 md:px-32 px-6 py-8 bg-white">
-        <div class="md:flex justify-between">
-            <div class="">
-                <img src="{{ asset('gambar/logo.png') }}" alt="AOY" class="w-32">
-                <div class="text-gray-400 mt-4">
-                    merasa
-                    nyaman di <br>
-                    kulit mulus
+    @if (!request()->is("transaksi-proses") && !request()->is("keranjang"))
+        <footer class="border-t-2 mt-12 md:mt-44 md:px-32 px-6 py-8 bg-white">
+            <div class="md:flex justify-between">
+                <div class="">
+                    <img src="{{ asset('gambar/logo.png') }}" alt="AOY" class="w-32">
+                    <div class="text-gray-400 mt-4">
+                        merasa
+                        nyaman di <br>
+                        kulit mulus
+                    </div>
+                </div>
+                <div class="py-6">
+                    <div class="font-bold text-gray-700 text-lg">
+                        For Beginners
+                    </div>
+                    <div class="text-gray-400 text-lg my-2">
+                        <a href="">
+                            Akun Baru
+                        </a>
+                    </div>
+                    <div class="text-gray-400 text-lg my-2">
+                        <a href="">
+                            Cara Pembayaran
+                        </a>
+                    </div>
+                </div>
+                <div class="py-6">
+                    <div class="font-bold text-gray-700 text-lg">
+                        Explore Us
+                    </div>
+                    <div class="text-gray-400 text-lg my-2">
+                        <a href="">
+                            Career
+                        </a>
+                    </div>
+                    <div class="text-gray-400 text-lg my-2">
+                        <a href="">
+                            Privacy
+                        </a>
+                    </div>
+                    <div class="text-gray-400 text-lg my-2">
+                        <a href="">
+                            Syarat & Ketentuan
+                        </a>
+                    </div>
+                </div>
+                <div class="py-6">
+                    <div class="font-bold text-gray-700 text-lg">
+                        Connect Us
+                    </div>
+                    <div class="text-gray-400 text-lg my-2">
+                        <a href="">
+                            support@aysonyou.com
+                        </a>
+                    </div>
+                    <div class="text-gray-400 text-lg my-2">
+                        <a href="">
+                            021 - 2208 - 1996
+                        </a>
+                    </div>
+                    <div class="text-gray-400 text-lg my-2">
+                        <a href="">
+                            BSD, Tangerang Selatan, Banten
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="py-6">
-                <div class="font-bold text-gray-700 text-lg">
-                    For Beginners
-                </div>
-                <div class="text-gray-400 text-lg my-2">
-                    <a href="">
-                        Akun Baru
-                    </a>
-                </div>
-                <div class="text-gray-400 text-lg my-2">
-                    <a href="">
-                        Cara Pembayaran
-                    </a>
-                </div>
-            </div>
-            <div class="py-6">
-                <div class="font-bold text-gray-700 text-lg">
-                    Explore Us
-                </div>
-                <div class="text-gray-400 text-lg my-2">
-                    <a href="">
-                        Career
-                    </a>
-                </div>
-                <div class="text-gray-400 text-lg my-2">
-                    <a href="">
-                        Privacy
-                    </a>
-                </div>
-                <div class="text-gray-400 text-lg my-2">
-                    <a href="">
-                        Syarat & Ketentuan
-                    </a>
-                </div>
-            </div>
-            <div class="py-6">
-                <div class="font-bold text-gray-700 text-lg">
-                    Connect Us
-                </div>
-                <div class="text-gray-400 text-lg my-2">
-                    <a href="">
-                        support@aysonyou.com
-                    </a>
-                </div>
-                <div class="text-gray-400 text-lg my-2">
-                    <a href="">
-                        021 - 2208 - 1996
-                    </a>
-                </div>
-                <div class="text-gray-400 text-lg my-2">
-                    <a href="">
-                        BSD, Tangerang Selatan, Banten
-                    </a>
-                </div>
-            </div>
-        </div>
-    </footer>
+        </footer>
+    @endif
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>

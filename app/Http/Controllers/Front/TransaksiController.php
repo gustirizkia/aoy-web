@@ -13,6 +13,7 @@ use App\Models\Transaksi;
 use App\Models\UserAddress;
 use Carbon\Carbon;
 use DateTime;
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\GuzzleException;
@@ -27,6 +28,7 @@ class TransaksiController extends Controller
         if (!$request->inv) {
             return redirect()->back();
         }
+
 
         $inv = Transaksi::where('no_inv', $request->inv)->where('user_id', auth()->user()->id)->first();
 
@@ -120,18 +122,8 @@ class TransaksiController extends Controller
 
     public function createInv(Request $request)
     {
-        $validasi = Validator::make($request->all(), [
-            'carts' => 'required',
-        ]);
 
-        if ($validasi->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validasi->errors()
-            ], 422);
-        }
-
-        $carts = $request->carts;
+        $carts = DB::table("carts")->where("user_id", auth()->user()->id)->get();
         $subTotal = 0;
 
         $user_id = auth()->user()->id;
@@ -143,82 +135,92 @@ class TransaksiController extends Controller
 
         // return response()->json($level);
 
-        $collectionProduk = collect();
+        DB::beginTransaction();
+        try {
 
-        for ($i=0; $i < count($carts); $i++) {
-            $cart = DB::table('carts')
-                ->where('carts.id', $carts[$i])->first();
+            $collectionProduk = collect();
 
-            // dd($cart->produk_id);
-            $produk = DB::table('produks')->where('id', $cart->produk_id)->first();
-            $totalHargaProduk = $produk->harga*$cart->qty;
-            $totalHarga += $totalHargaProduk;
+            foreach($carts as $cart)
+            {
+                // dd($cart->produk_id);
+                $produk = DB::table('produks')->where('id', $cart->produk_id)->first();
+                $totalHargaProduk = $produk->harga*$cart->qty;
+                $totalHarga += $totalHargaProduk;
 
-            if ($level->tipe_potongan === 'fix') {
-                // potong tiap produk
-                $potonganProduk = $level->potongan_harga*$cart->qty;
-                $diskon += $potonganProduk;
-                $subTotal += $totalHargaProduk - $potonganProduk;
-            } else {
-                $nilai = ($level->potongan_harga/100)*$produk->harga;
-                $potonganProduk = $nilai*$cart->qty;
+                if($level){
+                    if ($level->tipe_potongan === 'fix') {
+                        // potong tiap produk
+                        $potonganProduk = $level->potongan_harga*$cart->qty;
+                        $diskon += $potonganProduk;
+                        $subTotal += $totalHargaProduk - $potonganProduk;
+                    } else {
+                        $nilai = ($level->potongan_harga/100)*$produk->harga;
+                        $potonganProduk = $nilai*$cart->qty;
 
-                $diskon += $potonganProduk;
-                $subTotal += $totalHarga - $potonganProduk;
-            }
+                        $diskon += $potonganProduk;
+                        $subTotal += $totalHarga - $potonganProduk;
+                    }
+                }else{
+                    $potonganProduk = 0;
+                    $subTotal = $totalHarga;
+                }
 
-            $cekInv = Transaksi::where('no_inv', $noInv)->first();
-            if ($cekInv) {
-                $createInv = Transaksi::where('no_inv', $noInv)->update([
-                    'user_id' => $user_id,
-                    'no_inv' => $noInv,
-                    'jenis_inv' => $jenisInv,
-                    'sub_total' => $subTotal,
-                    'status' => 'create',
-                    'total_harga_barang' => $totalHarga,
-                    'diskon' => $diskon
+
+                $cekInv = Transaksi::where('no_inv', $noInv)->first();
+                if ($cekInv) {
+                    $createInv = Transaksi::where('no_inv', $noInv)->update([
+                        'user_id' => $user_id,
+                        'no_inv' => $noInv,
+                        'jenis_inv' => $jenisInv,
+                        'sub_total' => $subTotal,
+                        'status' => 'create',
+                        'total_harga_barang' => $totalHarga,
+                        'diskon' => $diskon
+                    ]);
+
+                    $createInv = Transaksi::where('no_inv', $noInv)->first();
+                // return response()->json($createInv);
+                } else {
+                    $createInv = Transaksi::create([
+                        'user_id' => $user_id,
+                        'no_inv' => $noInv,
+                        'jenis_inv' => $jenisInv,
+                        'sub_total' => $subTotal,
+                        'status' => 'create',
+                        'total_harga_barang' => $totalHarga,
+                        'diskon' => $diskon
+                    ]);
+                }
+
+                $transaksi_id = $createInv->id;
+
+
+                $insertDetailTransaksi = DetailTransaksi::create([
+                    'produk_id' => $produk->id,
+                    'transaksi_id' => $transaksi_id,
+                    'qty' => $cart->qty,
+                    'harga' => $produk->harga,
+                    'potong' => $potonganProduk,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
 
-                $createInv = Transaksi::where('no_inv', $noInv)->first();
-            // return response()->json($createInv);
-            } else {
-                $createInv = Transaksi::create([
-                    'user_id' => $user_id,
-                    'no_inv' => $noInv,
-                    'jenis_inv' => $jenisInv,
-                    'sub_total' => $subTotal,
-                    'status' => 'create',
-                    'total_harga_barang' => $totalHarga,
-                    'diskon' => $diskon
-                ]);
+                $collectionProduk->push($produk);
             }
 
-            $transaksi_id = $createInv->id;
+            // dd($noInv, "CEK");
+
+            DB::commit();
+
+            return redirect()->route("proses-transaksi", ['inv' => $noInv]) ;
 
 
-            $insertDetailTransaksi = DetailTransaksi::create([
-                'produk_id' => $produk->id,
-                'transaksi_id' => $transaksi_id,
-                'qty' => $cart->qty,
-                'harga' => $produk->harga,
-                'potong' => $potonganProduk,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            $collectionProduk->push($produk);
+        } catch (Exception $th) {
+            DB::rollBack();
+            return redirect()->back();
         }
 
 
-        $carts = DB::table('carts')->whereIn('id', $carts)->get();
-
-        return response()->json([
-            'status' => 'success',
-            'carts' => $carts,
-            'produks' => $collectionProduk,
-            'inv' => $createInv,
-            'level' => $level
-        ], 201);
     }
 
     public function prosesInv(Request $request)
@@ -253,7 +255,12 @@ class TransaksiController extends Controller
 
     public function menungguPembayaran(Request $request)
     {
-        DB::transaction(function () use ($request) {
+        // return response()->json("OK CEK 01");
+
+        DB::beginTransaction();
+
+        try {
+
             $inv = Transaksi::where('no_inv', $request->no_inv)->first();
             $user = DB::table('users')->find($inv->user_id);
             $detailTransaksi = DB::table('detail_transaksis')
@@ -261,16 +268,15 @@ class TransaksiController extends Controller
                             ->join('produks', 'detail_transaksis.produk_id', 'produks.id')
                             ->get();
 
-            $total_pembayaran = (int)$inv->sub_total+(int)$request->biaya_pengiriman+(int)$request->biaya_admin;
+            $total_pembayaran = (int)$inv->total_harga_barang+(int)$request->biaya_pengiriman+(int)$request->biaya_admin;
 
             $apiKey       = env('TRIPAY_API_KEY');
             $privateKey   = env('TRIPAY_PRIVAT_KEY');
             $merchantCode = env("TRIPAY_MERCHENT");
             $merchantRef  = $request->no_inv;
-            $amount       = $total_pembayaran-(int)$request->biaya_admin;
+            $amount       = $total_pembayaran-(int)$request->biaya_admin; // diambil biaya admin karena sudah di tambahkan otomatis oleh tripay
             $metode_pembayaran = $request->metode_pembayaran;
             $biaya_pengiriman = $request->biaya_pengiriman;
-            // dd($merchantRef);
 
             $data = [
                 'method'         => $metode_pembayaran,
@@ -305,6 +311,8 @@ class TransaksiController extends Controller
             $res = json_decode($result->getBody());
 
             $userAddress = DB::table('users_address')->find($request->address_id);
+
+            // return response()->json($userAddress);
 
             $transaksi = Transaksi::where('no_inv', $merchantRef)->update([
                 'user_id' => auth()->user()->id,
@@ -350,8 +358,16 @@ class TransaksiController extends Controller
 
             ]);
 
+            DB::table("carts")->where("user_id", auth()->user()->id)->delete();
+
+            DB::commit();
+
             return response()->json($inv);
-        });
+
+        } catch (Exception $th) {
+            DB::rollBack();
+            return response()->json("GAGAL", 422);
+        }
     }
 
     public function unpaid(Request $request)
@@ -429,10 +445,12 @@ class TransaksiController extends Controller
             }
         }
 
+        // dd($transaksi);
+
         return view('Frontend.transaksi.rincian', [
             'transaksi' => $transaksi,
             'detail_transaksi' => $detailTransaksi,
-            'resi' => $resi
+            'resi' => $resi,
         ]);
     }
 

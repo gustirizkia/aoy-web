@@ -12,20 +12,21 @@ use Illuminate\Support\Facades\URL;
 
 class CartController extends Controller
 {
-    public function index(Request $request){
-        if($request->session()->get('current_page') !== 'keranjang'){
+    public function index(Request $request)
+    {
+        if($request->session()->get('current_page') !== 'keranjang') {
             $request->session()->put('current_page', 'keranjang');
             $request->session()->put('prev', URL::previous());
         }
 
         $cart = Cart::with('produk')->where('user_id', auth()->user()->id)->get()->groupBy('produk_id')->values();
         $potongan = DB::table('levels')->where('id', auth()->user()->level)->first();
-        // dd($potongan);
-        // return response()->json($cart);
+        $alamat = DB::table("users_address")->where("user_id", auth()->user()->id)->exists();
 
         return view('Frontend.keranjang', [
             'produks' => $cart,
-            'level' => $potongan
+            'level' => $potongan,
+            'alamat' => $alamat
         ]);
     }
 }

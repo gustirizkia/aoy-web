@@ -6,12 +6,13 @@ use App\Models\DetailTransaksi;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-
+        // dd(Session::get('level'));
         $now = Carbon::now();
 
         $transksi = Transaksi::where('user_id', auth()->user()->id)->where('status', '!=', 'create')->where('metode_pembayaran', '!=', null)->get()->pluck('id');
@@ -19,7 +20,7 @@ class DashboardController extends Controller
 
         $statusTransaksi = Transaksi::where('user_id', auth()->user()->id)->get();
 
-        $utils = new UtilsController;
+        $utils = new UtilsController();
         $totalPenjualan = $utils->Totalpenjualan()['total_harga'];
         $totalPembelian = $utils->totalPembelian()['total_harga'];
         return view('dashboard.index', [

@@ -27,6 +27,21 @@ class AkunController extends Controller
         ]);
     }
 
+    public function afterRegister(Request $request)
+    {
+        $user= auth()->user();
+        $alamat = UserAddress::where('user_id', auth()->user()->id)->with('provinsi', 'kota', 'kecamatan')->get();
+        $provinsi = DB::table('provinces_ro')->orderBy('name', 'asc')->get();
+        $alamatUtama = UserAddress::where('user_id', auth()->user()->id)->where('status', 1)->orderBy('id', 'desc')->first();
+
+        return view('dashboard.akun.after-register', [
+            'user' => $user,
+            'alamat' => $alamat,
+            'provinsi' => $provinsi,
+            'alamat_utama' => $alamatUtama
+        ]);
+    }
+
     public function editAlamat($id){
         $alamat = UserAddress::where('user_id', auth()->user()->id)
                     ->where('id', $id)
@@ -50,7 +65,7 @@ class AkunController extends Controller
     public function updateProfile(Request $request){
         $request->validate([
             'nama' => 'required|string',
-            'nomor_wa' => 'required|numeric',
+            'nomor_wa' => 'numeric',
             'photo' => 'image|max:5192', //5240 5mb
         ], [
             'required' => ':attribute tidak boleh kosong',

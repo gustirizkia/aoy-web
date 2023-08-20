@@ -16,6 +16,19 @@ class LoginRequest extends FormRequest
      *
      * @return bool
      */
+
+    protected $loginField;
+    protected $loginValue;
+
+    protected function prepareForValidation()
+    {
+        $this->loginField = filter_var(
+            $this->input('input_type'),
+            FILTER_VALIDATE_EMAIL
+        ) ? 'email' : 'username';
+        $this->loginValue = $this->input('input_type');
+        $this->merge([$this->loginField => $this->loginValue]);
+    }
     public function authorize()
     {
         return true;
@@ -29,9 +42,12 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => ['required', 'string'],
-            'password' => ['required', 'string'],
-        ];
+            'email' =>
+                'required_without:username|string|email|exists:users,email',
+            'username' =>
+                'required_without:email|string|exists:users,username',
+            'password' => 'required|string',
+          ];
     }
 
     /**
@@ -44,12 +60,13 @@ class LoginRequest extends FormRequest
     public function authenticate()
     {
         $this->ensureIsNotRateLimited();
-
-        if (! Auth::attempt($this->only('username', 'password'), $this->boolean('remember'))) {
+        if (!Auth::attempt(
+            $this->only($this->loginField, 'password'),
+            $this->boolean('remember')
+        )) {
             RateLimiter::hit($this->throttleKey());
-
             throw ValidationException::withMessages([
-                'username' => trans('auth.failed'),
+              'login' => __('auth.failed')
             ]);
         }
 
@@ -57,12 +74,12 @@ class LoginRequest extends FormRequest
     }
 
     /**
-     * Ensure the login request is not rate limited.
-     *
-     * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
+         * Ensure the login request is not rate limited.
+         *
+         * @return void
+         *
+         * @throws \Illuminate\Validation\ValidationException
+         */
     public function ensureIsNotRateLimited()
     {
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {

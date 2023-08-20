@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Level;
 use App\Models\Member;
 use App\Models\MemberGallery;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -18,6 +20,15 @@ class StoreSettingController extends Controller
 
         $provinsi = DB::table('provinces_ro')->orderBy('name', 'asc')->get();
         // dd($gallery, auth()->user()->id);
+
+        if(!$member) {
+            $level = Level::get();
+            return view('dashboard.store.register-member', [
+                'provinsi' => $provinsi,
+                'level' => $level
+            ]);
+        }
+
         return view('dashboard.store.index', [
             'member' => $member,
             'gallery' => $gallery,
@@ -25,17 +36,31 @@ class StoreSettingController extends Controller
         ]);
     }
 
-    public function store(Request $request){
-        $request->validate([
+    public function store(Request $request)
+    {
+        // dd($request->all());
+        $data = [
             'image' => 'image|max:40240', // 4mb
             'nama' => 'required|string',
             'akun_ig' => 'required|string',
             'nomor_wa' => 'required|string',
             'deskripsi' => 'required',
-            'city_id' => 'required',
-            'kecamatan_id' => 'required',
-            'provinsi' => 'required',
+            'city_id' => 'required|exists:subdistricts_ro,city_id',
+            'kecamatan_id' => 'required|exists:tb_ro_subdistricts,subdistrict_id',
+            'provinsi' => 'required|exists:provinces_ro,province_id',
+            'jalan' => 'required|string'
+        ];
+
+        if($request->daftar_seller) {
+            $data['paket'] = 'required';
+        }
+
+        $request->validate($data, [
+            'required' => ':attribute wajib di isi',
+            'max' => 'image maksimal 4 mb',
+            'exists' => ":attribute tidak ada"
         ]);
+
         $data = [
             'user_uuid' => auth()->user()->uuid,
             'akun_ig' => $request->akun_ig,
@@ -44,10 +69,19 @@ class StoreSettingController extends Controller
             'deskripsi' => $request->deskripsi,
             'province_id' => $request->provinsi,
             'city_id' => $request->city_id,
-            'subdistrict_id' => $request->kecamatan_id
+            'subdistrict_id' => $request->kecamatan_id,
+            'jalan' => $request->jalan
         ];
 
-        if($request->image){
+
+        if($request->daftar_seller) {
+            User::where('id', auth()->user()->id)->update([
+                'level' => $request->level
+            ]);
+            $data['status'] = 3;
+        }
+
+        if($request->image) {
             $image = $request->image->store('toko', 'public');
             $data['image'] = $image;
         }
@@ -55,7 +89,7 @@ class StoreSettingController extends Controller
 
         $insert = Member::updateOrCreate([
             "user_uuid" => auth()->user()->uuid
-        ],$data);
+        ], $data);
 
         return redirect()->back()->with('success', 'Berhasil simpan data store kamu');
 
@@ -67,7 +101,7 @@ class StoreSettingController extends Controller
         $validasi = Validator::make($request->all(), [
             'image' => 'image|max:50240' ///5mb
         ]);
-        if($validasi->fails()){
+        if($validasi->fails()) {
             return response()->json([
                 'status' => 'error',
                 'message' => $validasi->errors()
@@ -87,7 +121,7 @@ class StoreSettingController extends Controller
     public function deleteImage(Request $request)
     {
         $id = $request->id;
-        if(!$id){
+        if(!$id) {
             return redirect()->back()->with('error', "Data tidak ditemukan");
         }
 

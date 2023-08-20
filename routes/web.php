@@ -66,6 +66,7 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::get('delete-image', [StoreSettingController::class, 'deleteImage'])->name('deleteImage');
 
     Route::get('akun-saya', [AkunController::class, 'index'])->name('akun-saya');
+    Route::get('profile', [AkunController::class, 'afterRegister'])->name('afterRegister');
     Route::post('updateProfile', [AkunController::class, 'updateProfile'])->name('updateProfile');
     Route::get('akun-saya/edit-alamat/{id}', [AkunController::class, 'editAlamat'])->name('edit-alamat-dashboard');
 });
