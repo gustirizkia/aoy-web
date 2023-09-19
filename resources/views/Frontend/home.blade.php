@@ -12,7 +12,7 @@
 @endpush
 
 @section('content')
-<div class="" x-data="funcData">
+<div class="pb-32" x-data="funcData">
 
      {{-- Header section --}}
     <section class="md:px-32 px-6 py-14 bg-hero-pattern relative overflow-y-hidden" >

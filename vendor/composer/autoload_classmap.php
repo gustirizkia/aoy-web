@@ -73,6 +73,7 @@ return array(
     'App\\Models\\Member' => $baseDir . '/app/Models/Member.php',
     'App\\Models\\MemberGallery' => $baseDir . '/app/Models/MemberGallery.php',
     'App\\Models\\Notification' => $baseDir . '/app/Models/Notification.php',
+    'App\\Models\\Page' => $baseDir . '/app/Models/Page.php',
     'App\\Models\\Produk' => $baseDir . '/app/Models/Produk.php',
     'App\\Models\\ProdukRekomendasi' => $baseDir . '/app/Models/ProdukRekomendasi.php',
     'App\\Models\\ProdukSaya' => $baseDir . '/app/Models/ProdukSaya.php',

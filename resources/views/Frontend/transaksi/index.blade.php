@@ -686,7 +686,7 @@
                     }).then(ress => {
                         // console.log('ress proses', ress)
                         window.location.replace("{{ route('transaksi-unpaid') }}?inv={{ $transaksi->no_inv }}");
-                        this.loadingCO = false;
+                        // this.loadingCO = false;
                         // console.log("DISINI");
                     }).catch(err => {
                         this.loadingCO = false;

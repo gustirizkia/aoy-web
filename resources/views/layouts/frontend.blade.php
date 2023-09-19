@@ -32,7 +32,7 @@
         <div class="text-gray-700">
             <a href="{{ route('produk') }}" class="mx-10 {{ (request()->is('produk*')) ? 'text-primary font-medium' : '' }}">Produk</a>
             <a href="/member" class="mx-6 {{ (request()->is('member*')) ? 'text-primary font-medium' : '' }}">Seller</a>
-            <a href="" class="mx-6">Tentang</a>
+            <a href="{{ route("page", 'tentang') }}" class="mx-6">Tentang</a>
             <a href="" class="mx-6">Media</a>
             <a href="" class="mx-6">Kontak</a>
         </div>
@@ -145,7 +145,7 @@
         @yield('content')
     </div>
     @if (!request()->is("transaksi-proses") && !request()->is("keranjang"))
-        <footer class="border-t-2 mt-12 md:mt-44 md:px-32 px-6 py-8 bg-white">
+        <footer class="border-t-2 mt-12 md:mt-44 md:px-32 px-6 py-8 bg-white hidden md:block">
             <div class="md:flex justify-between">
                 <div class="">
                     <img src="{{ asset('gambar/logo.png') }}" alt="AOY" class="w-32">

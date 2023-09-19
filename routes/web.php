@@ -17,6 +17,7 @@ use App\Http\Controllers\Front\SellerController;
 use App\Http\Controllers\Front\TransaksiController;
 use App\Http\Controllers\Front\UserController;
 use App\Http\Controllers\OngkirController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,6 +32,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index']);
+Route::get('page/{page}', [PageController::class, "index"])->name('page');
 Route::get('member/{username}', [HomeController::class, 'detailMember'])->name('detailMember');
 Route::get('member', [MemberController::class, 'index'])->name('member-index');
 Route::get('getMember', [MemberController::class, 'getMember'])->name('getMember');
@@ -70,6 +72,8 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::post('updateProfile', [AkunController::class, 'updateProfile'])->name('updateProfile');
     Route::get('akun-saya/edit-alamat/{id}', [AkunController::class, 'editAlamat'])->name('edit-alamat-dashboard');
 });
+
+
 
 Route::get('admin', [AdminDashboardController::class, 'index']);
 Route::post('updateResi/{id}', [AdminTransaksisController::class, 'updateResi'])->name('updateResi');

@@ -18,7 +18,7 @@
     @if ($storeImage)
         <link rel="icon" href="{{ url('storage/' . $storeImage->image) }}" sizes="32x32" />
     @else
-        <link rel="icon" href="{{ asset('gambar/no-image.png') }}" sizes="32x32" />
+        <link rel="icon" href="{{ asset('gambar/logo.png') }}" sizes="32x32" />
     @endif
 
 
@@ -88,7 +88,7 @@
                         <img src="{{ url('storage/' . $storeImage->image) }}" alt=""
                             class="my-4 image__store" />
                     @else
-                        <img src="{{ asset('gambar/no-image.png') }}" alt="" class="my-4 image__store" />
+                        <img src="{{ asset('gambar/logo.png') }}" alt="" class="my-4 image__store" />
                     @endif
                     <h4 class="text__primary">
                         {{ \App\Models\Level::where('id', auth()->user()->id)->first() ? \App\Models\Level::where('id', auth()->user()->id)->first()->nama : '' }}

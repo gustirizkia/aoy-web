@@ -29,6 +29,15 @@
                         <div class=" mt-6">
                             {{-- <img src="{{ $item-> }}" alt="" class=""> --}}
                             <div class="text-gray-500 text-sm">
+                                No Invoice
+                            </div>
+                            <div class="font-semibold">
+                                {{ $transaksi->no_inv }}
+                            </div>
+                        </div>
+                        <div class=" mt-6">
+                            {{-- <img src="{{ $item-> }}" alt="" class=""> --}}
+                            <div class="text-gray-500 text-sm">
                                 Metode pembayaran
                             </div>
                             <div class="font-semibold">
@@ -59,7 +68,7 @@
                                         <div class="font-medium">
                                             {{ $item->pay_code }}
                                         </div>
-                                        <div class="text-primary font-semibold ml-2">
+                                        <div class="text-primary font-semibold ml-2 salin_va" style="cursor: pointer">
                                             Salin
                                         </div>
                                     </div>
@@ -108,16 +117,16 @@
                               </div>
                             <div id="accordion-flush" data-accordion="collapse" data-active-classes="bg-white dark:bg-gray-900 text-gray-900 dark:text-white" data-inactive-classes="text-gray-500 dark:text-gray-400">
 
-                            @foreach ($item->instructions as $index => $item)
+                            @foreach ($item->instructions as $index => $itemI)
                                 <h2 id="accordion-flush-heading-{{ $index+1 }}">
                                     <button type="button" class="flex items-center justify-between w-full py-5 font-medium text-left text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400" data-accordion-target="#accordion-flush-body-{{ $index+1 }}" aria-expanded="true" aria-controls="accordion-flush-body-1">
-                                    <span>{{ $item->title }}</span>
+                                    <span>{{ $itemI->title }}</span>
                                     <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                                     </button>
                                 </h2>
                                 <div id="accordion-flush-body-{{ $index+1 }}" class="hidden" aria-labelledby="accordion-flush-heading-{{ $index+1 }}">
                                     <div class="py-5 font-light border-b border-gray-200 dark:border-gray-700">
-                                        @foreach ($item->steps as $stepIndex => $step)
+                                        @foreach ($itemI->steps as $stepIndex => $step)
                                             <div class="grid grid-flow-row grid-cols-12 gap-3 text-black">
                                                 <div class="col-span-1 text-center">
                                                 {{ $stepIndex+1 }}.
@@ -140,3 +149,28 @@
         </div>
     </div>
 @endsection
+
+@push('addScript')
+    <script>
+        let text = "{{ $item->pay_code }}";
+        $(".salin_va").on("click", function(){
+            navigator.clipboard.writeText(text);
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'bottom-center',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            Toast.fire({
+                icon: 'success',
+                title: 'Berhasil salin'
+            })
+        })
+    </script>
+@endpush

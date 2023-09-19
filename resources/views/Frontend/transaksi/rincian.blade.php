@@ -19,13 +19,25 @@
                             class="ml-4 mt-4 pl-2 relative text-gray-500 border-l border-gray-200 dark:border-gray-700 dark:text-gray-400">
                             <li class="mb-10 ml-6">
                                 <span
-                                    class="absolute flex items-center justify-center w-8 h-8 bg-green-200 rounded-full -left-4 ring-4 ring-white dark:ring-gray-900 dark:bg-green-900">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400"
-                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
+                                    class="absolute flex items-center justify-center w-8 h-8 {{ $transaksi->payment_at ? "bg-green-200" : 'bg-slate-100' }} rounded-full -left-4 ring-4 ring-white dark:ring-gray-900 dark:bg-green-900">
+
+                                    @if ($transaksi->payment_at)
+                                        <svg aria-hidden="true" class="w-5 h-5 text-green-500 dark:text-green-400"
+                                            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd"
+                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                    @else
+
+
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gray-500 ">
+                                            <path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" />
+                                            <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM18.75 9a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V9.75a.75.75 0 00-.75-.75h-.008zM4.5 9.75A.75.75 0 015.25 9h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V9.75z" clip-rule="evenodd" />
+                                            <path d="M2.25 18a.75.75 0 000 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 00-.75-.75H2.25z" />
+                                        </svg>
+                                    @endif
+
                                 </span>
                                 <h3 class="font-medium leading-tight text-gray-900 ">Pembayaran</h3>
                                 <p class="text-xs">
@@ -256,12 +268,18 @@
                                 </div>
                             </div>
                         </div>
-                        @if ($transaksi->status === 'konfirmasi')
+                        @if ($transaksi->status === 'dikirim')
                             <div class="mt-6 flex justify-end">
                                 <div data-modal-target="popup-modal" data-modal-toggle="popup-modal"
                                     class="bg-primary px-4 py-3 rounded-xl inline-block text-white cursor-pointer">
                                     Konfirmasi Penerima</div>
                             </div>
+                        @elseif($transaksi->status === "UNPAID")
+                            <a href="{{ route('transaksi-unpaid', 'inv='.$transaksi->no_inv) }}" class="mt-6 flex justify-end">
+                                <div
+                                    class="bg-primary px-4 py-3 rounded-xl inline-block text-white cursor-pointer">
+                                    Lakukan Pembayaran</div>
+                            </a>
                         @endif
                     </div>
                 </div>

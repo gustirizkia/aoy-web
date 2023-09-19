@@ -23,9 +23,10 @@ class DashboardController extends Controller
         $utils = new UtilsController();
         $totalPenjualan = $utils->Totalpenjualan()['total_harga'];
         $totalPembelian = $utils->totalPembelian()['total_harga'];
+
         return view('dashboard.index', [
             'detail_transaksi' => $detailTransaki,
-            'count_unpaid' => $statusTransaksi->where('status', 'UNPAID')->where('expired_time', '>', $now)->count(),
+            'count_unpaid' => Transaksi::where('user_id', auth()->user()->id)->where('status', 'UNPAID')->count(),
             'count_dikemas' => Transaksi::where('user_id', auth()->user()->id)->where('status', 'PAID')->orWhere('status', 'dikemas')->count(),
             'count_dikirim' => $statusTransaksi->where('status', 'dikirim')->count(),
             'count_penilaian' => $statusTransaksi->where('status', 'penilaian')->count(),

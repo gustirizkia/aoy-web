@@ -376,6 +376,7 @@ class AdminTransaksisController extends \crocodicstudio\crudbooster\controllers\
 
     public function updateResi(HttpRequest $request, $id)
     {
+        // dd($request->all());
         $request->validate([
             'resi' => 'required|string',
             'metode_pengiriman' => 'required|string'

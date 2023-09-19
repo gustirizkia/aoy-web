@@ -399,7 +399,8 @@ class TransaksiController extends Controller
             // dd($res->data);
 
             return view('Frontend.transaksi.menunggu', [
-                'item' => $res->data
+                'item' => $res->data,
+                "transaksi" => $transaksi
             ]);
         } catch (BadResponseException $e) {
             return redirect()->back()->with('info', 'Transaksi tidak ditemukan');
@@ -418,9 +419,9 @@ class TransaksiController extends Controller
         if (!$transaksi) {
             return redirect('/');
         }
-        if ($transaksi->status === 'UNPAID') {
-            return redirect()->route('transaksi-unpaid', 'inv='.$transaksi->no_inv);
-        }
+        // if ($transaksi->status === 'UNPAID') {
+        //     return redirect()->route('transaksi-unpaid', 'inv='.$transaksi->no_inv);
+        // }
 
         $resi = null;
         if ($transaksi->resi) {

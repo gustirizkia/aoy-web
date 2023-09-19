@@ -47,19 +47,24 @@
     </style>
 @endpush
 
+
 @section('content')
     <section x-data="funcData">
         <div class="header mb-md-5 mb-3">
             <div class="row">
                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
-                        <div class="item_jenis_inv " :class="!pembelian ? 'active' : ''" @click="() =>{pembelian = false}">
-                            Penjualan
-                        </div>
-                        <div class="item_jenis_inv ml-md-5 ml-3" :class="pembelian ? 'active' : ''"
+
+                        <div class="item_jenis_inv " :class="pembelian ? 'active' : ''"
                             @click="() =>{pembelian = true}">
                             Pembelian
                         </div>
+
+                        @if (auth()->user()->level)
+                            <div class="item_jenis_inv ml-md-5 ml-3" :class="!pembelian ? 'active' : ''" @click="() =>{pembelian = false}">
+                                Penjualan
+                            </div>
+                        @endif
                     </div>
                     @if (auth()->user()->level)
                         <div class="">
@@ -252,7 +257,7 @@
     <script>
         function funcData() {
             return {
-                pembelian: false,
+                pembelian: true,
 
             }
         }

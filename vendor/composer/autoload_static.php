@@ -692,6 +692,7 @@ class ComposerStaticInitd179f148d979d05ec2036b2c27d6e26b
         'App\\Models\\Member' => __DIR__ . '/../..' . '/app/Models/Member.php',
         'App\\Models\\MemberGallery' => __DIR__ . '/../..' . '/app/Models/MemberGallery.php',
         'App\\Models\\Notification' => __DIR__ . '/../..' . '/app/Models/Notification.php',
+        'App\\Models\\Page' => __DIR__ . '/../..' . '/app/Models/Page.php',
         'App\\Models\\Produk' => __DIR__ . '/../..' . '/app/Models/Produk.php',
         'App\\Models\\ProdukRekomendasi' => __DIR__ . '/../..' . '/app/Models/ProdukRekomendasi.php',
         'App\\Models\\ProdukSaya' => __DIR__ . '/../..' . '/app/Models/ProdukSaya.php',

@@ -11,11 +11,13 @@
         <div id="default-carousel" class="relative w-full" data-carousel="slide">
 
             @if ($banner)
-                <img src="{{ asset($banner->photo) }}" class="w-full" alt="">
+                {{-- Desktop --}}
+                <img src="{{ asset($banner->photo) }}" class="w-full hidden md:block" alt="">
+                <img src="{{ asset($banner->photo_mobile) }}" class="w-full md:hidden" alt="">
             @endif
 
     </section>
-    <section class="md:px-32 px-6 mt-4 md:mt-12">
+    <section class="md:px-32 px-4 mt-4 md:mt-12 pb-32">
         <div class="grid grid-flow-row grid-cols-12 gap-6">
             <div class="col-span-12 md:col-span-3">
                 <div class="md:hidden">

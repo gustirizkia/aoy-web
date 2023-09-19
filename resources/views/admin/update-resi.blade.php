@@ -28,7 +28,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label for="">Metode Pengiriman</label>
-                        <select name="metode_pengiriman" class="form-control">
+                        <select name="metode_pengiriman" disabled class="form-control">
                             <option value="sicepat" {{ $item->metode_pengiriman === 'sicepat' ? 'selected' : '' }}>Sicepat
                                 Reguler</option>
                             <option value="jne" {{ $item->metode_pengiriman === 'jne' ? 'selected' : '' }}>JNE Reguler
@@ -37,6 +37,7 @@
                                 AntarAja
                                 Reguler</option>
                         </select>
+                        <input type="text" name="metode_pengiriman" value="{{ $item->metode_pengiriman }}" hidden>
                     </div>
                     <div class="col-md-6">
                         <label for="">Resi</label>

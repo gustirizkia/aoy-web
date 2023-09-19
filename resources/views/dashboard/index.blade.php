@@ -148,15 +148,7 @@
                 </div>
                 <div class="mt-1 status">Dikirim</div>
             </div>
-            <div class="col text-center icon_status">
-                <div class="position-relative d-inline-block">
-                    <img src="{{ asset('gambar/icon/penilain.png') }}" alt="">
-                    @if ($count_penilaian > 0)
-                        <span class="count_status">{{ $count_penilaian }}</span>
-                    @endif
-                </div>
-                <div class="mt-1 status">Beri penilaian</div>
-            </div>
+
         </div>
     </div>
 
