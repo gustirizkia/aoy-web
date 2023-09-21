@@ -5,9 +5,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
-    {{-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" /> --}}
-    {{-- <link href="/css/app.css" rel="stylesheet"> --}}
-    {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}
+
+    <!-- Primary Meta Tags -->
+
+    <meta name="title" content="AY'S ON YOU
+    " />
+    <meta name="description" content="AY'S ON YOU Penuhi kebutuhan kulitmu agar kecantikanmu terpancar." />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="AY'S ON YOU
+    " />
+    <meta property="og:description" content="AY'S ON YOU Penuhi kebutuhan kulitmu agar kecantikanmu terpancar." />
+    <meta property="og:image" content="{{ asset("gambar/logo.png") }}" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="{{ asset("gambar/logo.png") }}" />
+    <meta property="twitter:title" content="AY'S ON YOU
+    " />
+    <meta property="twitter:description" content="AY'S ON YOU Penuhi kebutuhan kulitmu agar kecantikanmu terpancar." />
+    <meta property="twitter:image" content="{{ asset("gambar/logo.png") }}" />
+
+    <!-- Meta Tags Generated with https://metatags.io -->
 
 
 
