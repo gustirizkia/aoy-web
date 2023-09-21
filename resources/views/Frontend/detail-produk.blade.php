@@ -1,10 +1,35 @@
 @extends('layouts.frontend')
 
 @section('title')
-    AOY | {{ $produk->nama }}
+    {{ $produk->nama }} | AY'S ON YOU
 @endsection
 
 @push('addStyle')
+
+<!-- Primary Meta Tags -->
+
+<meta name="title" content="{{ $produk->nama }} | AY'S ON YOU
+" />
+<meta name="description" content="AY'S ON YOU Penuhi kebutuhan kulitmu agar kecantikanmu terpancar." />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{ route('detail-produk', $produk->slug) }}" />
+<meta property="og:title" content="{{ $produk->nama }} | AY'S ON YOU
+" />
+<meta property="og:description" content="AY'S ON YOU Penuhi kebutuhan kulitmu agar kecantikanmu terpancar." />
+<meta property="og:image" content="{{ url($produk->thumbnail->photo) }}" />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content="{{ route('detail-produk', $produk->slug) }}" />
+<meta property="twitter:title" content="{{ $produk->nama }} | AY'S ON YOU
+" />
+<meta property="twitter:description" content="AY'S ON YOU Penuhi kebutuhan kulitmu agar kecantikanmu terpancar." />
+<meta property="twitter:image" content="{{ url($produk->thumbnail->photo) }}" />
+
+<!-- Meta Tags Generated with https://metatags.io -->
+
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 @endpush
 
