@@ -12,6 +12,7 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+
         $pembelian_member = Transaksi::where('jenis_inv', 'pembelian');
         $penjualan = Transaksi::where('jenis_inv', 'penjualan');
 

@@ -74,8 +74,10 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
 });
 
 
+Route::middleware('admin_cb')->group(function(){
+    Route::get('admin', [AdminDashboardController::class, 'index']);
+    Route::post('updateResi/{id}', [AdminTransaksisController::class, 'updateResi'])->name('updateResi');
+});
 
-Route::get('admin', [AdminDashboardController::class, 'index']);
-Route::post('updateResi/{id}', [AdminTransaksisController::class, 'updateResi'])->name('updateResi');
 
 require __DIR__.'/auth.php';
