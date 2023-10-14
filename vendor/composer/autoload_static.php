@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb17e441be6418d62620ff71defed7467
+class ComposerStaticInit0a44959e139494054ba155390de6d854
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -476,8 +476,8 @@ class ComposerStaticInitb17e441be6418d62620ff71defed7467
         ),
         'Intervention\\Image\\' => 
         array (
-            0 => __DIR__ . '/..' . '/intervention/imagecache/src/Intervention/Image',
-            1 => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image',
+            0 => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image',
+            1 => __DIR__ . '/..' . '/intervention/imagecache/src/Intervention/Image',
         ),
         'Illuminate\\Support\\' => 
         array (
@@ -7410,10 +7410,10 @@ class ComposerStaticInitb17e441be6418d62620ff71defed7467
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb17e441be6418d62620ff71defed7467::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb17e441be6418d62620ff71defed7467::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitb17e441be6418d62620ff71defed7467::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitb17e441be6418d62620ff71defed7467::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0a44959e139494054ba155390de6d854::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0a44959e139494054ba155390de6d854::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit0a44959e139494054ba155390de6d854::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit0a44959e139494054ba155390de6d854::$classMap;
 
         }, null, ClassLoader::class);
     }
