@@ -5271,6 +5271,10 @@ textarea.form-control.is-invalid {
     padding-top: 1.5rem;
   }
 
+  .md\:pb-0 {
+    padding-bottom: 0px;
+  }
+
   .md\:text-left {
     text-align: left;
   }

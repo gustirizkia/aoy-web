@@ -63,7 +63,7 @@
             </div>
         </div>
     </div>
-    <section class="md:px-32 mt-6 px-6" >
+    <section class="md:px-32 mt-6 px-6 pb-32 md:pb-0" >
         <div class="grid grid-flow-row grid-cols-12 gap-4 md:gap-10">
             <div class="md:col-span-4 col-span-12 ">
                 <img :src="thumbnailActive.url" class="rounded-xl w-auto" alt="">
