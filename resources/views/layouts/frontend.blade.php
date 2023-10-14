@@ -53,7 +53,7 @@
             <a href="/member" class="mx-6 {{ (request()->is('member*')) ? 'text-primary font-medium' : '' }}">Seller</a>
             <a href="{{ route("page", 'tentang') }}" class="mx-6">Tentang</a>
             <a href="/media" class="mx-6">Media</a>
-            <a href="" class="mx-6">Kontak</a>
+            {{-- <a href="" class="mx-6">Kontak</a> --}}
         </div>
         @if (Auth::user())
             {{-- search --}}
