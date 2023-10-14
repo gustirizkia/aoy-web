@@ -17,7 +17,7 @@
     </div>
 
 
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         @foreach ($items as $item)
             <div>
                 <img class="h-auto max-w-full rounded-lg" src="{{ url($item->image) }}" alt="">
