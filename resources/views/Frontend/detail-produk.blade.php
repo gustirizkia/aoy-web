@@ -139,10 +139,10 @@
 
                     </div>
 
-                    <div class="mt-4 text-gray-600 text-sm prose" x-show="isDeskripsi">
+                    <div class="mt-4 text-gray-600 text-xs md:text-sm prose" x-show="isDeskripsi">
                         {!! $produk->deskripsi !!}
                     </div>
-                    <div class="mt-4 text-gray-600 text-sm prose" x-show="!isDeskripsi">
+                    <div class="mt-4 text-gray-600 text-xs md:text-sm prose" x-show="!isDeskripsi">
                         {!! $produk->khasiat !!}
                     </div>
                 </div>
