@@ -16,6 +16,7 @@ use App\Http\Controllers\Front\ProdukController;
 use App\Http\Controllers\Front\SellerController;
 use App\Http\Controllers\Front\TransaksiController;
 use App\Http\Controllers\Front\UserController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OngkirController;
 use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +56,8 @@ Route::post('tambah-alamat', [UserController::class, 'tambahAlamat'])->name('tam
 Route::get('kecamatan-rajaongkir', [OngkirController::class, 'getSubdistrict'])->name('kecamatan');
 Route::get('change-active-alamat', [AlamatController::class, 'changeActive'])->name('changeActive')->middleware('auth');
 Route::post('viewOngkirProduct', [OngkirController::class, 'viewOngkirProduct'])->name('viewOngkirProduct')->middleware('auth');
+
+Route::get("media", [MediaController::class, "index"])->name("media");
 
 Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
