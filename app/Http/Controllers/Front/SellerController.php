@@ -13,7 +13,7 @@ class SellerController extends Controller
         $province_id = $request->province_id;
         $city_id = $request->city_id;
         $username = $request->username;
-
+        // dd($username);
         $member = DB::table('members')
                     ->join('users', 'members.user_uuid', 'users.uuid')
                     ->join('levels', 'users.level', 'levels.id')
@@ -27,7 +27,7 @@ class SellerController extends Controller
                         return $query->where('members.city_id', $city_id);
                     })
                     ->when($username, function($query)use($username){
-                        return $query->where('users.username', "LIKE", "%$username%");
+                        return $query->where('users.username', "LIKE", "%$username%")->orWhere("members.nama", "LIKE", "%$username%");
                     })
                     ->select('members.*', 'provinces_ro.name as provinsi', 'subdistricts_ro.name as kota', 'users.name', 'users.username', 'tb_ro_subdistricts.subdistrict_name', 'levels.nama as level_nama')
                     ->orderBy('members.id', 'desc')->paginate(6);
