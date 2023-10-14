@@ -162,7 +162,9 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-1 d-flex align-items-center">
-                                    <img src="{{ url($transaction->produk->thumbnail->photo) }}" class="w-75" />
+                                    @if($transaction->produk->thumbnail->photo)
+                                        <img src="{{ url($transaction->produk->thumbnail->photo) }}" class="w-75" />
+                                    @endif
                                 </div>
                                 <div class="col-md-4">
                                     <span>{{ $transaction->produk->nama ?? '' }}</span>
