@@ -62,7 +62,7 @@ class DetailProductController extends Controller
         }
 
         $user_id = auth()->user()->id;
-        $level = DB::table('levels')->where('id', $user_id)->first();
+        $level = DB::table('levels')->where('id', auth()->user()->level)->first();
         $diskon = 0;
         $jenisInv = 'pembelian';
         $noInv = 'AOY/INV/'.$user_id.time();
@@ -72,7 +72,7 @@ class DetailProductController extends Controller
         $produk = DB::table('produks')->where('id', $request->produk_id)->first();
         $totalHargaProduk = $produk->harga*$request->qty;
         $totalHarga += $totalHargaProduk;
-
+        
         if($level){
             if($level->tipe_potongan === 'fix')
             {

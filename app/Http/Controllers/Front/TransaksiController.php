@@ -122,7 +122,7 @@ class TransaksiController extends Controller
 
     public function createInv(Request $request)
     {
-
+        dd("CEK");
         $carts = DB::table("carts")->where("user_id", auth()->user()->id)->get();
         $subTotal = 0;
 
@@ -146,7 +146,7 @@ class TransaksiController extends Controller
                 $produk = DB::table('produks')->where('id', $cart->produk_id)->first();
                 $totalHargaProduk = $produk->harga*$cart->qty;
                 $totalHarga += $totalHargaProduk;
-
+                
                 if($level){
                     if ($level->tipe_potongan === 'fix') {
                         // potong tiap produk

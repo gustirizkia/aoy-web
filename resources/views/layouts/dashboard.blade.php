@@ -99,6 +99,7 @@
                         class="list-group-item list-group-item-action  {{ request()->is('dashboard') ? 'active' : '' }}">
                         Dashboard
                     </a>
+                    
                     @if (auth()->user()->level)
                         <a href="{{ route('store-setting') }}"
                             class="list-group-item list-group-item-action {{ request()->is('dashboard/store*') ? 'active' : '' }}">

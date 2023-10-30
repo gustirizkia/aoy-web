@@ -129,22 +129,7 @@
                                 <input type="text" class="form-control @error('jalan') is-invalid @enderror"
                                     value="{{ old('jalan') }}" name="jalan" placeholder="masuk alamat jalan">
                             </div>
-                            <div class="col-md-12">
-                                <label for="">Pilih Paket</label>
-                            </div>
-                            @foreach ($level as $item)
-                                <div class="col-md-12">
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" id="{{ $item->id }}level" name="paket"
-                                            class="custom-control-input" value="{{ $item->id }}">
-                                        <label class="custom-control-label"
-                                            for="{{ $item->id }}level">{{ $item->nama }}
-                                            (potongan
-                                            {{ $item->tipe_potongan === 'fix' ? 'Rp.' . number_format($item->potongan_harga) : "$item->potongan_harga%" }})
-                                        </label>
-                                    </div>
-                                </div>
-                            @endforeach
+                           
                             <div class="col-12 mt-4">
                                 <input type="text" hidden name="daftar_seller" value="1">
                                 <button type="submit" class="btn btn__primary btn-block w-100">

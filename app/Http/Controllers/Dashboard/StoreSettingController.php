@@ -51,9 +51,9 @@ class StoreSettingController extends Controller
             'jalan' => 'required|string'
         ];
 
-        if($request->daftar_seller) {
-            $data['paket'] = 'required';
-        }
+        // if($request->daftar_seller) {
+        //     $data['paket'] = 'required';
+        // }
 
         $request->validate($data, [
             'required' => ':attribute wajib di isi',
@@ -74,12 +74,13 @@ class StoreSettingController extends Controller
         ];
 
 
-        if($request->daftar_seller) {
-            User::where('id', auth()->user()->id)->update([
-                'level' => $request->level
-            ]);
-            $data['status'] = 3;
-        }
+        // if($request->daftar_seller) {
+        //     // User::where('id', auth()->user()->id)->update([
+        //     //     'level' => $request->level
+        //     // ]);
+        // }
+
+        $data['status'] = 3;
 
         if($request->image) {
             $image = $request->image->store('toko', 'public');

@@ -330,6 +330,7 @@
                     }).then(ress => {
                         window.location.reload();
                         this.modalTambahAlamat = false;
+                        console.log('ress :>> ', ress);
                     }).catch(err => {
 
                         this.modalTambahAlamat = false;
