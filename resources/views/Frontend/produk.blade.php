@@ -24,14 +24,14 @@
                     <div class="font-semibold mb-2">Kategori</div>
                     <div class="flex overflow-x-auto">
                         <a href="/produk{{ Request::has('search') ? '?search=' . Request::get('search') : '' }}"
-                            class="border rounded-xl px-4 py-2 text-sm mr-2 {{ !Request::has('q') ? 'bg-primary bg-opacity-50' : '' }}">Semua</a>
+                            class="border rounded-xl px-4 py-2 text-sm mr-2 whitespace-nowrap {{ !Request::has('q') ? 'bg-primary bg-opacity-50' : '' }}">Semua</a>
                         @foreach ($kategori as $item)
                             <a href="?q={{ $item->slug }}{{ Request::has('search') ? '&search=' . Request::get('search') : '' }}"
-                                class="border rounded-xl px-4 py-2 text-sm mr-2 {{ Request::get('q') === $item->slug ? 'bg-primary bg-opacity-50' : '' }}">{{ $item->nama }}</a>
+                                class="border rounded-xl px-4 py-2 text-sm mr-2 whitespace-nowrap {{ Request::get('q') === $item->slug ? 'bg-primary bg-opacity-50' : '' }}">{{ $item->nama }}</a>
                         @endforeach
                     </div>
                 </div>
-                <div class="border pl-4 py-4 shadow rounded-lg md:block hidden">
+                <div class="border pl-4 py-4 shadow rounded-lg md:block hidden whitespace-nowrap">
                     <div class="font-semibold">Kategori</div>
                     <div class="mt-6">
                         @if (!Request::has('q'))
@@ -46,7 +46,7 @@
                         @endif
                     </div>
                     @foreach ($kategori as $item)
-                        <div class="mt-6">
+                        <div class="mt-6 whitespace-nowrap">
 
                             @if (Request::has('q'))
                                 @if (Request::get('q') === $item->slug)
