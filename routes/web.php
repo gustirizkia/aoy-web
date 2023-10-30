@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\AdminTransaksisController;
 use App\Http\Controllers\AlamatController;
 use App\Http\Controllers\Dashboard\AkunController;
 use App\Http\Controllers\Dashboard\ProdukController as DashboardProdukController;
@@ -11,9 +13,12 @@ use App\Http\Controllers\Front\DetailProductController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\MemberController;
 use App\Http\Controllers\Front\ProdukController;
+use App\Http\Controllers\Front\SellerController;
 use App\Http\Controllers\Front\TransaksiController;
 use App\Http\Controllers\Front\UserController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OngkirController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,9 +33,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index']);
+Route::get('page/{page}', [PageController::class, "index"])->name('page');
 Route::get('member/{username}', [HomeController::class, 'detailMember'])->name('detailMember');
 Route::get('member', [MemberController::class, 'index'])->name('member-index');
 Route::get('getMember', [MemberController::class, 'getMember'])->name('getMember');
+Route::get('member-filter', [SellerController::class, 'filter'])->name('member-filter');
+Route::get('getNotif', [UserController::class, 'getNotif'])->name('getNotif')->middleware('auth');
 
 Route::get('produk', [ProdukController::class, 'index'])->name('produk');
 Route::get('/produk/{slug}', [DetailProductController::class, 'index'])->name('detail-produk');
@@ -41,12 +49,15 @@ Route::post('/createInv', [TransaksiController::class, 'createInv'])->name('crea
 Route::post('/transaksi-pending', [TransaksiController::class, 'menungguPembayaran'])->name('transaksi-pending')->middleware('auth');
 Route::get('/transaksi-unpaid', [TransaksiController::class, 'unpaid'])->name('transaksi-unpaid')->middleware('auth');
 Route::get('/transaksi-detail', [TransaksiController::class, 'rincian'])->name('transaksi-detail');
+Route::get('/konfirmasi', [TransaksiController::class, 'konfirmasi'])->name('konfirmasi');
 Route::post('/add-cart', [DetailProductController::class, 'addCart'])->name('add-cart');
 
 Route::post('tambah-alamat', [UserController::class, 'tambahAlamat'])->name('tambah-alamat')->middleware('auth');
 Route::get('kecamatan-rajaongkir', [OngkirController::class, 'getSubdistrict'])->name('kecamatan');
 Route::get('change-active-alamat', [AlamatController::class, 'changeActive'])->name('changeActive')->middleware('auth');
 Route::post('viewOngkirProduct', [OngkirController::class, 'viewOngkirProduct'])->name('viewOngkirProduct')->middleware('auth');
+
+Route::get("media", [MediaController::class, "index"])->name("media");
 
 Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -57,11 +68,18 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::get('store-setting', [StoreSettingController::class, 'index'])->name('store-setting');
     Route::post('store-setting', [StoreSettingController::class, 'store'])->name('insert-store-setting');
     Route::post('upload-gallery-image', [StoreSettingController::class, 'uploadImage'])->name('upload-image-gallery');
+    Route::get('delete-image', [StoreSettingController::class, 'deleteImage'])->name('deleteImage');
 
     Route::get('akun-saya', [AkunController::class, 'index'])->name('akun-saya');
+    Route::get('profile', [AkunController::class, 'afterRegister'])->name('afterRegister');
     Route::post('updateProfile', [AkunController::class, 'updateProfile'])->name('updateProfile');
     Route::get('akun-saya/edit-alamat/{id}', [AkunController::class, 'editAlamat'])->name('edit-alamat-dashboard');
+});
 
+
+Route::middleware('admin_cb')->group(function(){
+    Route::get('admin', [AdminDashboardController::class, 'index']);
+    Route::post('updateResi/{id}', [AdminTransaksisController::class, 'updateResi'])->name('updateResi');
 });
 
 

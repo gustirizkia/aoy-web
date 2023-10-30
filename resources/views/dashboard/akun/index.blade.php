@@ -84,10 +84,12 @@
                             <label for="email">Email</label>
                             <input type="email" class="form-control" name="email" id="email" disabled value="{{ $user->email }}">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="wa">Nomor Handphone/WhatsApp</label>
-                            <input type="number" class="form-control" name="nomor_wa"  value="{{ $member->nomor_wa }}">
-                        </div>
+                        @if ($member)
+                            <div class="col-md-4 mb-3">
+                                <label for="wa">Nomor Handphone/WhatsApp</label>
+                                <input type="number" class="form-control" name="nomor_wa"  value="{{ $member->nomor_wa }}">
+                            </div>
+                        @endif
                         <div class="col-md-4 mb-3">
                             <label for="password">Password Baru</label>
                             <input type="password" class="form-control" name="password" >
@@ -206,7 +208,7 @@
                 list_kota: [],
                 list_kecamatan: [],
                 alamat_lengkap: null,
-                alamat_utama_id: {{ $alamat_utama->id }},
+                alamat_utama_id: {{ $alamat_utama->id ? $alamat_utama->id : 0 }},
                 onFileChange(e)
                 {
                     if (e.target.files.length !== 0) {

@@ -33,10 +33,12 @@ class ProdukController extends Controller
         }
 
         $kategori = DB::table('kategori_produks')->get();
+        $banner = DB::table('banner')->where('page', 'produk')->orderBy('id', 'desc')->first();
 
         return view('Frontend.produk', [
             'items' => $data,
-            'kategori' => $kategori
+            'kategori' => $kategori,
+            'banner' => $banner
         ]);
     }
 }

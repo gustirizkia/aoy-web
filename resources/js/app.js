@@ -2,6 +2,7 @@ import "./bootstrap";
 import "tw-elements";
 import "flowbite";
 import Alpine from "alpinejs";
+import { Modal } from "flowbite";
 
 window.Alpine = Alpine;
 

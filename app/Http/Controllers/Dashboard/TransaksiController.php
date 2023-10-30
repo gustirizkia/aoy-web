@@ -12,9 +12,10 @@ use Illuminate\Support\Facades\Validator;
 
 class TransaksiController extends Controller
 {
-    public function index(Request $request){
-        $invPembelian = Transaksi::where('jenis_inv', 'pembelian')->where('metode_pembayaran', '!=', null)->get()->pluck('id');
-        $invPenjualan = Transaksi::where('jenis_inv', 'penjualan')->where('metode_pembayaran', '!=', null)->get()->pluck('id');
+    public function index(Request $request)
+    {
+        $invPembelian = Transaksi::where('jenis_inv', 'pembelian')->where('metode_pembayaran', '!=', null)->where('user_id', auth()->user()->id)->get()->pluck('id');
+        $invPenjualan = Transaksi::where('jenis_inv', 'penjualan')->where('metode_pembayaran', '!=', null)->where('user_id', auth()->user()->id)->get()->pluck('id');
 
         $dataPembelian = DetailTransaksi::whereIn('transaksi_id', $invPembelian)->with('produk', 'transaksi')->get();
         $dataPenjualan = DetailTransaksi::whereIn('transaksi_id', $invPenjualan)->with('produk', 'transaksi')->get();
@@ -45,7 +46,7 @@ class TransaksiController extends Controller
         for ($i=0; $i < count($produk); $i++) {
             $element = $produk[$i];
             $cek = DB::table('produk_sayas')->where('produk_id', $element['id'])->first();
-            if($cek->qty < $element['qty']){
+            if($cek->qty < $element['qty']) {
                 $isReady = false;
                 return $isReady;
             }
@@ -60,7 +61,7 @@ class TransaksiController extends Controller
         $validasi = Validator::make($request->all(), [
             'produk' => 'required'
         ]);
-        if($validasi->fails()){
+        if($validasi->fails()) {
             return response()->json([
                 'status' => 'error',
                 'message' => $validasi->errors()
@@ -76,7 +77,7 @@ class TransaksiController extends Controller
         $totalHarga = 0;
 
         $stokReady = $this->stokReady($request->produk);
-        if(!$stokReady){
+        if(!$stokReady) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'stok produk tidak mencukupi',
@@ -96,17 +97,17 @@ class TransaksiController extends Controller
 
             $produkSaya = ProdukSaya::where('user_id', $user_id)->where('produk_id', $element['id'])->first();
             // return response()->json([(int)$produkSaya->qty, $element, auth()->user()->id]);
-            if((int)$produkSaya->qty < $element['qty']){
+            if((int)$produkSaya->qty < $element['qty']) {
 
                 return response()->json([
                     'status' => 'error',
                     'message' => 'stok tidak mencukupi',
                     'no_inv' => $noInv
                 ], 422);
-            }elseif((int)$produkSaya->qty === $element['qty']){
+            } elseif((int)$produkSaya->qty === $element['qty']) {
                 // delete prosuk
                 $deleteProdukSaya = ProdukSaya::where('user_id', $user_id)->where('produk_id', $element['id'])->delete();
-            }else{
+            } else {
                 // kurangi stok produk
                 $stokSekarang = $produkSaya->qty - $element['qty'];
 
@@ -116,8 +117,7 @@ class TransaksiController extends Controller
             }
 
 
-            if($level->tipe_potongan === 'fix')
-            {
+            if($level->tipe_potongan === 'fix') {
                 // potong tiap produk
                 $potonganProduk = $level->potongan_harga*$element['qty'];
                 $diskon += $potonganProduk;
@@ -127,7 +127,7 @@ class TransaksiController extends Controller
 
             $cekInv = DB::table('transaksis')->where('no_inv', $noInv)->first();
             $transaksi_id = null;
-            if(!$cekInv){
+            if(!$cekInv) {
                 $insertTransaksi = Transaksi::create([
                     'status' => 'selesai',
                     'metode_pembayaran' => 'offline',
@@ -149,7 +149,7 @@ class TransaksiController extends Controller
                     'fee_customer' => 0
                 ]);
                 $transaksi_id = $insertTransaksi->id;
-            }else{
+            } else {
                 $insertTransaksi = Transaksi::where('id', $cekInv->id)->update([
                     'status' => 'selesai',
                     'metode_pembayaran' => 'offline',

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\DetailTransaksi;
 use App\Models\ImageProduk;
+use App\Models\ListKota;
+use App\Models\ListProvinsi;
 use App\Models\Produk;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
@@ -24,9 +26,23 @@ class DetailProductController extends Controller
 
         $image = ImageProduk::where('product_id', $data->id)->get();
 
+        $listProvinsi = ListProvinsi::get();
+        $listKota = ListKota::get();
+
+        if(auth()->user())
+        {
+            $alamat = DB::table("users_address")->where('user_id', auth()->user()->id)->exists();
+        }else{
+            $alamat = null;
+        }
+
+
         return view('Frontend.detail-produk', [
             'produk' => $data,
-            'images' => $image
+            'images' => $image,
+            'list_provinsi' => $listProvinsi,
+            'list_kota' => $listKota,
+            'alamat' => $alamat
         ]);
     }
 
@@ -36,6 +52,8 @@ class DetailProductController extends Controller
             'produk_id' => 'required|exists:produks,id'
         ]);
 
+
+
         if($validasi->fails()){
             return response()->json([
                 'status' => 'error',
@@ -44,7 +62,7 @@ class DetailProductController extends Controller
         }
 
         $user_id = auth()->user()->id;
-        $level = DB::table('levels')->where('id', $user_id)->first();
+        $level = DB::table('levels')->where('id', auth()->user()->level)->first();
         $diskon = 0;
         $jenisInv = 'pembelian';
         $noInv = 'AOY/INV/'.$user_id.time();
@@ -54,20 +72,25 @@ class DetailProductController extends Controller
         $produk = DB::table('produks')->where('id', $request->produk_id)->first();
         $totalHargaProduk = $produk->harga*$request->qty;
         $totalHarga += $totalHargaProduk;
+        
+        if($level){
+            if($level->tipe_potongan === 'fix')
+            {
+                // potong tiap produk
+                $potonganProduk = $level->potongan_harga;
+                $diskon += $potonganProduk*$request->qty;
+                $subTotal += $totalHargaProduk - $diskon;
 
-        if($level->tipe_potongan === 'fix')
-        {
-            // potong tiap produk
-            $potonganProduk = $level->potongan_harga;
-            $diskon += $potonganProduk*$request->qty;
-            $subTotal += $totalHargaProduk - $diskon;
+            }else{
+                $nilai = ($level->potongan_harga/100)*$produk->harga;
+                $potonganProduk = $nilai*$request->qty;
 
+                $diskon += $potonganProduk;
+                $subTotal += $totalHarga - $potonganProduk;
+            }
         }else{
-            $nilai = ($level->potongan_harga/100)*$produk->harga;
-            $potonganProduk = $nilai*$request->qty;
-
-            $diskon += $potonganProduk;
-            $subTotal += $totalHarga - $potonganProduk;
+            $potonganProduk = 0;
+            $subTotal = $totalHarga;
         }
 
         $createInv = Transaksi::create([

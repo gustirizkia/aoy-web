@@ -5,9 +5,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
-    {{-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" /> --}}
-    {{-- <link href="/css/app.css" rel="stylesheet"> --}}
-    {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}
+
+    <!-- Primary Meta Tags -->
+
+    <meta name="title" content="AY'S ON YOU
+    " />
+    <meta name="description" content="AY'S ON YOU Penuhi kebutuhan kulitmu agar kecantikanmu terpancar." />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="AY'S ON YOU
+    " />
+    <meta property="og:description" content="AY'S ON YOU Penuhi kebutuhan kulitmu agar kecantikanmu terpancar." />
+    <meta property="og:image" content="{{ asset("gambar/logo.png") }}" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="{{ asset("gambar/logo.png") }}" />
+    <meta property="twitter:title" content="AY'S ON YOU
+    " />
+    <meta property="twitter:description" content="AY'S ON YOU Penuhi kebutuhan kulitmu agar kecantikanmu terpancar." />
+    <meta property="twitter:image" content="{{ asset("gambar/logo.png") }}" />
+
+    <!-- Meta Tags Generated with https://metatags.io -->
 
 
 
@@ -30,11 +49,11 @@
         </div>
         {{-- Menu --}}
         <div class="text-gray-700">
-            <a href="{{ route('produk') }}" class="mx-10">Produk</a>
-            <a href="/member" class="mx-6">Seller</a>
-            <a href="" class="mx-6">Tentang</a>
-            <a href="" class="mx-6">Media</a>
-            <a href="" class="mx-6">Kontak</a>
+            <a href="{{ route('produk') }}" class="mx-10 {{ (request()->is('produk*')) ? 'text-primary font-medium' : '' }}">Produk</a>
+            <a href="/member" class="mx-6 {{ (request()->is('member*')) ? 'text-primary font-medium' : '' }}">Seller</a>
+            <a href="{{ route("page", 'tentang') }}" class="mx-6">Tentang</a>
+            <a href="/media" class="mx-6">Media</a>
+            {{-- <a href="" class="mx-6">Kontak</a> --}}
         </div>
         @if (Auth::user())
             {{-- search --}}
@@ -102,7 +121,7 @@
 
 
     {{-- bottombar mobile --}}
-    <section class="md:hidden shadow py-3 px-6 flex items-center justify-between fixed w-full border-t bottom-0 bg-white z-40 {{ (request()->is('keranjang')) ? 'hidden' : '' }}">
+    <section class="md:hidden shadow py-3 px-6 flex items-center justify-between fixed w-full border-t bottom-0 bg-white z-40 {{ (request()->is('keranjang')) || (request()->is('produk/*')) || (request()->is('transaksi*')) ? 'hidden' : '' }}">
         <div class="{{ (request()->is('/')) ? 'text-primary' : 'text-gray-600' }} text-center">
             <a href="/">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 mx-auto">
@@ -144,74 +163,75 @@
     <div class="min-h-screen">
         @yield('content')
     </div>
-
-    <footer class="border-t-2 mt-12 md:mt-44 md:px-32 px-6 py-8 bg-white">
-        <div class="md:flex justify-between">
-            <div class="">
-                <img src="{{ asset('gambar/logo.png') }}" alt="AOY" class="w-32">
-                <div class="text-gray-400 mt-4">
-                    merasa
-                    nyaman di <br>
-                    kulit mulus
+    @if (!request()->is("transaksi-proses") && !request()->is("keranjang"))
+        <footer class="border-t-2 mt-12 md:mt-44 md:px-32 px-6 py-8 bg-white hidden md:block">
+            <div class="md:flex justify-between">
+                <div class="">
+                    <img src="{{ asset('gambar/logo.png') }}" alt="AOY" class="w-32">
+                    <div class="text-gray-400 mt-4">
+                        merasa
+                        nyaman di <br>
+                        kulit mulus
+                    </div>
+                </div>
+                <div class="py-6">
+                    <div class="font-bold text-gray-700 text-lg">
+                        For Beginners
+                    </div>
+                    <div class="text-gray-400 text-lg my-2">
+                        <a href="">
+                            Akun Baru
+                        </a>
+                    </div>
+                    <div class="text-gray-400 text-lg my-2">
+                        <a href="">
+                            Cara Pembayaran
+                        </a>
+                    </div>
+                </div>
+                <div class="py-6">
+                    <div class="font-bold text-gray-700 text-lg">
+                        Explore Us
+                    </div>
+                    <div class="text-gray-400 text-lg my-2">
+                        <a href="">
+                            Career
+                        </a>
+                    </div>
+                    <div class="text-gray-400 text-lg my-2">
+                        <a href="">
+                            Privacy
+                        </a>
+                    </div>
+                    <div class="text-gray-400 text-lg my-2">
+                        <a href="">
+                            Syarat & Ketentuan
+                        </a>
+                    </div>
+                </div>
+                <div class="py-6">
+                    <div class="font-bold text-gray-700 text-lg">
+                        Connect Us
+                    </div>
+                    <div class="text-gray-400 text-lg my-2">
+                        <a href="">
+                            support@aysonyou.com
+                        </a>
+                    </div>
+                    <div class="text-gray-400 text-lg my-2">
+                        <a href="">
+                            021 - 2208 - 1996
+                        </a>
+                    </div>
+                    <div class="text-gray-400 text-lg my-2">
+                        <a href="">
+                            BSD, Tangerang Selatan, Banten
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="py-6">
-                <div class="font-bold text-gray-700 text-lg">
-                    For Beginners
-                </div>
-                <div class="text-gray-400 text-lg my-2">
-                    <a href="">
-                        Akun Baru
-                    </a>
-                </div>
-                <div class="text-gray-400 text-lg my-2">
-                    <a href="">
-                        Cara Pembayaran
-                    </a>
-                </div>
-            </div>
-            <div class="py-6">
-                <div class="font-bold text-gray-700 text-lg">
-                    Explore Us
-                </div>
-                <div class="text-gray-400 text-lg my-2">
-                    <a href="">
-                        Career
-                    </a>
-                </div>
-                <div class="text-gray-400 text-lg my-2">
-                    <a href="">
-                        Privacy
-                    </a>
-                </div>
-                <div class="text-gray-400 text-lg my-2">
-                    <a href="">
-                        Syarat & Ketentuan
-                    </a>
-                </div>
-            </div>
-            <div class="py-6">
-                <div class="font-bold text-gray-700 text-lg">
-                    Connect Us
-                </div>
-                <div class="text-gray-400 text-lg my-2">
-                    <a href="">
-                        support@aysonyou.com
-                    </a>
-                </div>
-                <div class="text-gray-400 text-lg my-2">
-                    <a href="">
-                        021 - 2208 - 1996
-                    </a>
-                </div>
-                <div class="text-gray-400 text-lg my-2">
-                    <a href="">
-                        BSD, Tangerang Selatan, Banten
-                    </a>
-                </div>
-            </div>
-        </div>
-    </footer>
+        </footer>
+    @endif
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>

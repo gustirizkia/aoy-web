@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -31,7 +32,12 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-
+        // dd(auth()->user());
+        if(auth()->user()->level) {
+            Session::put('level', auth()->user()->level);
+        } else {
+            Session::put('level', auth()->user()->level);
+        }
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 

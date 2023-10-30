@@ -20,7 +20,7 @@ class CreateMembersTable extends Migration
             $table->string('nomor_wa')->nullable();
             $table->string('nama');
             $table->bigInteger('users_address_id')->nullable();
-            $table->longText('deskripsi');
+
             $table->timestamps();
         });
     }
