@@ -22,7 +22,7 @@
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            <input type="text" class="w-full text-sm text-gray-900 bg-gray-50 focus:ring-0 border-0 placeholder-gray-400" placeholder="Cari Nama atau ID" @input.debounce.350ms="fetchResults">
+            <input type="text" x-model="username" class="w-full text-sm text-gray-900 bg-gray-50 focus:ring-0 border-0 placeholder-gray-400" placeholder="Cari Nama atau ID" @input.debounce.350ms="fetchResults">
         </div>
     </div>
     <div class="my-10 grid grid-flow-row grid-cols-12 gap-6 md:gap-10" id="row_member">
@@ -103,7 +103,7 @@
                                 <a href="/member/${element.username}">
 
                                     <div class="p-8">
-                                        <div class="text-xl font-medium text-gray-800">${element.name}</div>
+                                        <div class="text-xl font-medium text-gray-800">${element.nama}</div>
                                         <div class="flex items-center mt-3">
                                             <img src="{{ asset('gambar/icon/id_member.png') }}" class="" alt="">
                                             <div class="text-gray-400 ml-4 text-sm">${element.username}</div>
@@ -150,7 +150,7 @@
                                                         <a href="/member/${element.username}">
 
                                                             <div class="p-8">
-                                                                <div class="text-xl font-medium text-gray-800">${element.name}</div>
+                                                                <div class="text-xl font-medium text-gray-800">${element.nama}</div>
                                                                 <div class="flex items-center mt-3">
                                                                     <img src="{{ asset('gambar/icon/id_member.png') }}" class="" alt="">
                                                                     <div class="text-gray-400 ml-4 text-sm">${element.username}</div>
