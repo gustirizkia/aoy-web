@@ -1,9 +1,12 @@
 <?php namespace App\Http\Controllers;
 
-	use Session;
-	use Request;
+use App\Models\Level;
+use App\Models\Member;
+use App\Models\User;
+use Session;
 	use DB;
 	use CRUDBooster;
+use Illuminate\Http\Request;
 
 	class AdminMembersController extends \crocodicstudio\crudbooster\controllers\CBController {
 
@@ -17,11 +20,11 @@
 			$this->button_table_action = true;
 			$this->button_bulk_action = true;
 			$this->button_action_style = "button_icon";
-			$this->button_add = true;
-			$this->button_edit = true;
-			$this->button_delete = true;
-			$this->button_detail = true;
-			$this->button_show = true;
+			$this->button_add = false;
+			$this->button_edit = false;
+			$this->button_delete = false;
+			$this->button_detail = false;
+			$this->button_show = false;
 			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = false;
@@ -97,6 +100,7 @@
 	        | 
 	        */
 	        $this->addaction = array();
+			$this->addaction[] = ['label'=>'Edit Level','url'=>CRUDBooster::mainpath('edit-level/[id]'),'color'=>'success'];
 
 
 	        /* 
@@ -264,8 +268,18 @@
 	    | ---------------------------------------------------------------------- 
 	    |
 	    */    
-	    public function hook_row_index($column_index,&$column_value) {	        
-	    	//Your code here
+	    public function hook_row_index($column_index,&$column_value) {	 
+			$user = User::query();
+
+			if($column_index === 1){
+				$user_level = $user->where("uuid", "=",$column_value)->first();
+				$column_value = $user_level->name;
+			}
+
+			if($column_index === 2 ){
+				$user_level = $user->where("uuid", "=",$column_value)->first();
+				$column_value = $user_level->level ? $user_level->level_user->nama : "Tidak ada";
+			}
 	    }
 
 	    /*
@@ -340,6 +354,24 @@
 	        //Your code here
 
 	    }
+
+		public function getEditLevel($id){
+			$level = Level::orderBy("nama", "asc")->get();
+			$member = Member::find($id);
+			$user = User::where("uuid", $member->user_uuid)->first();
+
+			return view("admin.edit-level", compact("user", "member", "level"));
+
+		}
+
+		public function updateLevel(Request $request, $user_id) {
+			$user = User::findOrFail($user_id);
+			$user->update([
+				"level" => $request->level_id
+			]);
+
+			return CRUDBooster::redirect("/admin/members","Berhasil update level member","success");
+		}
 
 
 

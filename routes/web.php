@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\AdminMembersController;
 use App\Http\Controllers\AdminTransaksisController;
 use App\Http\Controllers\AlamatController;
 use App\Http\Controllers\Dashboard\AkunController;
@@ -80,6 +81,7 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
 Route::middleware('admin_cb')->group(function(){
     Route::get('admin', [AdminDashboardController::class, 'index']);
     Route::post('updateResi/{id}', [AdminTransaksisController::class, 'updateResi'])->name('updateResi');
+    Route::post('updateLevel/{user_id}', [AdminMembersController::class, "updateLevel"])->name("updateLevel");
 });
 
 

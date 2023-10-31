@@ -170,6 +170,7 @@
                 <div class="card">
                     <div class="card-body text-center">
                         <h5>Belum ada pembelian</h5>
+                        <a href="/produk" class="btn btn__primary">Lihat Produk</a>
                     </div>
                 </div>
             @endforelse
@@ -246,6 +247,7 @@
                 <div class="card">
                     <div class="card-body text-center">
                         <h5>Belum ada penjualan</h5>
+                        
                     </div>
                 </div>
             @endforelse

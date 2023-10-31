@@ -91,7 +91,7 @@
                         <img src="{{ asset('gambar/logo.png') }}" alt="" class="my-4 image__store" />
                     @endif
                     <h4 class="text__primary">
-                        {{ \App\Models\Level::where('id', auth()->user()->id)->first() ? \App\Models\Level::where('id', auth()->user()->id)->first()->nama : '' }}
+                        {{auth()->user()->level_user ? auth()->user()->level_user->nama : ""}}
                     </h4>
                 </div>
                 <div class="list-group list-group-flush">
@@ -100,11 +100,15 @@
                         Dashboard
                     </a>
                     
+                    <a href="{{ route('store-setting') }}"
+                        class="list-group-item list-group-item-action {{ request()->is('dashboard/store*') ? 'active' : '' }}">
+                        Pengaturan Toko
+                    </a>
+                    <a href="/produk"
+                        class="list-group-item list-group-item-action ">
+                        Beli Produk
+                    </a>
                     @if (auth()->user()->level)
-                        <a href="{{ route('store-setting') }}"
-                            class="list-group-item list-group-item-action {{ request()->is('dashboard/store*') ? 'active' : '' }}">
-                            Pengaturan Toko
-                        </a>
                         <a href="{{ route('produk-saya') }}"
                             class="list-group-item list-group-item-action {{ request()->is('dashboard/produk*') ? 'active' : '' }}">
                             Produk Saya
